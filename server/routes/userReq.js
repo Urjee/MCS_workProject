@@ -3,7 +3,7 @@ module.exports = app => {
 
     const router = require('express').Router();
 
-    router.get('/userReqs', requests.allProducts);
+    router.get('/userReqs', requests.allUserReq);
     router.post('/addUserReq', requests.addUserReq);
     router.post('/userReqApproved', requests.userReqApproved);
     router.post('/getAdminReqs', requests.getAdminReqs);

@@ -5,12 +5,17 @@ const Req = db.Request;
 const { QueryTypes, Op } = require('sequelize');
 const events = require('events');
 
-exports.allProducts = async(req, res) => {
+exports.allUserReq = async(req, res) => {
 
-    UserReq.findAll().then(data => {
-        res.send(data);
-        console.log(data)
-    });
+    // UserReq.findAll().then(data => {
+    //     res.send(data);
+    //     console.log(data)
+    // });
+    db.sequelize.query(`
+        exec sp_userReqs 1,0,0;`, {type: QueryTypes.SELECT }).then(data => {
+            res.send(data);
+        });
+}
 
     // const data = await db.sequelize.query(`exec Mcs_workprogress.dbo.sp_work_list 1, ${userid}, ${headid}`, { type: QueryTypes.SELECT });
 
@@ -27,7 +32,7 @@ exports.allProducts = async(req, res) => {
     //     return;
     // };
 
-}
+
 
 exports.allProductsuser = async(req, res) => {
 
@@ -56,15 +61,16 @@ exports.allProductsuser = async(req, res) => {
 exports.addUserReq=async(req,res)=>{
     const {    
         name,
-        organizationID,
+        organizationName,
         importanceID,
         planTime,
         file_id,
         stateID,
         description,
+        headName,
         } = req.body;
 
-    UserReq.create({ name: name, organizationID:organizationID, importanceID: importanceID, planTime: planTime, file_id: file_id,description: description, stateID: stateID })
+    UserReq.create({ name: name, organizationName:organizationName, importanceID: importanceID, planTime: planTime, file_id: file_id,description: description, stateID: stateID, headName: headName})
     .then(data => {
         res.send(data);
     })
@@ -75,7 +81,7 @@ exports.addUserReq=async(req,res)=>{
 
 exports.userReqApproved = async(req, res) => {
 
-    const { name, description, planTime, organizationID, file_id, importanceID, UserID, userReqID } = req.body;
+    const { name, description, planTime, organizationID, file_id, importanceID, UserID, userReqID, headName } = req.body;
 
     const userReq = await UserReq.update({
         stateID: 2
@@ -85,8 +91,8 @@ exports.userReqApproved = async(req, res) => {
         } 
     });
 
-    if(userReq.stateID === 2) {
-        const reqCreate = await Req.create({ name: name, description: description, planTime: planTime, stateID: 2, file_id: file_id, organizationID: organizationID, UserID: UserID, importanceID: importanceID, userReqID: userReqID })
+    if(userReq.stateID === 0) {
+        const reqCreate = await Req.create({ name: name, description: description, planTime: planTime, stateID: 2, file_id: file_id, organizationID: organizationID, UserID: UserID, importanceID: importanceID, userReqID: userReqID, headName: headName })
 
         if(reqCreate) {
             res.status(200).send(reqCreate)

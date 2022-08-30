@@ -35,6 +35,7 @@ require('./routes/request')(app);
 // require('./routes/workRequest')(app);
 require('./routes/userReq')(app);
 require('./routes/organization')(app);
+require('./routes/department')(app);
 require('./routes/requestUser')(app);
 require('./routes/importance')(app);
 const PORT = 8080;

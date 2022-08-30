@@ -4,30 +4,13 @@ const { QueryTypes, Op } = require('sequelize');
 const events = require('events');
 
 exports.allUsers = async(req, res) => {
-
+    // User.findAll().then(data => {
+    //     res.send(data);
+    // });
     db.sequelize.query(`
-    SELECT [UserID],
-           [username],
-           [password],
-           [firstname],
-           [lastname],
-           [phone],
-           [department],
-           [job],
-           [email],
-           [isAdmin],
-           [organizationID],
-           [headID],
-        (
-           SELECT organizationName FROM
-            [Organizations] AS org
-            WHERE org.organizationID = [User].organizationID
-        )
-        AS organizationName
-    FROM [Users] AS [User];`, { type: QueryTypes.SELECT }).then(data => {
+        exec sp_users 1,0,0;`, { type: QueryTypes.SELECT }).then(data => {
         res.send(data);
     });
-
 }
 
 exports.register = async(req, res) => {
@@ -47,7 +30,21 @@ exports.register = async(req, res) => {
     });
 
 }
+exports.listUser = async(req, res) => {
+    const { id } = req.body;
 
+    db.sequelize.query(`SELECT 
+        departmentName 
+        FROM
+            [Departments] AS [Department] 
+
+        INNER JOIN Organizations AS org 
+        ON org.organizationID = [Department].organizationID
+        WHERE
+        Department.organizationID = ${id}`, {type: QueryTypes. SELECT }).then(depData => {
+            res.send(depData);
+        })
+}
 exports.login = async(req, res) => {
 
     const email = req.body.email;
@@ -72,23 +69,33 @@ exports.addUser=async(req,res)=>{
         lastname,
         email,
         phone,
-        department,
+        departmentID,
         job,
-        organizationName,
+        OrganizationID,
         } = req.body;
 
     if(phone.length > 0) {
         const phoneNumber = parseInt(phone);
     }
 
-    User.create({ firstname: firstname, lastname: lastname, email:email, phoneNumber:phone, department:department, job:job,  organizationName:organizationName })
+     const org = await db.Organization.findOne({ where: { organizationName: 'Coca Cola'  } });
+     OrganizationID == 1;//org.OrganizationID;
+
+    // const dept = await db.Department.findOne({ where: { departmentName } });
+    // let departmentID = dept.departmentID;
+
+    // const head = await User.findOne({ where: { username: headName } });
+    // let headID = head.headID;
+
+    User.create({ firstname: firstname, lastname: lastname, email:email, phoneNumber:phone, departmentID: departmentID, job:job,  OrganizationID: OrganizationID })
     .then(data => {
         res.send(data);
+        console.log(data)
     })
+
     .catch(err => {
         res.status(500).send({ message: err });
     });
 
-    
 
 }

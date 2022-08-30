@@ -22,7 +22,7 @@ const MainRequests = () => {
   }, [dispatch]);
   return (
     <div>
-    { isAdmin=== 2 &&
+    { isAdmin === 2 &&
     <section className="content-main">
       <div className="content-header">
         <h2 className="content-title">Ажил даалгаврууд</h2>

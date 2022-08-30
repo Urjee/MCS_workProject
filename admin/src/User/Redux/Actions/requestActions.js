@@ -17,10 +17,10 @@ import {
     try {
       dispatch({ type: REQUEST_LIST_REQUEST });
 
-      const { data } = await axios.get(`${URL}/api/userReqs`)
+      const { impData } = await axios.get(`${URL}/api/userReqs`)
 
 
-      dispatch({ type: REQUEST_LIST_SUCCESS, payload: data });
+      dispatch({ type: REQUEST_LIST_SUCCESS, payload: impData });
     } catch (error) {
       const message =
         error.response && error.response.data.message
@@ -37,7 +37,7 @@ import {
   
 // CREATE USERREQ
 export const createUserReq =
-(name, organizationID, importanceID, planTime, file_id, description) =>
+(name, organizationName, subWordID, importanceName, planTime, file_name, description) =>
   async (dispatch, getState) => {
     try {
       dispatch({ type: USERREQ_CREATE_REQUEST });
@@ -52,13 +52,13 @@ export const createUserReq =
         },
       };
 
-      const { data } = await axios.post(
+      const { impData } = await axios.post(
         `${URL}/api/addUserReq/`,
-        {name, organizationID, importanceID, planTime, file_id, description },
+        {name, organizationName, subWordID, importanceName, planTime, file_name, description},
         config
       );
 
-      dispatch({ type: USERREQ_CREATE_SUCCESS, payload: data });
+      dispatch({ type: USERREQ_CREATE_SUCCESS, payload: impData });
     } catch (error) {
       const message =
 

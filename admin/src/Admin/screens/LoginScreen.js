@@ -20,7 +20,7 @@ const Login = ({ history }) => {
     if (userInfo) {
       window.localStorage.setItem("userid", userInfo.UserID);
       window.localStorage.setItem("headid", userInfo.headID);
-      console.log(userInfo.UserID)
+      // console.log(userInfo.UserID)
       history.push("/");
     }
   }, [userInfo, history]);

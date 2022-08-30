@@ -19,44 +19,56 @@ const AddUserMain = () => {
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [department, setDepartment] = useState("");
+  const [departmentID, setDepartment]= useState("")
   const [job, setJob] = useState("");
   const [organizationID, setOrganization] = useState("");
-  const [headID, setHead]= useState("");
-
+  const [headName, setHeadName]= useState("");
+  const [name, setName] = useState("");
+  const [depName, setDepName] = useState("");
   let orgs = [];
   let orgnames = [];
-
+  let dep = [];
 
   const dispatch = useDispatch();
 
   const userCreate = useSelector((state) => state.userCreate);
   const { loading, error, user } = userCreate;
-  const [name, setName] = useState("")
-
     
     const handleOrganization=(event)=>{
       const getOrganizationID=event.target.value;
       console.log(getOrganizationID);
     }
+    const handleDepartment=(event)=>{
+      const getDepartmentID=event.target.value;
+      console.log(getDepartmentID);
+    }
     useEffect(() => {
       const name = () => {
         fetch('http://localhost:8080/api/organization').then(res => res.json()).then(data => 
-        
           setName(data)
         // data.forEach(item => {
         //   orgs.push(item);
-        // })
-        
+        // })    
     );
       }
+      const department=()=>{
+        fetch('http://localhost:8080/api/department').then(res => res.json()).then(depData =>
+        setDepName(depData)
+    );}
       name()
+      department()
     }, [])
+
+      // handleChange(event) {
+      //   this.setState({ [event.target.name]: event.target.value });
+      // }
     
     let arr = [];
-
+    let arr1 = [];
+    
     for(let i in name) {
       arr.push(name[i].organizationName)
+      // arr.push(department[i].department)
     }
     console.log(arr)
 
@@ -65,9 +77,20 @@ const AddUserMain = () => {
     });
     console.log(orgnames)
 
+    for(let i in depName) {
+      arr1.push(depName[i].departmentName)
+    }
+    console.log(arr1)
+
+    dep.forEach(i=> {
+      dep.push(i.departmentName)
+    });
+    console.log(dep)
+
   useEffect(() => {
     
     setOrganization(orgs);
+    setDepartment(dep);
     if (user) {
       toast.success("Хэрэглэгч нэмэгдлээ", ToastObjects);
       dispatch({ type: USER_CREATE_RESET });
@@ -78,7 +101,7 @@ const AddUserMain = () => {
       setDepartment("");
       setJob("");
       setOrganization("");
-      setHead("");
+      setHeadName("");
 
     }
   }, [user, dispatch]);
@@ -86,7 +109,7 @@ const AddUserMain = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(createUser(firstname, lastname, email, phone, department, job, organizationID, headID));
+    dispatch(createUser(firstname, lastname, email, phone, departmentID, job, organizationID, headName));
   };
 
   return (
@@ -166,11 +189,11 @@ const AddUserMain = () => {
                       className="form-select"
                       id="user_organization"
                       required
-                      onChange={(e) => handleOrganization(e)}
+                      onChange={(e) =>handleOrganization(e)}
                     >
                       <option value="">Сонгох</option>
                       {arr.map(data => 
-                        <option>{data}</option>
+                        <option value={data}>{data}</option>
                       )}
                     </select>
                   </div>
@@ -182,11 +205,11 @@ const AddUserMain = () => {
                       className="form-select"
                       id="user_department"
                       required
-                      onChange={(e) => handleOrganization(e)}
+                      onChange={(e) => handleDepartment(e)}
                     >
                       <option value="">Сонгох</option>
-                      {arr.map(data => 
-                        <option>{data}</option>
+                      {arr1.map(depData => 
+                        <option value={depData}>{depData}</option>
                       )}
                     </select>
                   </div>
@@ -210,13 +233,26 @@ const AddUserMain = () => {
                     </label>
                     <input
                       type="text"
-                      placeholder="Type here"
                       className="form-control"
                       id="user_head"
+                      placeholder="Type here"
+
                       required
-                      value={headID}
-                      onChange={(e) => setHead(e.target.value)}
+                      value={headName}
+                      onChange={(e) => setHeadName(e.target.value)} 
                     />
+                        {/* <select value={optionState} onChange={handleChange}>
+                          <option value="1">Админ</option>
+                          <option value="0">Хэрэглэгч</option>
+                          <option value="3">Удирдлага</option>
+
+                        </select> */}
+                      {/* if(isAdmin==1){
+                        <div onClick={()=> handleChangeCheckboxs(item.id)}>
+                          
+                          </div>
+                      } */}
+                   
                   </div>
                 </div>
               </div>
@@ -230,7 +266,7 @@ const AddUserMain = () => {
               Хадгалах
               </button>
               <div>
-
+            
             </div>
           </div>
 

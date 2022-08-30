@@ -5,7 +5,11 @@ const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   host: dbConfig.HOST,
   dialect: dbConfig.dialect,
   dialectOptions: {
-    options: { "requestTimeout": 300000 }
+    options: { "requestTimeout": 300000 , encrypt: false,
+    trustedconnection: true,
+    enableArithAbort : true, 
+    instancename :'SQLEXPRESS',
+  },
   },
   pool: {
     max: dbConfig.pool.max,
@@ -16,7 +20,7 @@ const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
 });
 
 const db = {};
-
+db.Department=require('./Department')(sequelize, Sequelize);
 db.Organization = require('./Organization')(sequelize, Sequelize);
 db.User = require('./User')(sequelize, Sequelize);
 db.Work = require('./Work')(sequelize, Sequelize);

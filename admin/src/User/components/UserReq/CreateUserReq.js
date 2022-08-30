@@ -17,97 +17,101 @@ const ToastObjects = {
 const AddUserReq=()=>{
     const [name, setName] = useState("");
     const [organizationID, setOrganization] = useState(0);
-    // const [subWorkID, setSubWork] = useState("");
-    // const [importance, setImportance] = useState([]);
+    const [subWorkID, setSubWork] = useState("");
     const [importanceID, setImportance]= useState(0);
     const [planTime, setPlanTime] = useState("");
-    const [file_id, setFile] = useState(0);
+    // const [file_name, setFile] = useState(0);
     const [description, setDescription] = useState("");
-
-    // const orgs = [];
-    // const imprts=[];
+    const [orgname, setOrgName] = useState("");
+    const [impName, setImpName] = useState("");
+  
+    const orgs = [];
+    const orgnames = [];
+    const imprts=[];
     
     const dispatch = useDispatch();
 
     const userReqCreate=useSelector((state)=>state.userReqCreate);
     const {loading, error, request}=userReqCreate;
 
+    const handleOrganization=(event)=>{
+      const getOrganizationID=event.target.value;
+      console.log(getOrganizationID);
+    }
+    const handleImportance=(event)=>{
+      const getImportanceD=event.target.value;
+      console.log(getImportanceD);
+    }
+    useEffect(() => {
+      const orgname = () => {
+        fetch('http://localhost:8080/api/organization').then(res => res.json()).then(data => 
+        setOrgName(data)    
+    );
+      }
+      const impName=()=>{
+        fetch('http://localhost:8080/api/importance').then(res => res.json()).then(impData =>
+        setImpName(impData)
+    );}
+    orgname()
+    impName()
+    }, [])
+
+    let arr=[];
+    let arr1=[];
+
+    for(let i in orgname) {
+      arr.push(orgname[i].organizationName)
+    }
+    console.log(arr)
+
+    orgs.forEach(i => {
+      orgnames.push(i.organizationName)
+    });
+    console.log(orgnames)
+
+    for(let i in impName) {
+      arr1.push(i.importanceName)
+    }
+    console.log(arr1)
+    imprts.forEach(i=> {
+      imprts.push(i.importanceName)
+    });
+    console.log(imprts)
 
     // multiple file upload
-      const fileUploader= document.getElementById('file-uploader');
-      fileUploader.addEventListener('change', (event)=>{
-        const files=event.target.files;
-        console.log('files', files);
+      // const fileUploader= document.getElementById('file-uploader');
+      // fileUploader.addEventListener('change', (event)=>{
+      //   const files=event.target.files;
+      //   console.log('files', files);
 
-        const feedback= document.getElementById('feedback');
-        const msg= `${files.length} файл амжилттай байршууллаа!`;
-        feedback.innerHTML=msg;
-      });
+      //   const feedback= document.getElementById('feedback');
+      //   const msg= `${files.length} файл амжилттай байршууллаа!`;
+      //   feedback.innerHTML=msg;
+      // });
 
-        /*SELECT
-    useEffect( ()=>{
-      const getimportance=async()=>{
-        const resimportance=await fetch("http://localhost:8080/api/importance/");
-        const resimpor= await resimportance.json();
-        setImportance(await resimpor);
-      }
-      getimportance();
-    },[]);
+    useEffect(() => {
 
-    const handleimportance=(event)=>{
-      const getimportanceID=event.target.value;
-      setImportanceID(getimportanceID);
-    }
-    useEffect( ()=>{
-      const getstate=async()=>{
-        const state= await fetch(`http://localhost:8080/api/importance/state/${importanceID}`);
-        const resst= await state.json();
-        setImportance(await resst);
-      }
-      getstate();
-    },[importanceID]);
-
-    // useEffect(()=>{
-    //   const getState=async()=>{
-    //     const res=await fetch('http://localhost:8080/api/organization').then(res => res.json()).then(data => orgs.push(data));
-    //     // const getcon= await res.json();
-    //     // console.log(getcon);
-    //     // setOrganization(await getcon);
-
-    //   }
-    //   getState();
-    // },[]);
-    // const handleOrganization=(event)=>{
-    //   const getOrganizationID=event.target.value;
-    //   console.log(getOrganizationID);
-    // }
-
-
-    // fetch('http://localhost:8080/api/organization').then(res => res.json()).then(data => orgs.push(data))
-    // fetch('http://localhost:8080/api/importance').then(res => res.json()).then(data => imprts.push(data))
-
-*/
-    useEffect(()=>{
+        setOrganization(orgs);
+        setImportance(imprts);
         if(request){
             toast.success("Ажил даалгавар нэмэгдлээ", ToastObjects);
             dispatch({type: USERREQ_CREATE_RESET});
             setName("");
             setOrganization(0);
-            // setSubWork("");
+            setSubWork("");
             setImportance(0);
             setPlanTime("");
-            setFile(0);
+            // setFile(0);
             setDescription("");
         }
     },[request,dispatch]);
     
     const submitHandler=(e)=>{
         e.preventDefault();
-        dispatch(createUserReq(name, organizationID, importanceID, planTime, file_id, description));
+        dispatch(createUserReq(name, subWorkID, organizationID, importanceID, planTime,  description));
       
     };
-    // console.log(orgs)
-    // console.log(imprts)
+
     return (
         <>
         <Toast/>
@@ -135,94 +139,52 @@ const AddUserReq=()=>{
                       onChange={(e) => setName(e.target.value)}
                     />
                   </div>
-                  <div className="mb-6">
-                    <label htmlFor="userReq_organization" className="form-label">
-                      Харилцах байгууллага
-                    </label>
-                     <input
-                      type="text"
-                      placeholder="Type here"
-                      className="form-control"
-                      id="userReq_organization"
-                      required
-                      value={organizationID}
-                      onChange={(e) => setOrganization(e.target.value)} />
-                  
-                    {/* <select
-                      type="text"
-                      placeholder="Type here"
-                      className="form-control"
-                      id="userReq_organization"
-                      required
-                      onChange={(e) => setOrganization(e.target.value)}
-                      > 
-                       <option value="0">Сонгох</option>
-                        {
-                          orgs.map( (orgGet)=>(
-                            <option key={orgGet.organizationName} value={orgGet.organizationName}>
-                              {orgGet.organizationName}
-                            </option>
-                          ))
-                        }
-                        </select>
-                       */}
-
-                        {/* {orgs.map(orgz => orgz.map(org => {
-                          return (<option>{org.organizationName}</option>)
-                        }))} */}
-                    {/* </select> */}
-                  </div>
-                  <div className="mb-6">
-                    <label htmlFor="userReq_importance" className="form-label">
-                      Чухал байдал
-                    </label>
-
-                    {/* songodog bolgoh */}
-                    <input
-                      type="text"
-                      placeholder="Type here"
-                      className="form-control"
-                      id="userReq_importance"
-                      required
-                      value={importanceID}
-                      onChange={(e) => setImportance(e.target.value)}
-                    />
-                      {/* <select className="form-select" name="state" onChange={(e)=>handleimportance(e)}>
-                        <option value=""> songo</option>
-                        {
-                          importance.map( (getimportance, index)=>{
-                            <option key={index} value={getimportance.name}>{getimportance.name}</option>
-                          })
-                        }
-                      </select> */}
-
-                    {/* <select
-                      type="text"
-                      placeholder="Type here"
-                      className="form-control"
-                      id="userReq_importance"
-                      required
-                      onChange={(e) => setImportance(e.target.value)}
-                    >
-                      <option value="0">Сонгох</option>
-                        {imprts?.map(impt => impt?.map(imprt => {
-                          return (<option>{imprt?.name}</option>)
-                        }))}
-                    </select> */}
-                  </div>
-                        {/* <div className="mb-6">
-                    <label htmlFor="userReq_subWork" className="form-label">
-                      Дэд ажил бүртгэх
+                  <div className="mb-4">
+                  <label htmlFor="userReq_subWork" className="form-label">
+                      Дэд ажил нэмэх тоо
                     </label>
                     <input
                       type="text"
                       placeholder="Type here"
                       className="form-control"
                       id="userReq_subWork"
-                      required
                       value={subWorkID}
                       onChange={(e) => setSubWork(e.target.value)}
-                    /> */}
+                    />
+                  </div>
+                  <div className="mb-6">
+                    <label htmlFor="userReq_organization" className="form-label">
+                      Харилцах байгууллага
+                    </label>
+                    <select
+                      className="form-select"
+                      id="user_organization"
+                      required
+                      onChange={(e) =>handleOrganization(e)}
+                    >
+                      <option value="">Сонгох</option>
+                      {arr.map(data => 
+                        <option value={data}>{data}</option>
+                      )}
+                    </select>
+                  </div>
+                  <div className="mb-6">
+                    <label htmlFor="userReq_importance" className="form-label">
+                      Чухал байдал
+                    </label>
+                    <select
+                      className="form-select"
+                      id="user_importance"
+                      required
+                      onChange={(e) =>handleImportance(e)}
+                    >
+                      <option value="">Сонгох</option>
+                      {arr1.map(impData => 
+                        <option value={impData}>{impData}</option>
+                      )}
+                    </select>
+              
+                  </div>
                   <div className="mb-6">
                     <label htmlFor="userReq_planTime" className="form-label">
                       Төлөвлөгөөт огноо
@@ -237,7 +199,7 @@ const AddUserReq=()=>{
                       onChange={(e) => setPlanTime(e.target.value)}
                     />
                   </div>
-                  <div className="mb-6">
+                  {/* <div className="mb-6">
                     <label htmlFor="userReq_file_id" className="form-label">
                       Хавсралт
                     </label>
@@ -246,11 +208,11 @@ const AddUserReq=()=>{
                       placeholder="Type here"
                       className="form-control"
                       id="file-uploader"
-                      value={file_id}
+                      value={file_name}
                       onChange={(e) => setFile(e.target.value)}
-                      multiple
+                      // multiple
                     />
-                  </div>
+                  </div> */}
                    <div className="mb-6">
                     <label htmlFor="userReq_description" className="form-label">
                       Тайлбар

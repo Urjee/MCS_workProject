@@ -24,13 +24,7 @@ module.exports = (sequelize, Sequelize) => {
         },
         phone: {
             type: Sequelize.INTEGER,
-        },
-        department: {
-            type: Sequelize.STRING,
-        },
-        job: {
-            type: Sequelize.STRING,
-        },
+        }, 
         email: {
             type: Sequelize.STRING,
         },
@@ -45,14 +39,23 @@ module.exports = (sequelize, Sequelize) => {
                 key: 'organizationID'
             },
         },
+        departmentID: {
+            type: Sequelize.INTEGER,
+            references: {
+                model: 'Departments',
+                key:'departmentID'
+            },
+        },
+        job: {
+            type: Sequelize.STRING,
+        },
         headID: {
             type: Sequelize.INTEGER,
             references: {
                 model: 'Users',
                 key: 'UserID'
             }
-        }
-      
+        },      
     }, {
         timestamps: false,
         createdAt: false,
@@ -64,11 +67,7 @@ module.exports = (sequelize, Sequelize) => {
         User.hasMany('UserReq',{foreignKey: 'UserID'});
         User.hasMany('Users',{foreignKey: 'UserID'});
         User.belongsTo('Organization', { foreignKey: 'organizationID' });
-
+        User.belongsTo('Department', {foreignKey: 'departmentID'});
     };
-    
-    // Request.associate = () => {
-    //     Request.hasMany('User', {foreignKey : 'requestID'});
-    // }
     return User;
 };

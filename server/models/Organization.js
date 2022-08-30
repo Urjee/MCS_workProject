@@ -28,7 +28,7 @@ module.exports = (sequelize, Sequelize) => {
         Organization.hasMany('Work',{foreignKey : 'organizationID'})
         Organization.hasMany('UserReq',{foreignKey : 'organizationID'})
         Organization.hasMany('Request',{foreignKey : 'organizationID'})
-
+        Organization.hasMany('Department', {foreignKey: 'organizationID'});
 
     };
 

@@ -156,9 +156,9 @@ userRouter.get(
 userRouter.get(
   "/addUser",
   asyncHandler(async (req, res) => {
-    const { UserID,username, password, firstname,lastname,phone,address,job, email, isAdmin, organizationID, usercode } = req.body;
+    const { UserID,username, password, firstname,lastname,phone,address,job, email, isAdmin, organizationID, headName } = req.body;
 
-    const userExists = await User.create({ UserID, username, password, firstname, lastname,phone, address, job, email, isAdmin, organizationID, usercode });
+    const userExists = await User.create({ UserID, username, password, firstname, lastname,phone, address, job, email, isAdmin, organizationID, headName });
 
     if (userExists) {
       res.status(400);
@@ -177,7 +177,7 @@ userRouter.get(
         email,
         isAdmin,
         organizationID,
-        usercode,
+        headID,
      
     });
 
@@ -194,12 +194,28 @@ userRouter.get(
         email:user.email,
         isAdmin:user.isAdmin,
         organizationID:user.organizationID,
-        usercode: user.usercode,
+        headID: user.headID,
         token: generateToken(user.UserID)
       });
     } else {
       res.status(400);
       throw new Error("Invalid User Data");
+    }
+  })
+);
+//DELETE USER
+userRouter.delete(
+  "/:id",
+  protect,
+  admin,
+  asyncHandler(async (req, res) => {
+    const user= await User.findById(req.params.id);
+    if(user) {
+      await user.remove();
+      res.json({ message: "Хэрэглэгч устгагдлаа "});
+    } else {
+      res.status(404);
+      throw new Error("Хэрэглэгч олдсонгүй");
     }
   })
 );

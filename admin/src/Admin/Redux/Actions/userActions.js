@@ -110,7 +110,7 @@ export const listUser = () => async (dispatch, getState) => {
 };
 
 // DELETE USER
-export const deleteUser = (id) => async (dispatch, getState) => {
+export const deleteUser = (UserID) => async (dispatch, getState) => {
   try {
     dispatch({ type: USER_DELETE_REQUEST });
 
@@ -124,7 +124,7 @@ export const deleteUser = (id) => async (dispatch, getState) => {
       },
     };
 
-    await axios.delete(`${URL}/api/users/${id}`, config);
+    await axios.delete(`${URL}/api/users/${UserID}`, config);
 
     dispatch({ type: USER_DELETE_SUCCESS });
   } catch (error) {
@@ -143,7 +143,7 @@ export const deleteUser = (id) => async (dispatch, getState) => {
 };
 // CREATE USER
 export const createUser =
-  ( firstname, lastname, email, phone, department, job, organizationID) =>
+  ( firstname, lastname, email, phone, departmentName, job, organizationName, headID) =>
   async (dispatch, getState) => {
     try {
       dispatch({ type: USER_CREATE_REQUEST });
@@ -160,7 +160,7 @@ export const createUser =
 
       const { data } = await axios.post(
         `${URL}/api/addUser/`,
-        {firstname, lastname, email, phone, department, job, organizationID },
+        {firstname, lastname, email, phone, departmentName, job, organizationName, headID },
         config
       );
 

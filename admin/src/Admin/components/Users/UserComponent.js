@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { listUser } from "../../Redux/Actions/userActions";
@@ -19,7 +19,22 @@ const UserComponent = () => {
 
   const isAdmin = userinfo.isAdmin;
 
+  // const [ currentItems, setCurrentItems]=useState(null);
+  // const [ pageCount, setPageCount] = useState(0);
+  // const [itemOffset, setItemOffSet] = useState(0);
+
   useEffect(() => {
+    // const endOffset = itemOffset+ itemPerPage;
+    // console.log(`Loading items from ${itemOffset} to ${endOffset}`);
+    // setCurrentItems(items.slice(itemOffset, endOffset));
+    // setPageCount(Math.ceil(items.length / itemPerPage));
+
+    // const handlePageClick = (event) => {
+    //   const newOffset = event.selected * itemsPerPage % items.length;
+    //   console.log(`User requested page number ${event.selected}, which is offset ${newOffset}`);
+    //   setItemOffset(newOffset);
+    // };
+  
     dispatch(listUser());
   }, [dispatch, successDelete]);
   return (
@@ -60,26 +75,49 @@ const UserComponent = () => {
             )}
         </div>
       </div>
-
-          <nav className="float-end mt-4" aria-label="Page navigation">
+            <div id="container">
+            {/* <Items currentItems={currentItems} />
+            <ReactPaginate
+              nextLabel="next >"
+              onClick={handlePageClick}
+              onPageChange={handlePageClick}
+              pageRangeDisplayed={3}
+              marginPagesDisplayed={2}
+              pageCount={pageCount}
+              previousLabel="< previous"
+              pageClassName="page-item"
+              pageLinkClassName="page-link"
+              previousClassName="page-item"
+              previousLinkClassName="page-link"
+              nextClassName="page-item"
+              nextLinkClassName="page-link"
+              breakLabel="..."
+              breakClassName="page-item"
+              breakLinkClassName="page-link"
+              containerClassName="pagination"
+              activeClassName="active"
+              renderOnZeroPageCount={null}
+            /> */}
+            </div>
+          {/* <nav className="float-end mt-4" aria-label="Page navigation">
             <ul className="pagination">
               <li className="page-item disabled">
-                <Link className="page-link" to="#">
+                <Link className="page-link" to="1">
                   Өмнөх
                 </Link>
               </li>
               <li className="page-item active">
-                <Link className="page-link" to="#">
+                <Link className="page-link" to="2">
                   1
                 </Link>
               </li>
               <li className="page-item">
-                <Link className="page-link" to="#">
+                <Link className="page-link" to="3">
                   Дараагийн
                 </Link>
               </li>
             </ul>
-          </nav>
+          </nav> */}
     </section>
   );
 };

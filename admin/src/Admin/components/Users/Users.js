@@ -7,9 +7,9 @@ const Users = (props) => {
   const { users } = props;
   const dispatch = useDispatch();
 
-  const deletehandler = (id) => {
+  const deletehandler = (UserID) => {
     if (window.confirm("Та устгахдаа итгэлтэй байна уу??")) {
-      dispatch(deleteUser(id));
+      dispatch(deleteUser(UserID));
     }
   };
 
@@ -23,9 +23,9 @@ const Users = (props) => {
           <th scope="col">Овог</th>
           <th scope="col">Имэйл</th>
           <th scope="col">Утас</th>
+          <th scope="col">Харьяа байгууллага</th>
           <th scope="col">Алба хэлтэс</th>
           <th scope="col">Албан тушаал</th>
-          <th scope="col">Харьяа байгууллага</th>
           <th scope="col">Удирдлага</th>
           <th scope="col" className="text-end">
             Үйлдэл
@@ -39,10 +39,10 @@ const Users = (props) => {
             <td>{user.lastname}</td>
             <td>{user.email}</td>
             <td>{user.phone}</td>
-            <td>{user.department}</td>
-            <td>{user.job}</td>
             <td>{user.organizationName}</td>
-            <td>{user.headID}</td>
+            <td>{user.departmentName}</td>
+            <td>{user.job}</td>
+            <td>{user.headName}</td>
             <td className="text-end">
               <div className="dropdown">
                 <Link
