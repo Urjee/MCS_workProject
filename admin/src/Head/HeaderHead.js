@@ -4,7 +4,7 @@ import $ from "jquery";
 import { useDispatch } from "react-redux";
 import { logout } from "./Redux/Actions/userActions"
 import logo from "./img/user.png";
-const Header = () => {
+const HeaderHead = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     $("[data-trigger]").on("click", function (e) {
@@ -28,11 +28,14 @@ const Header = () => {
   const logoutHandler = () => {
     dispatch(logout());
   };
+   const firstname = window.localStorage.getItem("firstname");
+
+
   return (
     <header className="main-header navbar">
       <div className="col-search">
         <form className="searchform">
-          <div className="input-group">
+          {/* <div className="input-group">
             <input
               list="search_terms"
               type="text"
@@ -42,7 +45,7 @@ const Header = () => {
             <button className="btn btn-light bg" type="button">
               <i className="far fa-search"></i>
             </button>
-          </div>
+          </div> */}
           <datalist id="search_terms">
             
           </datalist>
@@ -67,9 +70,13 @@ const Header = () => {
             </Link>
             <div className="dropdown-menu dropdown-menu-end">
               <Link className="dropdown-item" to="/">
-                Профайл
+              <i className="icon fas fa-user"></i>
+                {firstname}
               </Link>
               <Link className="dropdown-item" to="#">
+              {/* <i className="icon fas fa-setting"></i> */}
+              <i class="fa fa-cog" aria-hidden="true"></i>
+
                 Тохиргоо
               </Link>
               <Link
@@ -77,6 +84,7 @@ const Header = () => {
                 className="dropdown-item text-danger"
                 to="#"
               >
+                <i class="fa fa-sign-out"  aria-hidden="true"></i>
                 Гарах
               </Link>
             </div>
@@ -87,4 +95,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default HeaderHead;

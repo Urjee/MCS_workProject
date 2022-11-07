@@ -23,14 +23,12 @@ const db = {};
 db.Department=require('./Department')(sequelize, Sequelize);
 db.Organization = require('./Organization')(sequelize, Sequelize);
 db.User = require('./User')(sequelize, Sequelize);
-db.Work = require('./Work')(sequelize, Sequelize);
 db.Importance= require('./Importance')(sequelize, Sequelize);
-db.Request = require('./Request')(sequelize, Sequelize);
-db.UserReq=require('./UserReq')(sequelize, Sequelize);
+db.UserReq = require('./UserReq')(sequelize, Sequelize);
 db.File = require('./File')(sequelize, Sequelize);
 db.SubWork = require('./SubWork')(sequelize, Sequelize);
 db.State=require('./State')(sequelize, Sequelize);
-
+db.Head=require('./Head')(sequelize, Sequelize);
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 

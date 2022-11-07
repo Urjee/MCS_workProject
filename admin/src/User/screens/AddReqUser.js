@@ -3,7 +3,7 @@ import SidebarUser from "../SidebarUser";
 import HeaderUser from "../HeaderUser";
 import CreateUserReq from "../components/UserReq/CreateUserReq";
 
-const UserAddMain = () => {
+const AddReqUser = () => {
   return (
     <>
       <SidebarUser />
@@ -15,4 +15,4 @@ const UserAddMain = () => {
   );
 };
 
-export default UserAddMain;
+export default AddReqUser;

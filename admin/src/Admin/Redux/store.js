@@ -1,6 +1,8 @@
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
+
+////------------ADMIN REDUCERS
 import {
    userCreateReducer,
    userDeleteReducer,
@@ -9,35 +11,37 @@ import {
    userListReducer, 
    userLoginReducer 
   } from "./Reducers/userReducers";
+
 import {
-  workCreateReducer,
-  workDeleteReducer,
-  workEditReducer,
   workListReducer,
-  workUpdateReducer,
 } from "./Reducers/workReducer";
-// import {
-//   requestListReducer,
-// } from "./Reducers/requestReducer";
 
 import {
   requestListReducer,
-  userReqCreateReducer,
-} from "../../User/Redux/Reducers/requestReducer";
+  requestCreateReducer,
+  requestUpdateReducer,
+} from "./Reducers/requestReducer";
+
+///-------------USER REDUCERS
 
 import {
-  HeadrequestListReducer,
+  userReqListReducer,
+  userReqCreateReducer,
+  
+} from "../../User/Redux/Reducers/requestReducer";
+
+///---------------HEAD REDUCERS
+
+import {
+  HeadRequestListReducer,
   headReqDetailsReducer,
   headReqEditReducer,
 } from "../../Head/Redux/Reducers/requestReducer";
 
 import {
-  productListReducer,
-  productDeleteReducer,
-  productCreateReducer,
-  productEditReducer,
-  productUpdateReducer,
-} from "../../Head/Redux/Reducers/ProductReducers";
+  headUserListReducer,
+  addUserReducer,
+} from "../../Head/Redux/Reducers/userReducers";
 
 const reducer = combineReducers({
   userLogin: userLoginReducer,
@@ -46,37 +50,31 @@ const reducer = combineReducers({
   userDelete:userDeleteReducer,
   userEdit:userEditReducer,
   userUpdate:userUpdateReducer,
-  workCreate: workCreateReducer,
-  workDelete:workDeleteReducer,
-  workEdit:workEditReducer,
-  workList:workListReducer,
-  workUpdate:workUpdateReducer,
 
-  requestList:requestListReducer,
+  updateRequest:requestUpdateReducer,
+
+  requestCreate:requestCreateReducer,
+
+  userReqList:userReqListReducer,
   userReqCreate:userReqCreateReducer,
 
-  headrequestList:HeadrequestListReducer,
+  headRequestList:HeadRequestListReducer,
   headReqDetail:headReqDetailsReducer,
   headReqEdit: headReqEditReducer,
+  headCreateUser: addUserReducer,
 
-  productList: productListReducer,
-  productDelete: productDeleteReducer,
-  productCreate: productCreateReducer,
-  productEdit: productEditReducer,
-  productUpdate: productUpdateReducer,
+  requestList: requestListReducer,
+  workList:workListReducer,
+
+  headUserList: headUserListReducer,
 });
 
 const userInfoFromLocalStorage = localStorage.getItem("userInfo")
   ? JSON.parse(localStorage.getItem("userInfo"))
   : null;
 
-  // const workInfoFromLocalStorage = localStorage.getItem("workInfo")
-  // ? JSON.parse(localStorage.getItem("workInfo"))
-  // : null;
-
 const initialState = {
   userLogin: { userInfo: userInfoFromLocalStorage },
-  // workList:{workInfo:workInfoFromLocalStorage},
 };
 
 const middleware = [thunk];

@@ -4,8 +4,13 @@ import Loading from "../components/LoadingError/Loading";
 import Toast from "../components/LoadingError/Toast";
 import { login } from "../Redux/Actions/userActions";
 import Message from "./../components/LoadingError/Error";
-
 import logo from "../img/mcs.png";
+import { toast } from "react-toastify";
+const ToastObjects = {
+  pauseOnFocusLoss: false,
+  draggable: false,
+  pauseOnHover: false,
+};
 const Login = ({ history }) => {
   window.scrollTo(0, 0);
   const [email, setEmail] = useState("");
@@ -18,12 +23,18 @@ const Login = ({ history }) => {
 
   useEffect(() => {
     if (userInfo) {
+      toast.success("Амжилттай нэвтэрлээ", ToastObjects);
+
       window.localStorage.setItem("userid", userInfo.UserID);
+      window.localStorage.setItem("firstname", userInfo.firstname);
       window.localStorage.setItem("headid", userInfo.headID);
-      // console.log(userInfo.UserID)
+      window.localStorage.setItem('isAdmin', userInfo.isAdmin);
+      window.localStorage.setItem('jobTitle', userInfo.jobTitle);
+      window.localStorage.setItem("userinfo", JSON.stringify(userInfo));
+  
       history.push("/");
     }
-  }, [userInfo, history]);
+  }, [userInfo, dispatch, history]);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -46,7 +57,6 @@ const Login = ({ history }) => {
             />
             <br/>        
           <h4 className="card-title mb-4 text-center">Нэвтрэх хэсэг</h4>
-          {/* <h6 className="card-body mb-4 text-center">Хэрэглэгчийн эрхээр нэвтэрнэ.</h6> */}
           <form onSubmit={submitHandler}>
             <div className="mb-3">
               <input

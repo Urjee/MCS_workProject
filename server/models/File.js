@@ -16,6 +16,16 @@ module.exports = (sequelize, Sequelize) => {
         },
         file_path:{
             type:Sequelize.STRING,
+        },
+        isDelete: {
+            type: Sequelize.BOOLEAN,
+        },
+        userReqID: {
+            type: Sequelize.INTEGER,
+            references:{
+                model: 'UserReq',
+                key: 'userReqID'
+            },
         }
     }, {
         timestamps: false,
@@ -24,7 +34,7 @@ module.exports = (sequelize, Sequelize) => {
     });
     File.associate=()=>{
         File.hasMany('UserReq', {foreignKey: 'file_id'});
-        File.hasMany('Request', {foreignKey: 'file_id'});
+
     }
     
     return File;

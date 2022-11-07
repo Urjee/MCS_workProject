@@ -4,16 +4,14 @@ import {
     WORK_LIST_FAIL,
   } from "../Constants/workConstants";
   import axios from "axios";
-  import { URL } from "../url";
+  import { URLFront } from "../url";
   
   
   // ALL WORK
-  export const listWork = () => async (dispatch, getState) => {
+  export const listWork = () => async (dispatch) => {
     try {
       dispatch({ type: WORK_LIST_REQUEST });
-  
-      const { data } = await axios.get(`${URL}/api/works`);
-  
+      const { data } = await axios.post(`${URLFront}/api/adminReqs`);
       dispatch({ type: WORK_LIST_SUCCESS, payload: data });
     } catch (error) {
       const message =
@@ -26,10 +24,40 @@ import {
         type: WORK_LIST_FAIL,
         payload: message,
       });
-      
     }
   };
+    // ALL REQ
+    export const listReq = () => async (dispatch) => {
+      try {
+        dispatch({ type: WORK_LIST_REQUEST });
+        const { data } = await axios.post(`${URLFront}/api/adminReqsPro`);
+        dispatch({ type: WORK_LIST_SUCCESS, payload: data });
+      } catch (error) {
+        const message =
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message;
+        if (message === "Not authorized, token failed") {
+        }
+        dispatch({
+          type: WORK_LIST_FAIL,
+          payload: message,
+        });
+      }
+    };
+      // const { data } = async () => {
+      //   await fetch('http://localhost:8080/api/adminReqs',{
+      //     method: "POST",
+      //     body: JSON.stringify({
+      //       userReqID: reqID * 1,
+      //     }),
+      //     headers: {
+      //       "Content-Type": "application/json"
+      //     }
+      //   });
+      // }
   
+   
   // // DELETE WORK
   // export const deleteWork = (id) => async (dispatch, getState) => {
   //   try {

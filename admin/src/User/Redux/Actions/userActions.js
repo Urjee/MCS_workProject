@@ -21,7 +21,7 @@ import {
 } from "../Constants/UserContants";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { URL } from "../url";
+import { URLFront } from "../url";
 
 // LOGIN
 export const login = (email, password) => async (dispatch) => {
@@ -39,7 +39,7 @@ export const login = (email, password) => async (dispatch) => {
       },
     };
     const {data} = await axios.post(
-      `${URL}/api/login`,
+      `${URLFront}/api/login`,
       { email, password},
       config,
       );
@@ -50,7 +50,7 @@ export const login = (email, password) => async (dispatch) => {
       });
     } else {
       dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
-      localStorage.setItem("userInfo", JSON.stringify(data));
+      // localStorage.setItem("userInfo", JSON.stringify(data));
     }
   } catch (error) {
     const message =
@@ -58,7 +58,6 @@ export const login = (email, password) => async (dispatch) => {
         ? error.response.data.message
         : error.message;
     if (message === "Not authorized, token failed") {
-      dispatch(logout());
     }
     dispatch({
       type: USER_LOGIN_FAIL,
@@ -70,7 +69,6 @@ export const login = (email, password) => async (dispatch) => {
 export const logout = () => (dispatch) => {
   localStorage.removeItem("userInfo");
   dispatch({ type: USER_LOGOUT });
-  dispatch({ type: USER_LIST_RESET });
 };
 
 // ALL USER
@@ -88,7 +86,7 @@ export const listWorkUser = () => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.get(`${URL}/api/workUsers`, config);
+    const { data } = await axios.get(`${URLFront}/api/workUsers`, config);
 
     dispatch({ type: USER_LIST_SUCCESS, payload: data });
   } catch (error) {
@@ -97,7 +95,6 @@ export const listWorkUser = () => async (dispatch, getState) => {
         ? error.response.data.message
         : error.message;
     if (message === "Not authorized, token failed") {
-      dispatch(logout());
     }
     dispatch({
       type: USER_LIST_FAIL,
@@ -121,7 +118,7 @@ export const deleteUser = (id) => async (dispatch, getState) => {
       },
     };
 
-    await axios.delete(`${URL}/api/users/${id}`, config);
+    await axios.delete(`${URLFront}/api/users/${id}`, config);
 
     dispatch({ type: USER_DELETE_SUCCESS });
   } catch (error) {
@@ -130,7 +127,6 @@ export const deleteUser = (id) => async (dispatch, getState) => {
         ? error.response.data.message
         : error.message;
     if (message === "Not authorized, token failed") {
-      dispatch(logout());
     }
     dispatch({
       type: USER_DELETE_FAIL,
@@ -156,7 +152,7 @@ export const createWorkUser =
       };
 
       const { data } = await axios.post(
-        `${URL}/api/addUser/`,
+        `${URLFront}/api/addUser/`,
         {workUser_id, name, organizationID, subWorkID, importance_id, stateID, planTime, file },
         config
       );
@@ -187,7 +183,6 @@ export const editUser = (id) => async (dispatch) => {
         ? error.response.data.message
         : error.message;
     if (message === "Not authorized, token failed") {
-      dispatch(logout());
     }
     dispatch({
       type: USER_EDIT_FAIL,
@@ -226,7 +221,6 @@ export const updateUser = (user) => async (dispatch, getState) => {
         ? error.response.data.message
         : error.message;
     if (message === "Not authorized, token failed") {
-      dispatch(logout());
     }
     dispatch({
       type: USER_UPDATE_FAIL,

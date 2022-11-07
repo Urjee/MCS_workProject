@@ -1,128 +1,219 @@
 const db = require('../models');
 const UserReq = db.UserReq;
 const Req = db.Request;
+const multer  = require('multer')
+const axios = require('axios')
 
 const { QueryTypes, Op } = require('sequelize');
 const events = require('events');
 
 exports.allUserReq = async(req, res) => {
-
-    // UserReq.findAll().then(data => {
-    //     res.send(data);
-    //     console.log(data)
-    // });
+    const id = req.body;
     db.sequelize.query(`
-        exec sp_userReqs 1,0,0;`, {type: QueryTypes.SELECT }).then(data => {
+        exec sp_userReqs 3,0, ${id.UserID} `,
+         {type: QueryTypes.SELECT })
+         .then(data => {
+        res.send(data);
+        });
+      };
+exports.headReqDetail = async(req, res) => {
+    const id = req.body;
+    await db.sequelize.query(
+        `exec sp_userReqs 2, ${id.userReqID}, 0`,
+         {type:QueryTypes.SELECT })
+         .then(data => {
+         res.send(data);
+        });
+    };
+exports.requestEdit = async(req, res) => {
+    const id = req.body;
+    await db.sequelize.query(
+        `exec sp_userReqs 8, ${id.userReqID}, 0`)
+        .then(data =>{
+            res.send(data);
+        });
+    }
+exports.editRequest = async(req, res) => {
+    const id = req.body;
+    await db.sequelize.query(
+        `exec sp_userReqs 8, ${id.userReqID}, 0`)
+        .then(data =>{
+            res.send(data);
+        });
+    }
+exports.reqAdminEdit = async(req, res) => {
+    const id = req.body;
+    await db.sequelize.query(
+        `exec sp_userReqs 9, ${id.userReqID}, 0`)
+        .then(data =>{
+            res.send(data);
+        });
+ }
+
+exports.message = async(req, res) => {
+    const id = req.body;
+         const msg = await db.sequelize.query(`exec sp_users 7, 0, ${id.userReqID}`)   
+        // for( var i in msg[0]) {
+        //     axios.post('http://122.201.28.39:8080/api2/data/smsregister', {
+        //             number:  msg[0][i].phone,
+        //             text: `Username: ${id.firstname}, Phone: ${id.phone}, Ajliin huseltiin web`
+        //             }
+        //         )
+        //     }
+    }
+     // await db.sequelize.query(
+    //     `exec Anungoo_db.dbo.SP_SMS_SENT_ANY_CARREER,
+    //         ${id.firstname, id.phone},
+    //         ${`exec sp_users 6,74, 0`},
+    //         'ajliin huselt'`
+    //     )
+    //     .then(data =>{
+    //         res.send(data);
+    //     });
+    // console.log(`Hereglegchiin ner: ${id.firstname},Utasnii dugaar: ${id.phone}`);
+
+exports.adminReqs = async(req, res) => {
+    await db.sequelize.query(`
+    SELECT 
+        uReqs.[userReqID]
+        ,uReqs.[name]
+        ,uReqs.[organizationID]
+        ,uReqs.[subWorkID]
+        ,uReqs.[importanceID]
+        ,uReqs.[file_id]
+        ,uReqs.[description]
+        ,uReqs.[stateID]
+        ,uReqs.[UserID]
+        ,uReqs.[startDate]
+        ,uReqs.[endDate]
+        ,uReqs.[createDate]
+        ,uReqs.[DeveloperID]
+        ,left( ureqs.realTime,8) realTime
+        ,uReqs.[planTime]
+        ,uReqs.[percentOfPerform],
+        imprts.importanceName AS importanceName,
+        stta.stateName AS stateName,
+        usr.firstname AS firstname,
+        org.organizationName AS organizationName,
+        fle.file_name AS file_name
+    FROM [dbo].UserReqs AS uReqs
+        INNER JOIN Importance AS imprts
+        ON imprts.importanceID = uReqs.importanceID
+        INNER JOIN States AS stta
+        ON stta.stateID = uReqs.stateID
+        INNER JOIN Users usr
+        ON usr.UserID = uReqs.DeveloperID
+        INNER JOIN Organizations org
+        ON org.organizationID = uReqs.organizationID
+        INNER JOIN Files fle
+        ON fle.file_id = uReqs.file_id
+    WHERE uReqs.stateID >=3  AND uReqs.importanceID = 1`,
+         {
+            type: QueryTypes.SELECT
+         })
+            .then(data => {
+            res.send(data);
+        }); 
+};
+exports.adminReqsPro = async(req, res) => {
+    await db.sequelize.query(`
+    SELECT 
+        uReqs.[userReqID]
+        ,uReqs.[name]
+        ,uReqs.[organizationID]
+        ,uReqs.[subWorkID]
+        ,uReqs.[importanceID]
+        ,uReqs.[file_id]
+        ,uReqs.[description]
+        ,uReqs.[stateID]
+        ,uReqs.[UserID]
+        ,uReqs.[startDate]
+        ,uReqs.[endDate]
+        ,uReqs.[createDate]
+        ,uReqs.[DeveloperID]
+        ,left( ureqs.realTime,8) realTime
+        ,uReqs.[planTime]
+        ,uReqs.[percentOfPerform],
+        imprts.importanceName AS importanceName,
+        stta.stateName AS stateName,
+        usr.firstname AS firstname,
+        org.organizationName AS organizationName,
+        fle.file_name AS file_name
+    FROM [dbo].UserReqs AS uReqs
+        INNER JOIN Importance AS imprts
+        ON imprts.importanceID = uReqs.importanceID
+        INNER JOIN States AS stta
+        ON stta.stateID = uReqs.stateID
+        INNER JOIN Users usr
+        ON usr.UserID = uReqs.DeveloperID
+        INNER JOIN Organizations org
+        ON org.organizationID = uReqs.organizationID
+        INNER JOIN Files fle
+        ON fle.file_id = uReqs.file_id
+    WHERE uReqs.stateID >=3 AND uReqs.importanceID>1`,
+         {
+            type: QueryTypes.SELECT
+         })
+            .then(data => {
+            res.send(data);
+        }); 
+};
+exports.allRequests = async(req, res) => {
+    await db.sequelize.query(`
+    SELECT uReqs.*,
+        imprts.importanceName AS importanceName,
+        stta.stateName AS stateName,
+        fle.file_name AS file_name,
+        org.organizationName AS organizationName
+    FROM [dbo].UserReqs AS uReqs
+        INNER JOIN Importance AS imprts
+        ON imprts.importanceID = uReqs.importanceID
+        INNER JOIN States AS stta
+        ON stta.stateID = uReqs.stateID
+        INNER JOIN Files fle
+        ON uReqs.file_id = fle.file_id
+        INNER JOIN Organizations org
+        ON org.organizationID = uReqs.organizationID
+    WHERE uReqs.stateID <= 3 AND uReqs.importanceID = 1`,
+         {
+            type: QueryTypes.SELECT
+         })
+            .then(data => {
+            res.send(data);
+        }); 
+};
+exports.requestAll = async(req, res) => {
+    await db.sequelize.query(`
+    SELECT uReqs.*,
+        imprts.importanceName AS importanceName,
+        stta.stateName AS stateName,
+        fle.file_name AS file_name,
+        org.organizationName AS organizationName
+    FROM [dbo].UserReqs AS uReqs
+        INNER JOIN Importance AS imprts
+        ON imprts.importanceID = uReqs.importanceID
+        INNER JOIN States AS stta
+        ON stta.stateID = uReqs.stateID
+        INNER JOIN Files fle
+        ON uReqs.file_id = fle.file_id
+        INNER JOIN Organizations org
+        ON org.organizationID = uReqs.organizationID
+    WHERE uReqs.importanceID != 1 AND uReqs.stateID<=3`,
+         {
+            type: QueryTypes.SELECT
+         })
+            .then(data => {
+            res.send(data);
+        }); 
+}
+exports.deleteAdminReq = async(req, res) => {
+    const id = req.body
+    db.sequelize.query(`
+        DELETE 
+		FROM UserReqs 
+		WHERE userReqID =${id.userReqID}` , 
+        { type: QueryTypes.DELETE })
+        .then(data => {
             res.send(data);
         });
 }
-
-    // const data = await db.sequelize.query(`exec Mcs_workprogress.dbo.sp_work_list 1, ${userid}, ${headid}`, { type: QueryTypes.SELECT });
-
-    // try {
-    //     if(data != 0) {
-    //         res.status(200).send(data);
-    //         console.log(data)
-    //     } else {
-    //         res.status(404).json({ message: "Couldn't find data." });
-    //         return;
-    //     }
-    // } catch(err) {
-    //     res.status(500).json({ message: err.message });
-    //     return;
-    // };
-
-
-
-exports.allProductsuser = async(req, res) => {
-
-    UserReq.findAll().then(data => {
-        res.send(data);
-        console.log(data)
-    });
-
-    // const data = await db.sequelize.query(`exec Mcs_workprogress.dbo.sp_work_list 1, ${userid}, ${headid}`, { type: QueryTypes.SELECT });
-
-    // try {
-    //     if(data != 0) {
-    //         res.status(200).send(data);
-    //         console.log(data)
-    //     } else {
-    //         res.status(404).json({ message: "Couldn't find data." });
-    //         return;
-    //     }
-    // } catch(err) {
-    //     res.status(500).json({ message: err.message });
-    //     return;
-    // };
-
-}
-
-exports.addUserReq=async(req,res)=>{
-    const {    
-        name,
-        organizationName,
-        importanceID,
-        planTime,
-        file_id,
-        stateID,
-        description,
-        headName,
-        } = req.body;
-
-    UserReq.create({ name: name, organizationName:organizationName, importanceID: importanceID, planTime: planTime, file_id: file_id,description: description, stateID: stateID, headName: headName})
-    .then(data => {
-        res.send(data);
-    })
-    .catch(err => {
-        res.status(500).send({ message: err });
-    });
-}    
-
-exports.userReqApproved = async(req, res) => {
-
-    const { name, description, planTime, organizationID, file_id, importanceID, UserID, userReqID, headName } = req.body;
-
-    const userReq = await UserReq.update({
-        stateID: 2
-    },
-    { where: {
-        [Op.not]: { userReqID: null }       
-        } 
-    });
-
-    if(userReq.stateID === 0) {
-        const reqCreate = await Req.create({ name: name, description: description, planTime: planTime, stateID: 2, file_id: file_id, organizationID: organizationID, UserID: UserID, importanceID: importanceID, userReqID: userReqID, headName: headName })
-
-        if(reqCreate) {
-            res.status(200).send(reqCreate)
-        } else {
-            res.status(400).send({ message: "Unable to create" });
-        };
-    };
-
-};
-
-exports.getAdminReqs = async(req, res) => {
-
-    const requests = await Req.findAll();
-
-    if(requests) {
-        res.status(200).send(requests);
-    } else {
-        res.status(400).send({ message: "Unable to find requests" });
-    };
-
-};
-
-exports.workRequestClose = async(req, res) => {
-
-    const { stateID, userReqID } = req.body;
-
-    const requests = await Req.update({ stateID: stateID }, { where: { userReqID: userReqID } });
-
-    if(requests) {
-        await UserReq.update({ stateID: stateID }, { where: { userReqID: userReqID } });
-    }
-
-};

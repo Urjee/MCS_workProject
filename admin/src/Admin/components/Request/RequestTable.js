@@ -8,21 +8,25 @@ const RequestTable = (props) => {
         <thead>
           <tr>
             <th scope="col">Нэр</th>
-            <th scope="col">Үүсгэгч</th>
-            <th scope="col">Төлөвлөгөөт огноо</th>
+            <th scope="col">Ажлын төрөл</th>
             <th scope="col">Төлөв</th>
-            <th scope="col">Бодит цаг</th>
+            <th scope="col">Хавсралт</th>
+            <th scope="col">Дэлгэрэнгүй</th>
+            <th scope="col"> Байгууллага</th>
+            <th>Үүсгэсэн огноо</th>
             <th scope="col" className="text-end">Үйлдэл</th>
           </tr>
         </thead>
         <tbody>
           {requests.map((request)=>(
-            <tr key={request.requestID}>
+            <tr key={request.userReqID}>
               <td>{request.name}</td>
-              <td>{request.create_user}</td>
-              <td>{request.planTime}</td>
-              <td>{request.stateID}</td>
-              <td>{request.realTime}</td>
+              <td>{request.importanceName}</td>
+              <td>{request.stateName}</td>
+              <td>{request?.file_name}</td>
+              <td>{request.description}</td>
+              <td>{request.organizationName}</td>
+              <td>{new Date(request.createDate).toISOString().slice(0,10).replace('T', '')}</td>
               <td className="text-end">
               <div className="dropdown">
                 <Link
@@ -33,11 +37,9 @@ const RequestTable = (props) => {
                   <i className="fas fa-ellipsis-h"></i>
                 </Link>
                 <div className="dropdown-menu">
-                  <Link className="dropdown-item" to="#">
+                  <Link className="dropdown-item" 
+                    to={{pathname: `/requestEdit/?id=${request.userReqID}`}}>
                     Засах
-                  </Link>
-                  <Link className="dropdown-item text-danger" to="#">
-                    Устгах
                   </Link>
                 </div>
               </div>

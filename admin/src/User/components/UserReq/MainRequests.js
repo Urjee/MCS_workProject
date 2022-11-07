@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { listRequest } from "../../Redux/Actions/requestActions";
@@ -7,50 +7,62 @@ import Loading from "../LoadingError/Loading";
 import Message from "../LoadingError/Error";
 const MainRequests = () => {
   const dispatch = useDispatch();
+  const userReqList = useSelector((state) => state.userReqList);
+  const { loading, error, userReqs } = userReqList;
+  const UserID = window.localStorage.userid * 1;
+  const [searchTerm, setSearch] = useState("");
+  const keys=["name", "importanceName"]
 
-  const requestList = useSelector((state) => state.requestList);
-  const { loading, error, requests } = requestList;
-
-  const userinfo = JSON.parse(window.localStorage.getItem('userInfo'));
-
-  const isAdmin = userinfo.isAdmin;
-
-  const userid = window.localStorage.getItem("userid");
-
+  const search = (userReqs) => {
+    return userReqs.filter((request) => 
+    keys.some((key) => request[key].toLowerCase().includes(searchTerm)))
+  }
   useEffect(() => {
-    dispatch(listRequest());
+    dispatch(listRequest(UserID));
   }, [dispatch]);
-  return (
+
+  return (   
     <div>
-    { isAdmin === 2 &&
     <section className="content-main">
       <div className="content-header">
         <h2 className="content-title">Ажил даалгаврууд</h2>
         <div>
-            <Link to="/addUserReq" className="btn btn-primary">
+            <Link to='/addUserReq' className="btn btn-primary">
             <i className="material-icons md-plus"></i> Ажил даалгавар нэмэх
-          </Link>         
+          </Link> 
         </div>
       </div>
-
+      <div className="card mb-4">
+      <header className="card-header">
+          <div className="row gx-3">
+            <div className="col-lg-4 col-md-6 me-auto">
+              <input
+                type="text"
+                placeholder="Хайх..."
+                className="form-control"
+                onChange={(e) => 
+                  setSearch(e.target.value)
+                }
+              />             
+            </div>            
+          </div>
+        </header>
+        </div>
       <div className="card shadow-sm">
         <div className="card-body">
-        <div className="table-responsive">
+        <div className="table-responsive">     
             {loading ? (
               <Loading />
             ) : error ? (
               <Message variant="alert-danger">{error}</Message>
             ) : (
-            <ReqTable requests={requests} 
-            
-            />
-        
+            <ReqTable userReqs={userReqs}       
+            /> 
             )}
             </div>
       </div>
       </div>
     </section>
-}
 </div>
   );
 };

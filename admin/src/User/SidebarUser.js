@@ -2,12 +2,11 @@ import React from "react";
 import { Link, NavLink } from "react-router-dom";
 import logo from "./img/mcs.png";
 
-const SidebarList = () => {
-  const userinfo = JSON.parse(window.localStorage.getItem('userInfo'));
-
-  const isAdmin = userinfo.isAdmin;
+const SidebarUser = () => {
+  // const userinfo = JSON.parse(window.localStorage.getItem('userInfo'));
+  // const isAdmin = userinfo.isAdmin;
+  
   return (
-    
     <div>
       <aside className="navbar-aside" id="offcanvas_aside">
         <div className="aside-top">
@@ -28,7 +27,7 @@ const SidebarList = () => {
         <nav>
           <ul className="menu-aside">
             <li className="menu-item">
-              <NavLink
+            <NavLink
                 activeClassName="active"
                 className="menu-link"
                 to="/"
@@ -41,17 +40,16 @@ const SidebarList = () => {
 
             <li className="menu-item">    
            
-               <NavLink activeClassName="active"
+            <NavLink activeClassName="active"
                 className="menu-link"
                 to="/userReqs"
               >
                 <i className="icon fas fa-user"></i>
                 <span className="text">Ажлын хүсэлт</span>
               </NavLink>
-              
             </li> 
-            <li className="menu-item">
-              <NavLink
+            {/* <li className="menu-item">
+            <NavLink
                 activeClassName="active"
                 className="menu-link"
                 to="/report"
@@ -59,7 +57,8 @@ const SidebarList = () => {
                 <i className="icon fas fa-list"></i>
                 <span className="text">Тайлан</span>
               </NavLink>
-            </li>
+            
+            </li> */}
           </ul>
           <br />
           <br />
@@ -70,4 +69,4 @@ const SidebarList = () => {
   );
 };
 
-export default SidebarList;
+export default SidebarUser;

@@ -21,9 +21,7 @@ module.exports = (sequelize, Sequelize) => {
 
     State.associate = () => {
         State.hasMany('UserReq', {foreignKey : 'stateID'});
-        State.hasMany('Request', {foreignKey : 'stateID'});
         State.hasMany('SubWork', {foreignKey : 'stateID'});
-
     };
 
     return State;

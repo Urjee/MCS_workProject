@@ -3,8 +3,8 @@ module.exports = app => {
 
     const router = require('express').Router();
 
-    router.get('/files', files.allFiles);
+    router.get('/file', files.allFiles);
+    router.post('/download', files.download);
 
     app.use('/api', router);
-    app.post("/upload", router);
 }

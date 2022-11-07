@@ -1,32 +1,26 @@
 import React from "react";
-import MainUser from "../../User/MainUser";
+import SidebarUser from "../../User/SidebarUser";
 import SidebarList from "./SidebarList";
-import MainHead from "../../Head/MainHead";
+import SidebarHead from "../../Head/SidebarHead";
+import SidebarProgram from "./SidebarProgram";
 const Sidebar = () => {
-  // const { admin }= props;
-    // let isAdmin = false;
-    const userinfo = JSON.parse(window.localStorage.getItem('userInfo'));
 
-    const isAdmin = userinfo.isAdmin;
+    const isAdmin = window.localStorage.isAdmin;
+    const jobTitle = window.localStorage.jobTitle;
+    // const [importanceID, setImportanceID] = useState();
+    
+    return (
+      <div>
+        
+        { isAdmin === '1' && jobTitle === '1' && ( <SidebarList /> ) }
 
-    // if(userinfo.isAdmin === 1) {
-    //   isAdmin = true;
-    // }
+        { isAdmin === '1' && jobTitle === '0' && ( <SidebarProgram /> ) }
 
-  return (
-    <div>
-       { isAdmin === 1 && <SidebarList/>}
-       { isAdmin === 2 && <MainUser/>}
-       { isAdmin === 3 && <MainHead/>}
-   
+        {  isAdmin === '2' && ( <SidebarUser /> ) }
 
-    {/* {admin ? (
-      <SidebarList admin={admin} />
-    ) : (
-      <MainUser admin={admin} />
-    )} */}
- </div>
-  );
-};
+        {  isAdmin === '3' && ( <SidebarHead /> ) }
+      </div>
+    );
+  };
 
 export default Sidebar;

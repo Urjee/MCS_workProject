@@ -1,9 +1,11 @@
-module.exports = app => {
-    const works = require('../controllers/workController');
+// module.exports = app => {
+//     // const works = require('../controllers/workController');
+//     const requests = require('../controllers/userReqController');
 
-    const router = require('express').Router();
+//     const router = require('express').Router();
 
-    router.get('/works', works.allWorks);
+//     // router.post('/works', works.allWorks);
+//     router.post('/userReqs', requests.allUserReq);
 
-    app.use('/api', router);
-}
+//     app.use('/api', router);
+// }

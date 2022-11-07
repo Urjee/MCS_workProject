@@ -1,6 +1,3 @@
-const User = require("./User");
-const Work = require("./Work");
-
 module.exports = (sequelize, Sequelize) => {
     const Organization = sequelize.define('Organization', {
         organizationID: {
@@ -21,19 +18,11 @@ module.exports = (sequelize, Sequelize) => {
         updatedAt: false
     });
 
-    
-
     Organization.associate = () => {
         Organization.hasMany('User', {foreignKey : 'organizationID'});
-        Organization.hasMany('Work',{foreignKey : 'organizationID'})
         Organization.hasMany('UserReq',{foreignKey : 'organizationID'})
-        Organization.hasMany('Request',{foreignKey : 'organizationID'})
         Organization.hasMany('Department', {foreignKey: 'organizationID'});
-
     };
 
     return Organization;
 };
-
-    // Organization.hasMany(User)
-// many toOne

@@ -20,16 +20,16 @@ import {
   } from "../Constants/workConstants";
   
   // ALL WORK
-  export const workListReducer = (state = { works: [] }, action) => {
+  export const workListReducer = (state = { requests: [] }, action) => {
     switch (action.type) {
       case WORK_LIST_REQUEST:
         return { loading: true };
       case WORK_LIST_SUCCESS:
-        return { loading: false, works: action.payload };
+        return { loading: false, requests: action.payload };
       case WORK_LIST_FAIL:
         return { loading: false, error: action.payload };
       case WORK_LIST_RESET:
-        return { works: [] };
+        return { requests: [] };
       default:
         return state;
     }
@@ -50,7 +50,6 @@ import {
         return state;
     }
   };
-  
   // DELETE CREATE
   export const workCreateReducer = (state = {}, action) => {
     switch (action.type) {
@@ -66,7 +65,6 @@ import {
         return state;
     }
   };
-  
   // EDIT WORK
   export const workEditReducer = (
     state = { work: { reviews: [] } },
@@ -83,7 +81,6 @@ import {
         return state;
     }
   };
-  
   // UPDATE WORK
   export const workUpdateReducer = (state = { work: {} }, action) => {
     switch (action.type) {

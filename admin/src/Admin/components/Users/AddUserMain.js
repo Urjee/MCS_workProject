@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { USER_CREATE_RESET } from "../../Redux/Constants/UserContants";
-import { createUser } from "../../Redux/Actions/userActions";
+import { adminCreateUser } from "../../Redux/Actions/userActions";
 import Toast from "../LoadingError/Toast";
 import Message from "../LoadingError/Error";
 import Loading from "../LoadingError/Loading";
@@ -19,99 +19,111 @@ const AddUserMain = () => {
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [departmentID, setDepartment]= useState("")
+  const [departmentName, setDepartmentName]= useState("")
   const [job, setJob] = useState("");
-  const [organizationID, setOrganization] = useState("");
+  const [jobTitle, setJobTile] = useState();
+  const [jobTitleName, setJobTitleName] = useState("");
+
+  const [organizationName, setOrganization] = useState("");
   const [headName, setHeadName]= useState("");
-  const [name, setName] = useState("");
+  const [name, setName] = useState([]);
   const [depName, setDepName] = useState("");
+  const [admin, setAdmin] = useState("");
+  const [headd, setHead] = useState("");
+  const [password, setPassword] = useState("");
+  const [filters, setFilters] = useState([]);
+  const [UserID, setUserID] = useState();
+  const [isActive, setIsActive] = useState();
+  const history = useHistory();
+
   let orgs = [];
-  let orgnames = [];
   let dep = [];
-
   const dispatch = useDispatch();
-
   const userCreate = useSelector((state) => state.userCreate);
   const { loading, error, user } = userCreate;
     
-    const handleOrganization=(event)=>{
-      const getOrganizationID=event.target.value;
-      console.log(getOrganizationID);
-    }
-    const handleDepartment=(event)=>{
-      const getDepartmentID=event.target.value;
-      console.log(getDepartmentID);
-    }
     useEffect(() => {
       const name = () => {
-        fetch('http://localhost:8080/api/organization').then(res => res.json()).then(data => 
-          setName(data)
-        // data.forEach(item => {
-        //   orgs.push(item);
-        // })    
-    );
-      }
-      const department=()=>{
-        fetch('http://localhost:8080/api/department').then(res => res.json()).then(depData =>
+        fetch('http://172.16.226.57:8080/api/organization')
+        .then(res => res.json())
+        .then(data => 
+        setName(data)
+        );}
+      const department = ()=>{
+        fetch('http://172.16.226.57:8080/api/department')
+        .then(res => res.json()).then(depData =>
         setDepName(depData)
-    );}
+             );
+      }
+      const head = async() => {
+        await fetch("http://172.16.226.57:8080/api/head")
+        .then(res => res.json())
+        .then(data => setHeadName(data))
+        .catch(function (error) {
+          console.log(error);
+        });
+      };
+      const jobtitle = async() => {
+        await fetch("http://172.16.226.57:8080/api/jobTitle")
+        .then(res => res.json())
+        .then(jobData => setJobTitleName(jobData))
+      };
       name()
       department()
+      head()
+      jobtitle()
+      setUserID(JSON.parse(window.localStorage.getItem('userinfo')).UserID)
     }, [])
 
-      // handleChange(event) {
-      //   this.setState({ [event.target.name]: event.target.value });
-      // }
-    
     let arr = [];
     let arr1 = [];
-    
+    let arr2 = [];
+    let arr3 = [];
+    //baiguullaga
     for(let i in name) {
       arr.push(name[i].organizationName)
-      // arr.push(department[i].department)
     }
-    console.log(arr)
-
-    orgs.forEach(i => {
-      orgnames.push(i.organizationName)
-    });
-    console.log(orgnames)
-
+    //alba heltes
     for(let i in depName) {
       arr1.push(depName[i].departmentName)
     }
-    console.log(arr1)
-
-    dep.forEach(i=> {
-      dep.push(i.departmentName)
-    });
-    console.log(dep)
+    //udirdlaga buyu head
+    for(let i in headName) {
+      arr2.push(headName[i].firstname)
+    }
+    for(let i in jobTitleName ) {
+      arr3.push(jobTitleName[i].jobTitleName)
+    }
+    const filterChange = (name) => {
+      setFilters(headName.filter(e => e.organizationName === name));
+    }
 
   useEffect(() => {
-    
-    setOrganization(orgs);
-    setDepartment(dep);
     if (user) {
-      toast.success("Хэрэглэгч нэмэгдлээ", ToastObjects);
       dispatch({ type: USER_CREATE_RESET });
+      setPassword();
       setFirstname("");
       setLastname("");
       setEmail("");
-      setPhone(0);
-      setDepartment("");
+      setPhone();
       setJob("");
-      setOrganization("");
-      setHeadName("");
-
+      setOrganization(orgs);
+      setDepartmentName(dep);
+      setHead(headd);
+      setAdmin(admin);
+      setIsActive();
+      setJobTile();
+      setJobTitleName(jobTitleName);
     }
   }, [user, dispatch]);
 
-
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(createUser(firstname, lastname, email, phone, departmentID, job, organizationID, headName));
-  };
-
+    toast.success("Хэрэглэгч нэмэгдлээ", ToastObjects);
+    dispatch(adminCreateUser(password, firstname, lastname, email, phone, departmentName, job, organizationName, headd, admin, isActive, jobTitle, jobTitleName));
+    setTimeout(() => history.push('/users'), 2000)
+  }; 
+  
   return (
     <>
       <Toast />
@@ -189,9 +201,12 @@ const AddUserMain = () => {
                       className="form-select"
                       id="user_organization"
                       required
-                      onChange={(e) =>handleOrganization(e)}
-                    >
-                      <option value="">Сонгох</option>
+                      onChange={
+                        (e) => {
+                          setOrganization(e.currentTarget.value)
+                          filterChange(e.target.value)
+                        } }>
+                      <option>Сонгох</option>
                       {arr.map(data => 
                         <option value={data}>{data}</option>
                       )}
@@ -205,8 +220,10 @@ const AddUserMain = () => {
                       className="form-select"
                       id="user_department"
                       required
-                      onChange={(e) => handleDepartment(e)}
-                    >
+                      onChange=
+                      {(e) =>
+                        { setDepartmentName(e.target.value)
+                      } }>
                       <option value="">Сонгох</option>
                       {arr1.map(depData => 
                         <option value={depData}>{depData}</option>
@@ -226,34 +243,61 @@ const AddUserMain = () => {
                       value={job}
                       onChange={(e) => setJob(e.target.value)}
                     />
-                  </div>         
+                  </div> 
+                  <div className="mb-6">
+                    <label htmlFor="user_jobTitle" className="form-label">
+                      Албан тушаалын төрөл
+                    </label>
+                    <select
+                      type="select" className="form-select" id="user_jobTitle" 
+                      value={jobTitleName}
+                      onChange={e => {
+                        setJobTitleName(e.target.value)
+                      }}>
+                      <option>Сонгох</option>
+                      <option value={0}>Програм хангамж</option>
+                      <option value={1}>Техник хангамж</option>
+                    </select>
+                  </div>    
                   <div className="mb-6">
                     <label htmlFor="user_head" className="form-label">
-                      Харьяа удирдлага
+                    Хэрэглэгчийн төрөл сонгох
                     </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="user_head"
-                      placeholder="Type here"
-
-                      required
-                      value={headName}
-                      onChange={(e) => setHeadName(e.target.value)} 
-                    />
-                        {/* <select value={optionState} onChange={handleChange}>
-                          <option value="1">Админ</option>
-                          <option value="0">Хэрэглэгч</option>
-                          <option value="3">Удирдлага</option>
-
-                        </select> */}
-                      {/* if(isAdmin==1){
-                        <div onClick={()=> handleChangeCheckboxs(item.id)}>
-                          
-                          </div>
-                      } */}
-                   
+                    <select
+                      type="select" className="form-select" id="user_head" required 
+                      value={admin}
+                      onChange={e => {
+                        setAdmin(e.target.value)
+                      }}>
+                      <option >Сонгох</option>
+                      <option value={1}>Админ</option>
+                      <option value={2}>Хэрэглэгч</option>
+                      <option value={3}>Удирдлага</option>
+                    </select>
                   </div>
+                  { admin == 2 ?
+                    <div className="mb-6">
+                      <label htmlFor="user_headName" className="form-label">
+                        Удирдлага сонгох
+                      </label>
+                      <select
+                        className="form-select"
+                        id="user_headName"
+                        value={headd}
+                        onChange={(e) => setHead(e.target.value)
+                        } >
+                        <option>Сонгох</option>
+                        {
+                          filters.map(e => {
+                            return (
+                              <option>{e.firstname}</option>
+                            )
+                          })
+                        }    
+                      </select>
+                    </div>
+                  : null
+                  }
                 </div>
               </div>
             </div>

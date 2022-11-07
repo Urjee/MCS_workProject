@@ -1,132 +1,95 @@
 import React, { useEffect, useState} from "react";
-import {Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {toast} from "react-toastify";
-import {USERREQ_CREATE_RESET} from "../../Redux/Constants/requestConstants";
-import {createUserReq} from "../../Redux/Actions/requestActions";
-import Toast from "../LoadingError/Toast";
-import Message from "../LoadingError/Error";
-import Loading from "../LoadingError/Loading";
+import axios from "axios";
 
-const ToastObjects = {
-    pauseOnFocusLoss: false,
-    draggable: false,
-    pauseOnHover: false,
-    autoClose: 2000,
-  };
-const AddUserReq=()=>{
+const CreateUserReq = () => {
+    const [uploadedFiles, setUploadedFiles] = useState([]);
+    const [files, setFiles] = useState([]);
     const [name, setName] = useState("");
-    const [organizationID, setOrganization] = useState(0);
-    const [subWorkID, setSubWork] = useState("");
-    const [importanceID, setImportance]= useState(0);
-    const [planTime, setPlanTime] = useState("");
-    // const [file_name, setFile] = useState(0);
+    const [importanceName, setImportanceName]= useState(0);
     const [description, setDescription] = useState("");
-    const [orgname, setOrgName] = useState("");
     const [impName, setImpName] = useState("");
-  
-    const orgs = [];
-    const orgnames = [];
-    const imprts=[];
-    
+    const [stateID, setStateID] = useState(0);
+    const [stteName, setStteName] = useState("");
+    const [orgID, setOrgID] = useState();
+    const history = useHistory();
+    const [firstname, setFirstname] = useState();
+    const [phone, setPhone]= useState("");
     const dispatch = useDispatch();
 
-    const userReqCreate=useSelector((state)=>state.userReqCreate);
-    const {loading, error, request}=userReqCreate;
-
-    const handleOrganization=(event)=>{
-      const getOrganizationID=event.target.value;
-      console.log(getOrganizationID);
-    }
-    const handleImportance=(event)=>{
-      const getImportanceD=event.target.value;
-      console.log(getImportanceD);
-    }
+    const userReqCreate = useSelector((state) => state.userReqCreate);
+    const { userReq } = userReqCreate;
     useEffect(() => {
-      const orgname = () => {
-        fetch('http://localhost:8080/api/organization').then(res => res.json()).then(data => 
-        setOrgName(data)    
-    );
-      }
-      const impName=()=>{
-        fetch('http://localhost:8080/api/importance').then(res => res.json()).then(impData =>
+      const impName = () => {
+        fetch('http://172.16.226.57:8080/api/importance')
+        .then(res => res.json())
+        .then(impData =>
         setImpName(impData)
-    );}
-    orgname()
+        );
+      }      
     impName()
     }, [])
-
-    let arr=[];
     let arr1=[];
-
-    for(let i in orgname) {
-      arr.push(orgname[i].organizationName)
-    }
-    console.log(arr)
-
-    orgs.forEach(i => {
-      orgnames.push(i.organizationName)
-    });
-    console.log(orgnames)
-
     for(let i in impName) {
-      arr1.push(i.importanceName)
+      arr1.push(impName[i].importanceName)
     }
-    console.log(arr1)
-    imprts.forEach(i=> {
-      imprts.push(i.importanceName)
-    });
-    console.log(imprts)
+    useEffect(()=> {
+      const stteName = () => {
+        fetch('http://172.16.226.57:8080/api/state')
+        .then(res => res.json())
+        .then(stateData => setStteName(stateData));
+      }
+      stteName()
+      setOrgID(JSON.parse(window.localStorage.getItem('userinfo')).organizationID)
+      setFirstname(JSON.parse(window.localStorage.getItem('userinfo')).firstname)
+      setPhone(JSON.parse(window.localStorage.getItem('userinfo')).phone)
 
-    // multiple file upload
-      // const fileUploader= document.getElementById('file-uploader');
-      // fileUploader.addEventListener('change', (event)=>{
-      //   const files=event.target.files;
-      //   console.log('files', files);
-
-      //   const feedback= document.getElementById('feedback');
-      //   const msg= `${files.length} файл амжилттай байршууллаа!`;
-      //   feedback.innerHTML=msg;
-      // });
-
-    useEffect(() => {
-
-        setOrganization(orgs);
-        setImportance(imprts);
-        if(request){
-            toast.success("Ажил даалгавар нэмэгдлээ", ToastObjects);
-            dispatch({type: USERREQ_CREATE_RESET});
-            setName("");
-            setOrganization(0);
-            setSubWork("");
-            setImportance(0);
-            setPlanTime("");
-            // setFile(0);
-            setDescription("");
-        }
-    },[request,dispatch]);
-    
-    const submitHandler=(e)=>{
+    },       
+    [])
+    let arr2=[];
+    for(let i in stteName) {
+      arr2.push(stteName[i].stateName)
+    }
+   
+    const submitHandler = (e) =>{
         e.preventDefault();
-        dispatch(createUserReq(name, subWorkID, organizationID, importanceID, planTime,  description));
-      
+        const data = new FormData();
+        for(let i=0; i < files.length; i++) {
+          data.append('file', files[i]);
+        }
+        data.append('name', name);
+        data.append('importanceName', importanceName);
+        data.append('description', description);
+        data.append('userID', (window.localStorage.userid * 1));
+        data.append('stateID', stateID);
+        data.append('organizationID', orgID);
+        data.append('firstname', firstname);
+        data.append('phone', phone);
+        data.append('createDate', new Date());
+        axios.post('http://172.16.226.57:8080/api/createUserReq', data)
+        .then((response) => {
+          toast.success('Амжилттай хадгалагдлаа');
+          submitHandler(response.data)
+        })
+        setTimeout(() => history.push('/userReqs'), 2000)
     };
-
+    const onInputChange = (e) => {
+      setFiles(e.target.files)
+    };
     return (
         <>
-        <Toast/>
         <section className="content-main" style={{ maxWidth: "1200px" }}>
-        <form onSubmit={submitHandler}>
+        <form onSubmit={submitHandler} encType="multipart/form-data">
         <h2 className="content-title">Ажил даалгавар нэмэх</h2>
         <br/>
           <div className="row mb-4">
             <div className="col-xl-8 col-lg-8">
               <div className="card mb-4 shadow-sm">
                 <div className="card-body">
-                  {error && <Message variant="alert-danger">{error}</Message>}
-                  {loading && <Loading />}
                   <div className="mb-4">
-                  <label htmlFor="userReq_name" className="form-label">
+                    <label htmlFor="userReq_name" className="form-label">
                       Ажил даалгаврын нэр
                     </label>
                     <input
@@ -134,85 +97,24 @@ const AddUserReq=()=>{
                       placeholder="Type here"
                       className="form-control"
                       id="userReq_name"
-                      required
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                     />
-                  </div>
-                  <div className="mb-4">
-                  <label htmlFor="userReq_subWork" className="form-label">
-                      Дэд ажил нэмэх тоо
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Type here"
-                      className="form-control"
-                      id="userReq_subWork"
-                      value={subWorkID}
-                      onChange={(e) => setSubWork(e.target.value)}
-                    />
-                  </div>
-                  <div className="mb-6">
-                    <label htmlFor="userReq_organization" className="form-label">
-                      Харилцах байгууллага
-                    </label>
-                    <select
-                      className="form-select"
-                      id="user_organization"
-                      required
-                      onChange={(e) =>handleOrganization(e)}
-                    >
-                      <option value="">Сонгох</option>
-                      {arr.map(data => 
-                        <option value={data}>{data}</option>
-                      )}
-                    </select>
-                  </div>
                   <div className="mb-6">
                     <label htmlFor="userReq_importance" className="form-label">
-                      Чухал байдал
+                      Ажлын төрөл
                     </label>
                     <select
                       className="form-select"
                       id="user_importance"
-                      required
-                      onChange={(e) =>handleImportance(e)}
+                      onChange={(e) =>setImportanceName(e.target.value)}
                     >
                       <option value="">Сонгох</option>
                       {arr1.map(impData => 
                         <option value={impData}>{impData}</option>
-                      )}
-                    </select>
-              
-                  </div>
-                  <div className="mb-6">
-                    <label htmlFor="userReq_planTime" className="form-label">
-                      Төлөвлөгөөт огноо
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Type here"
-                      className="form-control"
-                      id="userReq_planTime"
-                      required
-                      value={planTime}
-                      onChange={(e) => setPlanTime(e.target.value)}
-                    />
-                  </div>
-                  {/* <div className="mb-6">
-                    <label htmlFor="userReq_file_id" className="form-label">
-                      Хавсралт
-                    </label>
-                    <input
-                      type="file"
-                      placeholder="Type here"
-                      className="form-control"
-                      id="file-uploader"
-                      value={file_name}
-                      onChange={(e) => setFile(e.target.value)}
-                      // multiple
-                    />
-                  </div> */}
+                      ) }
+                      </select>
+                    </div>
                    <div className="mb-6">
                     <label htmlFor="userReq_description" className="form-label">
                       Тайлбар
@@ -222,30 +124,56 @@ const AddUserReq=()=>{
                       placeholder="Type here"
                       className="form-control"
                       id="userReq_description"
-                      required
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
                     />
+                     <div className="mb-6">
+                      <label htmlFor="userReq_file_id" className="form-label">
+                        Файл 
+                      </label>
+                        <input
+                        type="file"
+                        onChange={onInputChange}
+                        className="form-control"
+                        multiple />
+                        <div className="uploaded-files-list">
+                        {uploadedFiles.map(file => (
+                          <div>
+                              {file.originalname}
+                          </div>
+                        ))}
+                        </div>
+                    </div>
+                    {/* <div className="mb-12">
+                        <label className="form-label" htmlFor="user_developerID">Гүйцэтгэгч </label>
+                        <select className="form-select" id="user_developerID"
+                          onChange = {(e) => { setFirstname(e.target.value)}}>
+                          <option value="">Сонгох</option>
+                            {arr0.map(userData => 
+                            <option value={userData}>{userData}</option>) 
+                          }
+                        </select>   
+                    </div>     */}
+                    </div>
                   </div>
-                  
-                </div>
+                  </div>
+                  <div className="content-header">
+                    <Link to="/userReqs" className="btn btn-danger text-white">
+                      Буцах
+                    </Link>
+                      <button type="submit" className="btn btn-primary">
+                      Хадгалах
+                      </button>
+                  </div>
               </div>
-              </div>
-            </div>
-          <div className="content-header">
-            <Link to="/userReq" className="btn btn-danger text-white">
-              Буцах
-            </Link>
-              <button type="submit" className="btn btn-primary">
-              Хадгалах
-              </button>
-              <div>
-            </div>
+
           </div>
+        </div>
         </form>
       </section>  
-    </>
-  );
-};
-export default AddUserReq;
+        </>
+      )
+      };
+     
+export default CreateUserReq;
 

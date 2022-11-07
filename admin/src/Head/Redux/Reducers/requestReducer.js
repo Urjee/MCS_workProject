@@ -1,8 +1,8 @@
 import {
-    REQUEST_LIST_FAIL,
-    REQUEST_LIST_REQUEST,
-    REQUEST_LIST_RESET,
-    REQUEST_LIST_SUCCESS,
+    USERREQ_LIST_FAIL,
+    USERREQ_LIST_REQUEST,
+    USERREQ_LIST_SUCCESS,
+    USERREQ_LIST_RESET,
     USERREQ_DETAILS_FAIL,
     USERREQ_DETAILS_SUCCESS,
     USERREQ_DETAILS_REQUEST,
@@ -10,24 +10,26 @@ import {
     USERREQ_EDIT_SUCCESS,
     USERREQ_EDIT_FAIL,
     USERREQ_EDIT_RESET,
+    
 
   } from "../Constants/requestConstants";
   
   // ALL REQUEST
-  export const HeadrequestListReducer = (state = { requests: [] }, action) => {
+  export const HeadRequestListReducer = (state = { headReqs: [] }, action) => {
     switch (action.type) {
-      case REQUEST_LIST_REQUEST:
+      case USERREQ_LIST_REQUEST:
         return { loading: true };
-      case REQUEST_LIST_SUCCESS:
-        return { loading: false, requests: action.payload };
-      case REQUEST_LIST_FAIL:
+      case USERREQ_LIST_SUCCESS:
+        return { loading: false, headReqs: action.payload };
+      case USERREQ_LIST_FAIL:
         return { loading: false, error: action.payload };
-      case REQUEST_LIST_RESET:
-        return { requests: [] };
+      case USERREQ_LIST_RESET:
+        return  { headReqs: [] } ;
       default:
         return state;
     }
   };
+  
 
   //REQUEST DETAILS
   export const headReqDetailsReducer=(

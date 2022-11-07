@@ -24,8 +24,7 @@ import {
 } from "../Constants/UserContants";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { URL } from "../url";
-
+import { URLFront } from "../url";
 // LOGIN
 export const login = (email, password) => async (dispatch) => {
   const ToastObjects = {
@@ -42,7 +41,7 @@ export const login = (email, password) => async (dispatch) => {
       },
     };
     const {data} = await axios.post(
-      `${URL}/api/login`,
+      `${URLFront}/api/login`,
       { email, password},
       config,
       );
@@ -53,7 +52,7 @@ export const login = (email, password) => async (dispatch) => {
       });
     } else {
       dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
-      localStorage.setItem("userInfo", JSON.stringify(data));
+      // localStorage.setItem("userInfo", JSON.stringify(data));
     }
   } catch (error) {
     const message =
@@ -61,7 +60,6 @@ export const login = (email, password) => async (dispatch) => {
         ? error.response.data.message
         : error.message;
     if (message === "Not authorized, token failed") {
-      dispatch(logout());
     }
     dispatch({
       type: USER_LOGIN_FAIL,
@@ -73,7 +71,6 @@ export const login = (email, password) => async (dispatch) => {
 export const logout = () => (dispatch) => {
   localStorage.removeItem("userInfo");
   dispatch({ type: USER_LOGOUT });
-  dispatch({ type: USER_LIST_RESET });
 };
 
 // ALL USER
@@ -91,7 +88,7 @@ export const listUser = () => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.get(`${URL}/api/users`, config);
+    const { data } = await axios.get(`${URLFront}/api/users`, config);
 
     dispatch({ type: USER_LIST_SUCCESS, payload: data });
   } catch (error) {
@@ -100,7 +97,6 @@ export const listUser = () => async (dispatch, getState) => {
         ? error.response.data.message
         : error.message;
     if (message === "Not authorized, token failed") {
-      dispatch(logout());
     }
     dispatch({
       type: USER_LIST_FAIL,
@@ -124,7 +120,7 @@ export const deleteUser = (UserID) => async (dispatch, getState) => {
       },
     };
 
-    await axios.delete(`${URL}/api/users/${UserID}`, config);
+    await axios.delete(`${URLFront}/api/users/${UserID}`, config);
 
     dispatch({ type: USER_DELETE_SUCCESS });
   } catch (error) {
@@ -133,7 +129,6 @@ export const deleteUser = (UserID) => async (dispatch, getState) => {
         ? error.response.data.message
         : error.message;
     if (message === "Not authorized, token failed") {
-      dispatch(logout());
     }
     dispatch({
       type: USER_DELETE_FAIL,
@@ -142,8 +137,8 @@ export const deleteUser = (UserID) => async (dispatch, getState) => {
   }
 };
 // CREATE USER
-export const createUser =
-  ( firstname, lastname, email, phone, departmentName, job, organizationName, headID) =>
+export const adminCreateUser =
+  ( password, firstname, lastname, email, phone, departmentName, job, organizationName, headd, admin, isActive, jobTitle, jobTitleName) =>
   async (dispatch, getState) => {
     try {
       dispatch({ type: USER_CREATE_REQUEST });
@@ -157,13 +152,11 @@ export const createUser =
           Authorization: `Bearer ${userInfo.token}`,
         },
       };
-
       const { data } = await axios.post(
-        `${URL}/api/addUser/`,
-        {firstname, lastname, email, phone, departmentName, job, organizationName, headID },
+        `${URLFront}/api/adminCreateUser/`,
+        { password, firstname, lastname, email, phone, departmentName, job, organizationName, headd, admin, isActive, jobTitle, jobTitleName },
         config
       );
-
       dispatch({ type: USER_CREATE_SUCCESS, payload: data });
     } catch (error) {
       const message =
@@ -190,7 +183,6 @@ export const editUser = (id) => async (dispatch) => {
         ? error.response.data.message
         : error.message;
     if (message === "Not authorized, token failed") {
-      dispatch(logout());
     }
     dispatch({
       type: USER_EDIT_FAIL,
@@ -229,7 +221,6 @@ export const updateUser = (user) => async (dispatch, getState) => {
         ? error.response.data.message
         : error.message;
     if (message === "Not authorized, token failed") {
-      dispatch(logout());
     }
     dispatch({
       type: USER_UPDATE_FAIL,

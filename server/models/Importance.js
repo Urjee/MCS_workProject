@@ -6,7 +6,7 @@ module.exports = (sequelize, Sequelize) => {
             primaryKey: true,
             autoIncrement: true,
         },
-        name: {
+        importanceName: {
             type: Sequelize.STRING,
         },
       
@@ -19,7 +19,6 @@ module.exports = (sequelize, Sequelize) => {
     Importance.associate = () => {
        
         Importance.hasMany('UserReq', {foreignKey : 'importanceID'});
-        Importance.hasMany('Request',{foreignKey: 'importanceID'});
     };
     return Importance;
 };

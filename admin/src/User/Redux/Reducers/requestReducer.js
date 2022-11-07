@@ -1,8 +1,8 @@
 import {
-    REQUEST_LIST_FAIL,
-    REQUEST_LIST_REQUEST,
-    REQUEST_LIST_RESET,
-    REQUEST_LIST_SUCCESS,
+    USERREQ_LIST_FAIL,
+    USERREQ_LIST_REQUEST,
+    USERREQ_LIST_RESET,
+    USERREQ_LIST_SUCCESS,
     USERREQ_CREATE_FAIL,
     USERREQ_CREATE_RESET,
     USERREQ_CREATE_SUCCESS,
@@ -11,20 +11,23 @@ import {
     USERREQ_DETAILS_SUCCESS,
     USERREQ_DETAILS_FAIL,
     USERREQ_DETAILS_RESET,
-
+    USERREQ_DELETE_RESET,
+    USERREQ_DELETE_REQUEST,
+    USERREQ_DELETE_SUCCESS,
+    USERREQ_DELETE_FAIL,
   } from "../Constants/requestConstants";
   
   // ALL REQUEST
-  export const requestListReducer = (state = { requests: [] }, action) => {
+  export const userReqListReducer = (state = { userReqs: [] }, action) => {
     switch (action.type) {
-      case REQUEST_LIST_REQUEST:
+      case USERREQ_LIST_REQUEST:
         return { loading: true };
-      case REQUEST_LIST_SUCCESS:
-        return { loading: false, requests: action.payload };
-      case REQUEST_LIST_FAIL:
+      case USERREQ_LIST_SUCCESS:
+        return { loading: false, userReqs: action.payload };
+      case USERREQ_LIST_FAIL:
         return { loading: false, error: action.payload };
-      case REQUEST_LIST_RESET:
-        return { requests: [] };
+      case USERREQ_LIST_RESET:
+        return { userReqs: [] };
       default:
         return state;
     }
@@ -35,7 +38,7 @@ export const userReqCreateReducer = (state = {}, action) => {
     case USERREQ_CREATE_REQUEST:
       return { loading: true };
     case USERREQ_CREATE_SUCCESS:
-      return { loading: false, success: true, requests: action.payload };
+      return { loading: false, success: true, userReqs: action.payload };
     case USERREQ_CREATE_FAIL:
       return { loading: false, error: action.payload };
     case USERREQ_CREATE_RESET:
@@ -45,3 +48,19 @@ export const userReqCreateReducer = (state = {}, action) => {
   }
 };
 
+    //  DELETE
+    export const userReqDeleteReducer = (state = {}, action) => {
+      switch (action.type) {
+        case USERREQ_DELETE_REQUEST:
+          return { loading: true };
+        case USERREQ_DELETE_SUCCESS:
+          return { loading: false, success: true, userReqs: action.payload };
+        case USERREQ_DELETE_FAIL:
+          return { loading: false, error: action.payload };
+        case USERREQ_DELETE_RESET:
+          return {};
+        default:
+          return state;
+      }
+    };
+    

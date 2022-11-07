@@ -40,7 +40,7 @@ export const userLoginReducer = (state = {}, action) => {
 };
 
 // ALL USER
-export const userListReducer = (state = { users: [] }, action) => {
+export const headUserListReducer = (state = { users: [] }, action) => {
   switch (action.type) {
     case USER_LIST_REQUEST:
       return { loading: true };
@@ -72,7 +72,7 @@ export const userDeleteReducer = (state = {}, action) => {
 };
 
 // DELETE CREATE
-export const userCreateReducer = (state = {}, action) => {
+export const addUserReducer = (state = {}, action) => {
   switch (action.type) {
     case USER_CREATE_REQUEST:
       return { loading: true };

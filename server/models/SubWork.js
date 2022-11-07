@@ -28,13 +28,6 @@ module.exports = (sequelize, Sequelize) => {
         date: {
             type: Sequelize.DATE,
         },
-        work_id: {
-            type: Sequelize.INTEGER,
-            references:{
-                model: 'Works',
-                key: 'work_id'
-            },
-        },
     },
         {
             timestamps: false,
@@ -43,8 +36,6 @@ module.exports = (sequelize, Sequelize) => {
     });
 
     SubWork.associate = () => {
-        SubWork.hasMany('WorkUser', {foreignKey : 'subWorkID'});
-        SubWork.hasMany('WorkRequest', {foreignKey: 'subWorkID'});
         SubWork.hasMany('State', {foreignKey: 'subWorkID'});
         SubWork.hasMany('UserReq', {foreignKey: 'subWorkID'});
 

@@ -4,8 +4,8 @@ const { QueryTypes, Op } = require('sequelize');
 
 exports.allImportance = async(req, res) => {
 
-    Importance.findAll().then(data => {
-        res.send(data);
+    Importance.findAll().then(impData => {
+        res.send(impData);
     });
 
 }

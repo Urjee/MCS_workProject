@@ -9,29 +9,12 @@ module.exports = (sequelize, Sequelize) => {
         name: {
             type: Sequelize.STRING,
         },
-        organizationID: {
-            type: Sequelize.INTEGER,
-            references:{
-                model: 'Organizations',
-                key: 'organizationID'
-            },
-        },  
-        subWorkID: {
-            type: Sequelize.INTEGER,
-            references:{
-                model: 'SubWorks',
-                key: 'subWorkID'
-            },
-        }, 
         importanceID: {
             type: Sequelize.INTEGER,
             references:{
                 model: 'Importance',
                 key: 'importanceID'
             },
-        }, 
-        planTime: {
-            type: Sequelize.TIME,
         },
         file_id: {
             type: Sequelize.INTEGER,
@@ -43,6 +26,20 @@ module.exports = (sequelize, Sequelize) => {
         description:{
             type: Sequelize.STRING,
         },
+        subWorkID: {
+            type: Sequelize.INTEGER,
+            references:{
+                model: 'SubWorks',
+                key: 'subWorkID'
+            },
+        },         
+        organizationID: {
+            type: Sequelize.INTEGER,
+            references:{
+                model: 'Organizations',
+                key: 'organizationID'
+            },
+        }, 
         stateID: {
             type: Sequelize.INTEGER,
             references:{
@@ -50,15 +47,39 @@ module.exports = (sequelize, Sequelize) => {
                 key: 'stateID'
             },
         },
+        createDate: {
+            type: Sequelize.TIME,
+        },       
+        planTime: {
+            type: Sequelize.DATE,
+        },
+        realTime: {
+            type: Sequelize.DATE,
+        },
         UserID: {
             type: Sequelize.INTEGER,
             references: {
                 model: 'Users',
                 key: 'UserID'
             }
+        },
+        DeveloperID: {
+            type: Sequelize.INTEGER,
+            references: {
+                model: 'Users',
+                key: 'UserID'
+            }
+        },
+        percentOfPerform: {
+            type: Sequelize.INTEGER,
         }
-        
-
+        ,
+        startDate: {
+            type: Sequelize.DATE,
+        },
+        endDate: {
+            type: Sequelize.DATE,
+        }
     }, {
         timestamps: false,
         createdAt: false,
