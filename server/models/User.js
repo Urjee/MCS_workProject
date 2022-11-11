@@ -11,7 +11,9 @@ module.exports = (sequelize, Sequelize) => {
         password: {
             type: Sequelize.STRING,
         },
-        
+        confirmPassword: {
+            type: Sequelize.STRING,
+        },
         firstname: {
             type: Sequelize.STRING,
         },
@@ -58,7 +60,10 @@ module.exports = (sequelize, Sequelize) => {
        
         jobTitle: {
             type: Sequelize.INTEGER
-        }     
+        },
+        DevType: {
+            type: Sequelize.INTEGER
+        }    
     }, {
         timestamps: false,
         createdAt: false,

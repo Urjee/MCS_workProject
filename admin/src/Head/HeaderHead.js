@@ -35,17 +35,6 @@ const HeaderHead = () => {
     <header className="main-header navbar">
       <div className="col-search">
         <form className="searchform">
-          {/* <div className="input-group">
-            <input
-              list="search_terms"
-              type="text"
-              className="form-control"
-              placeholder="Search term"
-            />
-            <button className="btn btn-light bg" type="button">
-              <i className="far fa-search"></i>
-            </button>
-          </div> */}
           <datalist id="search_terms">
             
           </datalist>
@@ -73,10 +62,8 @@ const HeaderHead = () => {
               <i className="icon fas fa-user"></i>
                 {firstname}
               </Link>
-              <Link className="dropdown-item" to="#">
-              {/* <i className="icon fas fa-setting"></i> */}
+              <Link className="dropdown-item" to="/settings">
               <i class="fa fa-cog" aria-hidden="true"></i>
-
                 Тохиргоо
               </Link>
               <Link

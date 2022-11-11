@@ -57,7 +57,16 @@ const SidebarHead = () => {
               </NavLink>   
 
               </li> 
-                               
+              <li className="menu-item">
+              <NavLink
+                activeClassName="active"
+                className="menu-link"
+                to="/headReport"
+              >
+                <i className="icon fas fa-file"></i>
+                <span className="text">Тайлан</span>
+              </NavLink>
+            </li>         
           </ul>
           <br />
           <br />

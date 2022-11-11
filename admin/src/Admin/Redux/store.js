@@ -9,7 +9,9 @@ import {
    userEditReducer,
    userUpdateReducer, 
    userListReducer, 
-   userLoginReducer 
+   userLoginReducer,
+   userUpdateProfileReducer, 
+   userDetailsReducer
   } from "./Reducers/userReducers";
 
 import {
@@ -20,6 +22,7 @@ import {
   requestListReducer,
   requestCreateReducer,
   requestUpdateReducer,
+  reportListReducer,
 } from "./Reducers/requestReducer";
 
 ///-------------USER REDUCERS
@@ -36,6 +39,7 @@ import {
   HeadRequestListReducer,
   headReqDetailsReducer,
   headReqEditReducer,
+  HeadReportListReducer,
 } from "../../Head/Redux/Reducers/requestReducer";
 
 import {
@@ -67,6 +71,12 @@ const reducer = combineReducers({
   workList:workListReducer,
 
   headUserList: headUserListReducer,
+  settings: userDetailsReducer,
+  reportList: reportListReducer,
+  headReportList: HeadReportListReducer,
+
+  userUpdateProfile: userUpdateProfileReducer,
+
 });
 
 const userInfoFromLocalStorage = localStorage.getItem("userInfo")

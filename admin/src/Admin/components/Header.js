@@ -76,10 +76,8 @@ const Header = () => {
               <i className="icon fas fa-user"></i>
                 {firstname}
               </Link>
-              <Link className="dropdown-item" to="#">
-              {/* <i className="icon fas fa-settings"></i> */}
+              <Link className="dropdown-item" to="/settings">
               <i class="fa fa-cog" aria-hidden="true"></i>
-
                 Тохиргоо
               </Link>
               <Link
@@ -87,7 +85,6 @@ const Header = () => {
                 className="dropdown-item text-danger"
                 to="#"
               >
-                {/* <i className="icon fas fa-exit"></i> */}
                 <i class="fa fa-sign-out" aria-hidden="true"></i>
                 Гарах
               </Link>

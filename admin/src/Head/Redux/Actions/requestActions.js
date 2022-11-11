@@ -4,7 +4,9 @@ import {
   USERREQ_LIST_FAIL,
   USERREQ_LIST_REQUEST,
   USERREQ_LIST_SUCCESS,
-
+  REPORT_LIST_SUCCESS,
+  REPORT_LIST_FAIL,
+  REPORT_LIST_REQUEST
   } from "../Constants/requestConstants";
   import axios from "axios";
   import { URLFront } from "../url";
@@ -66,5 +68,27 @@ export const createHeadReq =
           : error.message;
       if (message === "Not authorized, token failed") {
       }
+    }
+  };
+  // ALL REQUEST
+  export const headReport = () => async (dispatch) => {
+    try {
+      dispatch({ type: REPORT_LIST_REQUEST });
+   
+      const { data } = await axios.post(`${URLFront}/api/headReport`);
+  
+      dispatch({ type: REPORT_LIST_SUCCESS, payload: data });
+    } catch (error) {
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
+      if (message === "Not authorized, token failed") {
+        
+      }
+      dispatch({
+        type: REPORT_LIST_FAIL,
+        payload: message,
+      });
     }
   };

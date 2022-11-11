@@ -74,10 +74,8 @@ const Header = () => {
 
                 {firstname}
               </Link>
-              <Link className="dropdown-item" to="#">
-              {/* <i className="icon fas fa-settings"></i> */}
+              <Link className="dropdown-item" to="/settings">
               <i class="fa fa-cog" aria-hidden="true"></i>
-
                 Тохиргоо
               </Link>
               <Link

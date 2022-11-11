@@ -1,10 +1,13 @@
 import React,  {useState} from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import ReactPaginate from "react-paginate"
 
 const Users = (props) => {
   const { users } = props;
-
+  const history = useHistory();
+  const handleClick = (UserID) => {
+    setTimeout(() => history.push(`/editUser/?id=${UserID}`))
+}
   const [pageNumber, setPageNumber] = useState(0)
   const usersPerPage = 7
   const pageVisited = pageNumber * usersPerPage;
@@ -13,7 +16,7 @@ const Users = (props) => {
     .map(user => {
       return (
         <tbody className="">
-          <tr key={user.UserID}>
+          <tr key={user.UserID} onClick={() => handleClick(user.UserID)} >
             <td>{user.UserID}</td>
             <td key={user.UserID} className="listItem">{user.firstname}</td>
             <td>{user.lastname}</td>
@@ -24,23 +27,7 @@ const Users = (props) => {
             <td>{user.job}</td>
             <td>{user.jobTitleName}</td>
             <td>{user.headName}</td>
-            <td>{user.activeName}</td>
-            <td className="text-end">
-              <div className="dropdown">
-                <Link
-                  to="#"
-                  data-bs-toggle="dropdown"
-                  className="btn btn-light"
-                >
-                  <i className="fas fa-ellipsis-h"></i>
-                </Link>
-                <div className="dropdown-menu">
-                <Link className="dropdown-item" to={`userEdit/?id=${user.UserID}`}>
-                    Засах
-                  </Link>
-                </div>
-              </div>
-              </td>        
+            <td>{user.activeName}</td>      
           </tr> 
       </tbody>
       )
@@ -66,9 +53,6 @@ const Users = (props) => {
             <th scope="col">Албан тушаалын төрөл</th>
             <th scope="col">Удирдлага</th>
             <th scope="col">Төлөв</th>
-            <th className="text-end">
-              Үйлдэл
-            </th>
           </tr>
       </thead>
             

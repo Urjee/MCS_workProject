@@ -22,7 +22,7 @@ const Request = (props) => {
             <i className="material-icons md-plus"></i> Ирсэн хүсэлтүүд
           </Link>
           <br/>
-              <span>{totalSale.toFixed(0)}</span>
+              {/* <span>{totalSale.toFixed(0)}</span> */}
             </div>
           </article>
         </div>
@@ -34,11 +34,11 @@ const Request = (props) => {
               <i className="text-success fas fa-bags-shopping"></i>
             </span>
             <div className="text">
-            <Link to="/performedWork" className="mb-1">
+            <Link to="/adminReqsPro" className="mb-1">
             <i className="material-icons md-plus"></i> Гүйцэтгэсэн ажил
           </Link>
              <br/>
-              {works ? <span>{works.length}</span> : <span>0</span>}
+              {/* {works ? <span>{works.length}</span> : <span>0</span>} */}
             </div>
           </article>
         </div>
@@ -50,11 +50,11 @@ const Request = (props) => {
               <i className="text-warning fas fa-shopping-basket"></i>
             </span>
             <div className="text">
-            <Link to="/comment" className="mb-1">
+            <Link to="" className="mb-1">
             <i className="material-icons md-plus"></i>Сэтгэгдэл
               </Link>
               <br/>
-              {comment ? <span>{comment.length}</span> : <span>0</span>}
+              {/* {comment ? <span>{comment.length}</span> : <span>0</span>} */}
             </div>
           </article>
         </div>

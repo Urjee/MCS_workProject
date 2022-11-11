@@ -10,7 +10,10 @@ import {
     USERREQ_EDIT_SUCCESS,
     USERREQ_EDIT_FAIL,
     USERREQ_EDIT_RESET,
-    
+    REPORT_LIST_SUCCESS,
+    REPORT_LIST_FAIL,
+    REPORT_LIST_REQUEST,
+    REPORT_LIST_RESET,
 
   } from "../Constants/requestConstants";
   
@@ -25,6 +28,21 @@ import {
         return { loading: false, error: action.payload };
       case USERREQ_LIST_RESET:
         return  { headReqs: [] } ;
+      default:
+        return state;
+    }
+  };
+  // ALL REPORT
+  export const HeadReportListReducer = (state = { requests: [] }, action) => {
+    switch (action.type) {
+      case REPORT_LIST_REQUEST:
+        return { loading: true };
+      case REPORT_LIST_SUCCESS:
+        return { loading: false, requests: action.payload };
+      case REPORT_LIST_FAIL:
+        return { loading: false, error: action.payload };
+      case REPORT_LIST_RESET:
+        return  { requests: [] } ;
       default:
         return state;
     }

@@ -29,7 +29,7 @@ app.use('/images',  express.static(__dirname + '/images'));
 
 const upload = multer({ storage: storage });
 const download = multer( {storage: storage});
-app.post('/api/createUserReq', upload.array('file', 10) , async (req, res) => {
+app.post('/api/addUserReq', upload.array('file', 10) , async (req, res) => {
   let reqID;
   const imprts = await db.Importance.findOne({ where: { importanceName: req.body.importanceName} });
         let importanceID = imprts.importanceID;
@@ -82,7 +82,7 @@ app.post('/api/headAddReqUpdate', upload.array('file', 10) , async (req, res) =>
   const user = await db.User.findOne({ where: { UserID: req.body.userID }});
   const today = new Date();
   let createdate = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-       const request = await db.UserReq.update({
+       const request = await db.UserReq.create({
             name: req.body.name, 
             createDate: createdate,
             importanceID: imprts.importanceID, 
@@ -347,28 +347,29 @@ app.post('/api/uploads', async (req, res) => {
         .catch(err => {
             res.status(500).send({ message: err });
         });
-
-      // for(let i = 0; i < req.files.length; i++) {
-
-      //     if(req.files.length > 1) {
-
-      //       await db.sequelize.query(`insert into [dbo].Files (file_name, original_name, file_path, userReqID)
-      //       Values ( N'${req.files[i].filename}', N'${req.files[i].originalname}', N'${req.files[i].path}', ${reqID} })`)
-
-      //     } else (req.files.length === 1) 
-
-      //       await db.sequelize.query(`
-      //         insert into [dbo].Files (
-      //             file_name, 
-      //             original_name,
-      //             file_path,
-      //             userReqID)
-      //           Values (N'${req.files[0].filename}',
-      //                   N'${req.files[0].originalname}',
-      //                   N'${req.files[0].path}', 
-      //                   ${reqID})`)           
-      //     }
         }    
+);
+app.post('/api/settingsUpdate', async (req, res) => {
+  const uID = req.body.UserID;
+    await db.User.update({ 
+      firstname: req.body.firstname,
+      lastname: req.body.lastname,
+      phone: req.body.phone,
+      email: req.body.email,
+      password: req.body.password,
+      confirmPassword:req.body.confirmPassword 
+    }, {
+      where: {
+        UserID: uID,
+      }
+    })
+  .then(data => {
+      res.send(data);
+  })
+  .catch(err => {
+      res.status(500).send({ message: err });
+  });
+  }    
 );
 app.post('/api/userReqsUpdate', async (req, res) => {
   const reqID = req.body.userReqID;

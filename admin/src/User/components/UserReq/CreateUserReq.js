@@ -8,7 +8,7 @@ const CreateUserReq = () => {
     const [uploadedFiles, setUploadedFiles] = useState([]);
     const [files, setFiles] = useState([]);
     const [name, setName] = useState("");
-    const [importanceName, setImportanceName]= useState(0);
+    const [importanceName, setImportanceName]= useState("");
     const [description, setDescription] = useState("");
     const [impName, setImpName] = useState("");
     const [stateID, setStateID] = useState(0);
@@ -68,7 +68,7 @@ const CreateUserReq = () => {
         data.append('firstname', firstname);
         data.append('phone', phone);
         data.append('createDate', new Date());
-        axios.post('http://172.16.226.57:8080/api/createUserReq', data)
+        axios.post('http://172.16.226.57:8080/api/addUserReq', data)
         .then((response) => {
           toast.success('Амжилттай хадгалагдлаа');
           submitHandler(response.data)

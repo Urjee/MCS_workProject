@@ -12,5 +12,8 @@ module.exports = app => {
     router.post('/headUserDetails', users.headUserDetails);
     router.post('/userDetails', users.userDetails);
     router.post('/deleteUser', users.deleteUser);
+    // router.get('/settingsGet', users.settingsGet);
+    router.put('/settings', users.settings);
+
     app.use('/api', router);
 }

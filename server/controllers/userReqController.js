@@ -36,7 +36,7 @@ exports.requestEdit = async(req, res) => {
 exports.editRequest = async(req, res) => {
     const id = req.body;
     await db.sequelize.query(
-        `exec sp_userReqs 8, ${id.userReqID}, 0`)
+        `exec sp_userReqs 8, ${id.userReqID}, 0`, { type: QueryTypes.SELECT })
         .then(data =>{
             res.send(data);
         });
@@ -148,7 +148,7 @@ exports.adminReqsPro = async(req, res) => {
         ON usr.UserID = uReqs.DeveloperID
         INNER JOIN Organizations org
         ON org.organizationID = uReqs.organizationID
-        INNER JOIN Files fle
+        LEFT JOIN Files fle
         ON fle.file_id = uReqs.file_id
     WHERE uReqs.stateID >=3 AND uReqs.importanceID>1`,
          {
@@ -194,11 +194,11 @@ exports.requestAll = async(req, res) => {
         ON imprts.importanceID = uReqs.importanceID
         INNER JOIN States AS stta
         ON stta.stateID = uReqs.stateID
-        INNER JOIN Files fle
+        LEFT JOIN Files fle
         ON uReqs.file_id = fle.file_id
         INNER JOIN Organizations org
         ON org.organizationID = uReqs.organizationID
-    WHERE uReqs.importanceID != 1 AND uReqs.stateID<=3`,
+    WHERE imprts.importanceID>=3 and stta.stateID<=3`,
          {
             type: QueryTypes.SELECT
          })
@@ -217,3 +217,103 @@ exports.deleteAdminReq = async(req, res) => {
             res.send(data);
         });
 }
+exports.report = async(req, res) => {
+    await db.sequelize.query(`
+    SELECT uReqs.*,
+    imprts.importanceName AS importanceName,
+    stta.stateName AS stateName,
+    fle.file_name AS file_name,
+    users.firstname as firstname,
+    usr.firstname as userrname,
+    org.organizationName AS organizationName
+FROM [dbo].UserReqs AS uReqs
+    INNER JOIN Importance AS imprts
+    ON imprts.importanceID = uReqs.importanceID
+    INNER JOIN States AS stta
+    ON stta.stateID = uReqs.stateID
+    INNER JOIN Files fle
+    ON uReqs.file_id = fle.file_id
+    LEFT JOIN Organizations org
+    ON org.organizationID = uReqs.organizationID
+    INNER JOIN Users users
+    ON users.UserID = uReqs.UserID 
+    INNER JOIN Users usr
+    ON usr.UserID = uReqs.DeveloperID
+WHERE uReqs.stateID>=5 AND uReqs.importanceID = 1 ` ,
+         {
+            type: QueryTypes.SELECT
+         })
+            .then(data => {
+            res.send(data);
+        }); 
+};
+exports.reports = async(req, res) => {
+    await db.sequelize.query(`
+    SELECT uReqs.*,
+    imprts.importanceName AS importanceName,
+    stta.stateName AS stateName,
+    fle.file_name AS file_name,
+    users.firstname as firstname,
+    usr.firstname as userrname,
+    org.organizationName AS organizationName
+FROM [dbo].UserReqs AS uReqs
+    INNER JOIN Importance AS imprts
+    ON imprts.importanceID = uReqs.importanceID
+    INNER JOIN States AS stta
+    ON stta.stateID = uReqs.stateID
+    LEFT JOIN Files fle
+    ON uReqs.file_id = fle.file_id
+    LEFT JOIN Organizations org
+    ON org.organizationID = uReqs.organizationID
+    INNER JOIN Users users
+    ON users.UserID = uReqs.UserID 
+    INNER JOIN Users usr
+    ON usr.UserID = uReqs.DeveloperID
+WHERE uReqs.stateID>=5 AND uReqs.importanceID>=3` ,
+         {
+            type: QueryTypes.SELECT
+         })
+            .then(data => {
+            res.send(data);
+        }); 
+};
+exports.headReport = async(req, res) => {
+    await db.sequelize.query(`
+    SELECT uReqs.*,
+    imprts.importanceName AS importanceName,
+    stta.stateName AS stateName,
+    fle.file_name AS file_name,
+    users.firstname as firstname,
+    usr.firstname as userrname,
+    org.organizationName AS organizationName
+FROM [dbo].UserReqs AS uReqs
+    INNER JOIN Importance AS imprts
+    ON imprts.importanceID = uReqs.importanceID
+    INNER JOIN States AS stta
+    ON stta.stateID = uReqs.stateID
+    INNER JOIN Files fle
+    ON uReqs.file_id = fle.file_id
+    LEFT JOIN Organizations org
+    ON org.organizationID = uReqs.organizationID
+    INNER JOIN Users users
+    ON users.UserID = uReqs.UserID 
+    INNER JOIN Users usr
+    ON usr.UserID = uReqs.DeveloperID
+WHERE uReqs.stateID>=5` ,
+         {
+            type: QueryTypes.SELECT
+         })
+            .then(data => {
+            res.send(data);
+        }); 
+};
+exports.reportDetail = async(req, res) => {
+    const id = req.body;
+    await db.sequelize.query(
+        `exec sp_userReqs 10, ${id.userReqID}, 0`,
+         {type:QueryTypes.SELECT })
+         .then(data => {
+         res.send(data);
+        });
+    };
+

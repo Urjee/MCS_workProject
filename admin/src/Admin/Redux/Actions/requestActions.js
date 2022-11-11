@@ -11,6 +11,9 @@ import {
     REQUEST_UPDATE_SUCCESS,
     REQUEST_UPDATE_FAIL,
     REQUEST_UPDATE_RESET,
+    REPORT_LIST_REQUEST,
+    REPORT_LIST_SUCCESS,
+    REPORT_LIST_FAIL,
   } from "../Constants/requestConstants";
   import axios from "axios";
   import { URLFront} from "../url";
@@ -37,6 +40,28 @@ import {
       });
     }
   };
+    // ALL REPORT INFO
+    export const allReport = () => async (dispatch) => {
+      try {
+        dispatch({ type: REPORT_LIST_REQUEST });
+    
+        const { data } = await axios.post(`${URLFront}/api/reports`);
+        
+       
+        dispatch({ type: REPORT_LIST_SUCCESS, payload: data });
+      } catch (error) {
+        const message =
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message;
+        if (message === "Not authorized, token failed") {
+        }
+        dispatch({
+          type: REPORT_LIST_FAIL,
+          payload: message,
+        });
+      }
+    };
     // ALL REQUEST
     export const requestProList = () => async (dispatch) => {
       try {

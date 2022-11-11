@@ -128,6 +128,9 @@
         "Content-Type": "application/json"
       }
     });
+     toast.success('Амжилттай батлагдлаа', ToastObjects);
+     setTimeout(() => history.push('/headReqs'), 2000)
+
   }
   const handleCancel = async () => {
     await fetch('http://172.16.226.57:8080/api/userReqCancel', {
@@ -139,6 +142,8 @@
         "Content-Type": "application/json"
         }
       })
+      toast.success('Хүсэлт цуцлагдлаа', ToastObjects);
+      setTimeout(() => history.push('/headReqs'), 2000)
 
   }
 

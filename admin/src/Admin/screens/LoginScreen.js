@@ -31,7 +31,10 @@ const Login = ({ history }) => {
       window.localStorage.setItem('isAdmin', userInfo.isAdmin);
       window.localStorage.setItem('jobTitle', userInfo.jobTitle);
       window.localStorage.setItem("userinfo", JSON.stringify(userInfo));
-  
+      window.localStorage.setItem("lastname", userInfo.lastname);
+      window.localStorage.setItem("email", userInfo.email);
+      window.localStorage.setItem("phone", userInfo.phone);
+      window.localStorage.setItem("DevType",userInfo.DevType);
       history.push("/");
     }
   }, [userInfo, dispatch, history]);
@@ -39,6 +42,8 @@ const Login = ({ history }) => {
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(login(email, password));
+    toast.warning("Нэвтрэх нэр эсвэл нууц үг буруу", ToastObjects)
+
   };
   return ( 
     <>

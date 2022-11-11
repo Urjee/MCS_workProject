@@ -175,3 +175,40 @@ exports.deleteUser = async(res, req) =>{
             res.send(data);
         });
 }
+exports.settings = async(res, req) => {
+    const user = await User.findById(req.user.UserID);
+
+    if (user) {
+      res.json({
+        name: user.name,
+        email: user.email,
+        isAdmin: user.isAdmin,
+        createdAt: user.createdAt,
+      });
+    } else {
+      res.status(404);
+      throw new Error("User not found");
+    }
+}
+// exports.settingsGet  = async(res, req) => {
+//     const user = await User.findById(req.user.UserID);
+
+//     if (user) {
+//       user.name = req.body.name || user.name;
+//       user.email = req.body.email || user.email;
+//       if (req.body.password) {
+//         user.password = req.body.password;
+//       }
+//       const updatedUser = await user.save();
+//       res.json({
+//         name: updatedUser.name,
+//         email: updatedUser.email,
+//         isAdmin: updatedUser.isAdmin,
+//         createdAt: updatedUser.createdAt,
+//         token: generateToken(updatedUser.UserID),
+//       });
+//     } else {
+//       res.status(404);
+//       throw new Error("User not found");
+//     }
+// }

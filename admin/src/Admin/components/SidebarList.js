@@ -3,6 +3,7 @@ import { Link, NavLink } from "react-router-dom";
 import logo from "../img/mcs.png";
 
 const SidebarList = () => {
+  const DevType = window.localStorage.DevType;
 
   return (
     <div>
@@ -36,6 +37,7 @@ const SidebarList = () => {
                 <span className="text">Нүүр</span>
               </NavLink>
             </li>
+            {DevType == '0' ?
             <li className="menu-item">
               <NavLink
                 activeClassName="active"
@@ -45,7 +47,8 @@ const SidebarList = () => {
                 <i className="icon fas fa-bags-shopping"></i>
                 <span className="text">Хэрэглэгч</span>
               </NavLink>
-            </li>
+            </li> 
+            : undefined }
             <li className="menu-item">
               <NavLink
                 activeClassName="active"
@@ -66,7 +69,18 @@ const SidebarList = () => {
                 <span className="text">Ажил даалгавар</span>
               </NavLink>
             </li>
-
+            {DevType == '0' ?
+            <li className="menu-item">
+              <NavLink
+                activeClassName="active"
+                className="menu-link"
+                to="/report"
+              >
+                <i className="icon fas fa-file"></i>
+                <span className="text">Тайлан</span>
+              </NavLink>
+            </li>
+            : undefined }
           </ul>
           <br />
           <br />

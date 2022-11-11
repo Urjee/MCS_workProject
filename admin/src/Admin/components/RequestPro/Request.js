@@ -1,8 +1,12 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 const Request = (props) => {
   const { requests }=props;
+  const history = useHistory();
+  const handleClick = (userReqID) => {
+    setTimeout(() => history.push(`/editRequest/?id=${userReqID}`))
+}
   return (
       <table className="table">
         <thead>
@@ -13,35 +17,17 @@ const Request = (props) => {
             <th scope="col">Хавсралт</th>
             <th scope="col">Дэлгэрэнгүй</th>
             <th scope="col"> Байгууллага</th>
-            <th scope="col" className="text-end">Үйлдэл</th>
           </tr>
         </thead>
         <tbody>
           {requests.map((request)=>(
-            <tr key={request.userReqID}>
-              <td>{request.name}</td>
+          <tr key={request.userReqID} onClick={() => handleClick(request.userReqID)}>
+          <td>{request.name}</td>
               <td>{request.importanceName}</td>
               <td>{request.stateName}</td>
               <td>{request?.file_name}</td>
               <td>{request.description}</td>
               <td>{request.organizationName}</td>
-              <td className="text-end">
-              <div className="dropdown">
-                <Link
-                  to="#"
-                  data-bs-toggle="dropdown"
-                  className="btn btn-light"
-                >
-                  <i className="fas fa-ellipsis-h"></i>
-                </Link>
-                <div className="dropdown-menu">
-                  <Link className="dropdown-item" 
-                    to={{pathname: `/editRequest/?id=${request.userReqID}`}}>
-                    Засах
-                  </Link>
-                </div>
-              </div>
-              </td>
             </tr>
           ))}
         </tbody>

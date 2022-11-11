@@ -7,12 +7,7 @@ import Toast from "../LoadingError/Toast";
 import { Link, useHistory } from "react-router-dom";
 import axios  from "axios";
 import { USERREQ_CREATE_RESET } from "../../Redux/Constants/requestConstants";
-const ToastObjects = {
-  pauseOnFocusLoss: false,
-  draggable: false,
-  pauseOnHover: false,
-  autoClose: 2000,
-};
+
 const ReqDetails = () => {
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
@@ -23,7 +18,6 @@ const ReqDetails = () => {
     const [stteName, setStteName] = useState("");
     const [file_name, setFileName] = useState([]);
     const [files, setFiles] = useState([]);
-    const [file_path, setFilePath]= useState([]);
     const[file_id, setFileID] = useState();
     const imprts=[];
     const states = [];
@@ -136,7 +130,6 @@ const ReqDetails = () => {
         setStateName(res[0].stateName)
         setFileName(res[0].file_name)
         setFileID(res[0].file_id)
-        setFilePath(res[0].path)
         setCreateDate(res[0].createDate)
       })
       .catch(function (error){
@@ -208,14 +201,6 @@ const ReqDetails = () => {
                         ) }
                         </select>
                     </div>
-                    {/* <div className="mb-12">
-                      <label htmlFor="userReq_createDate" className="form-label">
-                        Үүсгэсэн огноо
-                      </label>
-                      <input type="text" value={createDate} className="form-control"
-                        onChange={(e) =>setCreateDate}>
-                        </input>
-                    </div> */}
                     { fileRemove ? null :
                       <div id="form-control" className="mb-12">
                       <i className="icon fas fa exit"></i>

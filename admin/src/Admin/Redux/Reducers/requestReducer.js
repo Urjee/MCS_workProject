@@ -11,6 +11,10 @@ import {
     REQUEST_UPDATE_SUCCESS,
     REQUEST_UPDATE_FAIL,
     REQUEST_UPDATE_RESET,
+    REPORT_LIST_REQUEST,
+    REPORT_LIST_SUCCESS,
+    REPORT_LIST_FAIL,
+    REPORT_LIST_RESET
   } from "../Constants/requestConstants";
   
   // ALL REQUEST
@@ -28,7 +32,21 @@ import {
         return state;
     }
   };
-
+// ALL REPORT
+export const reportListReducer = (state = { requests: [] }, action) => {
+  switch (action.type) {
+    case REPORT_LIST_REQUEST:
+      return { loading: true };
+    case REPORT_LIST_SUCCESS:
+      return { loading: false, requests: action.payload };
+    case REPORT_LIST_FAIL:
+      return { loading: false, error: action.payload };
+    case REPORT_LIST_RESET:
+      return { requests: [] };
+    default:
+      return state;
+  }
+};
       //  CREATE
 export const requestCreateReducer = (state = {}, action) => {
   switch (action.type) {

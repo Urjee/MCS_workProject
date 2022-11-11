@@ -3,8 +3,7 @@ import { Link, NavLink } from "react-router-dom";
 import logo from "./img/mcs.png";
 
 const SidebarUser = () => {
-  // const userinfo = JSON.parse(window.localStorage.getItem('userInfo'));
-  // const isAdmin = userinfo.isAdmin;
+
   
   return (
     <div>
@@ -48,17 +47,6 @@ const SidebarUser = () => {
                 <span className="text">Ажлын хүсэлт</span>
               </NavLink>
             </li> 
-            {/* <li className="menu-item">
-            <NavLink
-                activeClassName="active"
-                className="menu-link"
-                to="/report"
-              >
-                <i className="icon fas fa-list"></i>
-                <span className="text">Тайлан</span>
-              </NavLink>
-            
-            </li> */}
           </ul>
           <br />
           <br />

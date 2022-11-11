@@ -7,12 +7,11 @@ const Sidebar = () => {
 
     const isAdmin = window.localStorage.isAdmin;
     const jobTitle = window.localStorage.jobTitle;
-    // const [importanceID, setImportanceID] = useState();
-    
+        
     return (
       <div>
         
-        { isAdmin === '1' && jobTitle === '1' && ( <SidebarList /> ) }
+        { isAdmin === '1' && jobTitle === '1' &&  ( <SidebarList /> ) }
 
         { isAdmin === '1' && jobTitle === '0' && ( <SidebarProgram /> ) }
 

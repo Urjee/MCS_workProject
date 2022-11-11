@@ -279,7 +279,7 @@ const ReqAdminEdit = () => {
                     </div>   
                       <br/>
                 <div className="content-header">
-                    <Link to="/requests" className="btn btn-dark col-3">
+                    <Link to="/adminReqs" className="btn btn-dark col-3">
                       Буцах
                     </Link>
                     <button type="submit" className="btn btn-success col-3">

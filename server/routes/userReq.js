@@ -16,6 +16,11 @@ module.exports = app => {
     router.post('/requestProgrammer', requests.requestAll);
     router.post('/message', requests.message);
 
-    router.delete('/deleteAdminReq', requests.deleteAdminReq)
+    router.delete('/deleteAdminReq', requests.deleteAdminReq);
+    router.post('/report', requests.report);
+    router.post('/reports', requests.reports);
+    router.post("/headReport", requests.headReport);
+    router.post('/reportDetail', requests.reportDetail);
+
     app.use('/api', router);
 }
