@@ -61,18 +61,25 @@ exports.login = async(req, res) => {
 
     const email = req.body.email;
     const password = req.body.password;
+
+    if(!email) res.status(400).json({ message: "Please enter email" });
+    if(!password) res.status(400).json({ message: "Please enter password" });
     
-    User.findOne({ where: { email: `${email}`, password: `${password}` } }).then(data => {
-        if(email == null || email == "") {
-            res.status(400).json({ message: `User not found`});
-        } else if(password == "" || password == null) {
-            res.status(422).json({ message: "Password incorrect"});
+    const user = await User.findOne({ where: { email: email } });
+    
+    try {
+        if(user) {
+            if(password === user.password) {
+                res.status(200).send(user);
+            } else {
+                res.status(422).json({ message: "Нэвтрэх нууц үг буруу" });
+            }
         } else {
-            res.status(200).send(data);
+            res.status(422).json({ message: "Нэвтрэх имэйл буруу" })
         }
-    }).catch(err => {
-        res.status(500).json({ message: err.message});
-    });
+    } catch(err) {
+        res.status(500).json({ message: err.message });
+    }
 };
 //head User nemeh hiih uyed
 exports.addUser = async(req, res)=>{

@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 const ReqAdmin = (props) => {
   const { requests } = props;
@@ -14,7 +14,7 @@ const ReqAdmin = (props) => {
       <thead>
         <tr>
           <th scope="col">Нэр</th>
-          <th scope="col">Дэд ажил</th>
+          {/* <th scope="col">Дэд ажил</th> */}
           <th scope="col">Байгууллага</th>
           <th scope="col">Чухал байдал</th>
           <th scope="col">Төлөв</th>
@@ -34,7 +34,7 @@ const ReqAdmin = (props) => {
         {requests.map((request) => (
           <tr key={request.userReqID} onClick={() => handleClick(request.userReqID)}>
             <td>{request.name}</td>
-            <td><Link to="#">0</Link></td>
+            {/* <td><Link to="#">0</Link></td> */}
             <td>{request.organizationName}</td>
             <td>{request.importanceName}</td>
             <td>{request.stateName}</td>

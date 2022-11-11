@@ -5,12 +5,12 @@ import Toast from "../components/LoadingError/Toast";
 import { login } from "../Redux/Actions/userActions";
 import Message from "./../components/LoadingError/Error";
 import logo from "../img/mcs.png";
-import { toast } from "react-toastify";
-const ToastObjects = {
-  pauseOnFocusLoss: false,
-  draggable: false,
-  pauseOnHover: false,
-};
+// import { toast } from "react-toastify";
+// const ToastObjects = {
+//   pauseOnFocusLoss: false,
+//   draggable: false,
+//   pauseOnHover: false,
+// };
 const Login = ({ history }) => {
   window.scrollTo(0, 0);
   const [email, setEmail] = useState("");
@@ -23,8 +23,6 @@ const Login = ({ history }) => {
 
   useEffect(() => {
     if (userInfo) {
-      toast.success("Амжилттай нэвтэрлээ", ToastObjects);
-
       window.localStorage.setItem("userid", userInfo.UserID);
       window.localStorage.setItem("firstname", userInfo.firstname);
       window.localStorage.setItem("headid", userInfo.headID);
@@ -41,9 +39,8 @@ const Login = ({ history }) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(login(email, password));
-    toast.warning("Нэвтрэх нэр эсвэл нууц үг буруу", ToastObjects)
-
+    dispatch(login(email, password))
+        // toast.warning("Нэвтрэх имэйл эсвэл нууц үг буруу", ToastObjects)
   };
   return ( 
     <>
