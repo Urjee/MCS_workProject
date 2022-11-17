@@ -88,10 +88,7 @@ export const userCreateReducer = (state = {}, action) => {
 };
 
 // EDIT USER
-export const userEditReducer = (
-  state = { user: { reviews: [] } },
-  action
-) => {
+export const userEditReducer = (state = { user: { reviews: [] } }, action) => {
   switch (action.type) {
     case USER_EDIT_REQUEST:
       return { ...state, loading: true };

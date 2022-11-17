@@ -29,9 +29,9 @@ const TableReport = (props) => {
             <tr key={request.userReqID} onClick={() => handleClick(request.userReqID)}>
               <td>{request?.name}</td>
               <td>{request.firstname}</td>
-              <td>{new Date(request.createDate).toISOString().slice(0,10).replace('T', '')}</td>
-              <td>{new Date(request.startDate).toISOString().slice(0,10).replace('T', '')}</td>
-              <td>{new Date(request.endDate).toISOString().slice(0,10).replace('T', '')}</td>
+              <td>{new Date(request.createDate).toISOString().slice(0,19).replace('T', ' ')}</td>
+              <td>{new Date(request.startDate).toISOString().slice(0,10).replace('T', ' ')}</td>
+              <td>{new Date(request.endDate).toISOString().slice(0,10).replace('T', ' ')}</td>
               <td>{request.importanceName}</td>
               <td>{request.organizationName}</td>
               <td>{request.stateName}</td>

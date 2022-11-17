@@ -1,79 +1,89 @@
-const db = require('../models');
+const db = require("../models");
 const UserReq = db.UserReq;
 const Req = db.Request;
-const multer  = require('multer')
-const axios = require('axios')
+const multer = require("multer");
+const axios = require("axios");
 
-const { QueryTypes, Op } = require('sequelize');
-const events = require('events');
+const { QueryTypes, Op } = require("sequelize");
+const events = require("events");
 
-exports.allUserReq = async(req, res) => {
-    const id = req.body;
-    db.sequelize.query(`
+exports.allUserReq = async (req, res) => {
+  const id = req.body;
+  db.sequelize
+    .query(
+      `
         exec sp_userReqs 3,0, ${id.UserID} `,
-         {type: QueryTypes.SELECT })
-         .then(data => {
-        res.send(data);
-        });
-      };
-exports.headReqDetail = async(req, res) => {
-    const id = req.body;
-    await db.sequelize.query(
-        `exec sp_userReqs 2, ${id.userReqID}, 0`,
-         {type:QueryTypes.SELECT })
-         .then(data => {
-         res.send(data);
-        });
-    };
-exports.requestEdit = async(req, res) => {
-    const id = req.body;
-    await db.sequelize.query(
-        `exec sp_userReqs 8, ${id.userReqID}, 0`)
-        .then(data =>{
-            res.send(data);
-        });
-    }
-exports.editRequest = async(req, res) => {
-    const id = req.body;
-    await db.sequelize.query(
-        `exec sp_userReqs 8, ${id.userReqID}, 0`, { type: QueryTypes.SELECT })
-        .then(data =>{
-            res.send(data);
-        });
-    }
-exports.reqAdminEdit = async(req, res) => {
-    const id = req.body;
-    await db.sequelize.query(
-        `exec sp_userReqs 9, ${id.userReqID}, 0`)
-        .then(data =>{
-            res.send(data);
-        });
- }
+      { type: QueryTypes.SELECT }
+    )
+    .then((data) => {
+      res.send(data);
+    });
+};
+exports.headReqDetail = async (req, res) => {
+  const id = req.body;
+  await db.sequelize
+    .query(`exec sp_userReqs 2, ${id.userReqID}, 0`, {
+      type: QueryTypes.SELECT,
+    })
+    .then((data) => {
+      res.send(data);
+    });
+};
+exports.requestEdit = async (req, res) => {
+  const id = req.body;
+  await db.sequelize
+    .query(`exec sp_userReqs 8, ${id.userReqID}, 0`)
+    .then((data) => {
+      res.send(data);
+    });
+};
+exports.editRequest = async (req, res) => {
+  const id = req.body;
+  await db.sequelize
+    .query(`exec sp_userReqs 8, ${id.userReqID}, 0`, {
+      type: QueryTypes.SELECT,
+    })
+    .then((data) => {
+      res.send(data);
+    });
+};
+exports.reqAdminEdit = async (req, res) => {
+  const id = req.body;
+  await db.sequelize
+    .query(`exec sp_userReqs 9, ${id.userReqID}, 0`)
+    .then((data) => {
+      res.send(data);
+    });
+};
 
-exports.message = async(req, res) => {
-    const id = req.body;
-         const msg = await db.sequelize.query(`exec sp_users 7, 0, ${id.userReqID}`)   
-        // for( var i in msg[0]) {
-        //     axios.post('http://122.201.28.39:8080/api2/data/smsregister', {
-        //             number:  msg[0][i].phone,
-        //             text: `Username: ${id.firstname}, Phone: ${id.phone}, Ajliin huseltiin web`
-        //             }
-        //         )
-        //     }
-    }
-     // await db.sequelize.query(
-    //     `exec Anungoo_db.dbo.SP_SMS_SENT_ANY_CARREER,
-    //         ${id.firstname, id.phone},
-    //         ${`exec sp_users 6,74, 0`},
-    //         'ajliin huselt'`
-    //     )
-    //     .then(data =>{
-    //         res.send(data);
-    //     });
-    // console.log(`Hereglegchiin ner: ${id.firstname},Utasnii dugaar: ${id.phone}`);
+exports.message = async (req, res) => {
+  const id = req.body;
+  const msg = await db.sequelize.query(`exec sp_users 7, 0, ${id.userReqID}`, {
+    type: QueryTypes.SELECT,
+  });
 
-exports.adminReqs = async(req, res) => {
-    await db.sequelize.query(`
+  if (msg) {
+    for (let i = 0; i < msg.length; i++) {
+      axios.post("http://66.181.175.237:8080/api2/data/smsregister", {
+        number: msg[i].phone,
+        text: `[Ajliin huseltiin web], Hereglechiin mail: ${id.email}, Utasnii dugaar: ${id.phone}`,
+      });
+    }
+
+    res.status(200).json({
+      message: "SMS sent",
+    });
+  } else {
+    res.status(422).json({
+      message: "SMS failed",
+    });
+  }
+};
+
+exports.adminReqs = async (req, res) => {
+  await db.sequelize
+    .query(
+      `
     SELECT 
         uReqs.[userReqID]
         ,uReqs.[name]
@@ -108,15 +118,18 @@ exports.adminReqs = async(req, res) => {
         INNER JOIN Files fle
         ON fle.file_id = uReqs.file_id
     WHERE uReqs.stateID >=3  AND uReqs.importanceID = 1`,
-         {
-            type: QueryTypes.SELECT
-         })
-            .then(data => {
-            res.send(data);
-        }); 
+      {
+        type: QueryTypes.SELECT,
+      }
+    )
+    .then((data) => {
+      res.send(data);
+    });
 };
-exports.adminReqsPro = async(req, res) => {
-    await db.sequelize.query(`
+exports.adminReqsPro = async (req, res) => {
+  await db.sequelize
+    .query(
+      `
     SELECT 
         uReqs.[userReqID]
         ,uReqs.[name]
@@ -151,15 +164,18 @@ exports.adminReqsPro = async(req, res) => {
         LEFT JOIN Files fle
         ON fle.file_id = uReqs.file_id
     WHERE uReqs.stateID >=3 AND uReqs.importanceID>1`,
-         {
-            type: QueryTypes.SELECT
-         })
-            .then(data => {
-            res.send(data);
-        }); 
+      {
+        type: QueryTypes.SELECT,
+      }
+    )
+    .then((data) => {
+      res.send(data);
+    });
 };
-exports.allRequests = async(req, res) => {
-    await db.sequelize.query(`
+exports.allRequests = async (req, res) => {
+  await db.sequelize
+    .query(
+      `
     SELECT uReqs.*,
         imprts.importanceName AS importanceName,
         stta.stateName AS stateName,
@@ -175,15 +191,18 @@ exports.allRequests = async(req, res) => {
         INNER JOIN Organizations org
         ON org.organizationID = uReqs.organizationID
     WHERE uReqs.stateID <= 3 AND uReqs.importanceID = 1`,
-         {
-            type: QueryTypes.SELECT
-         })
-            .then(data => {
-            res.send(data);
-        }); 
+      {
+        type: QueryTypes.SELECT,
+      }
+    )
+    .then((data) => {
+      res.send(data);
+    });
 };
-exports.requestAll = async(req, res) => {
-    await db.sequelize.query(`
+exports.requestAll = async (req, res) => {
+  await db.sequelize
+    .query(
+      `
     SELECT uReqs.*,
         imprts.importanceName AS importanceName,
         stta.stateName AS stateName,
@@ -199,26 +218,32 @@ exports.requestAll = async(req, res) => {
         INNER JOIN Organizations org
         ON org.organizationID = uReqs.organizationID
     WHERE imprts.importanceID>=3 and stta.stateID<=3`,
-         {
-            type: QueryTypes.SELECT
-         })
-            .then(data => {
-            res.send(data);
-        }); 
-}
-exports.deleteAdminReq = async(req, res) => {
-    const id = req.body
-    db.sequelize.query(`
+      {
+        type: QueryTypes.SELECT,
+      }
+    )
+    .then((data) => {
+      res.send(data);
+    });
+};
+exports.deleteAdminReq = async (req, res) => {
+  const id = req.body;
+  db.sequelize
+    .query(
+      `
         DELETE 
 		FROM UserReqs 
-		WHERE userReqID =${id.userReqID}` , 
-        { type: QueryTypes.DELETE })
-        .then(data => {
-            res.send(data);
-        });
-}
-exports.report = async(req, res) => {
-    await db.sequelize.query(`
+		WHERE userReqID =${id.userReqID}`,
+      { type: QueryTypes.DELETE }
+    )
+    .then((data) => {
+      res.send(data);
+    });
+};
+exports.report = async (req, res) => {
+  await db.sequelize
+    .query(
+      `
     SELECT uReqs.*,
     imprts.importanceName AS importanceName,
     stta.stateName AS stateName,
@@ -239,16 +264,19 @@ FROM [dbo].UserReqs AS uReqs
     ON users.UserID = uReqs.UserID 
     INNER JOIN Users usr
     ON usr.UserID = uReqs.DeveloperID
-WHERE uReqs.stateID>=5 AND uReqs.importanceID = 1 ` ,
-         {
-            type: QueryTypes.SELECT
-         })
-            .then(data => {
-            res.send(data);
-        }); 
+WHERE uReqs.stateID>=5 AND uReqs.importanceID = 1 `,
+      {
+        type: QueryTypes.SELECT,
+      }
+    )
+    .then((data) => {
+      res.send(data);
+    });
 };
-exports.reports = async(req, res) => {
-    await db.sequelize.query(`
+exports.reports = async (req, res) => {
+  await db.sequelize
+    .query(
+      `
     SELECT uReqs.*,
     imprts.importanceName AS importanceName,
     stta.stateName AS stateName,
@@ -269,16 +297,19 @@ FROM [dbo].UserReqs AS uReqs
     ON users.UserID = uReqs.UserID 
     INNER JOIN Users usr
     ON usr.UserID = uReqs.DeveloperID
-WHERE uReqs.stateID>=5 AND uReqs.importanceID>=3` ,
-         {
-            type: QueryTypes.SELECT
-         })
-            .then(data => {
-            res.send(data);
-        }); 
+WHERE uReqs.stateID>=5 AND uReqs.importanceID>=3`,
+      {
+        type: QueryTypes.SELECT,
+      }
+    )
+    .then((data) => {
+      res.send(data);
+    });
 };
-exports.headReport = async(req, res) => {
-    await db.sequelize.query(`
+exports.headReport = async (req, res) => {
+  await db.sequelize
+    .query(
+      `
     SELECT uReqs.*,
     imprts.importanceName AS importanceName,
     stta.stateName AS stateName,
@@ -299,21 +330,22 @@ FROM [dbo].UserReqs AS uReqs
     ON users.UserID = uReqs.UserID 
     INNER JOIN Users usr
     ON usr.UserID = uReqs.DeveloperID
-WHERE uReqs.stateID>=5` ,
-         {
-            type: QueryTypes.SELECT
-         })
-            .then(data => {
-            res.send(data);
-        }); 
+WHERE uReqs.stateID>=5`,
+      {
+        type: QueryTypes.SELECT,
+      }
+    )
+    .then((data) => {
+      res.send(data);
+    });
 };
-exports.reportDetail = async(req, res) => {
-    const id = req.body;
-    await db.sequelize.query(
-        `exec sp_userReqs 10, ${id.userReqID}, 0`,
-         {type:QueryTypes.SELECT })
-         .then(data => {
-         res.send(data);
-        });
-    };
-
+exports.reportDetail = async (req, res) => {
+  const id = req.body;
+  await db.sequelize
+    .query(`exec sp_userReqs 10, ${id.userReqID}, 0`, {
+      type: QueryTypes.SELECT,
+    })
+    .then((data) => {
+      res.send(data);
+    });
+};

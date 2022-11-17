@@ -3,8 +3,6 @@ import { Link, NavLink } from "react-router-dom";
 import logo from "./img/mcs.png";
 
 const SidebarUser = () => {
-
-  
   return (
     <div>
       <aside className="navbar-aside" id="offcanvas_aside">
@@ -26,7 +24,7 @@ const SidebarUser = () => {
         <nav>
           <ul className="menu-aside">
             <li className="menu-item">
-            <NavLink
+              <NavLink
                 activeClassName="active"
                 className="menu-link"
                 to="/"
@@ -37,22 +35,21 @@ const SidebarUser = () => {
               </NavLink>
             </li>
 
-            <li className="menu-item">    
-           
-            <NavLink activeClassName="active"
+            <li className="menu-item">
+              <NavLink
+                activeClassName="active"
                 className="menu-link"
                 to="/userReqs"
               >
                 <i className="icon fas fa-user"></i>
                 <span className="text">Ажлын хүсэлт</span>
               </NavLink>
-            </li> 
+            </li>
           </ul>
           <br />
           <br />
         </nav>
       </aside>
-
     </div>
   );
 };

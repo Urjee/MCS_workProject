@@ -17,9 +17,6 @@ module.exports = (sequelize, Sequelize) => {
         file_path:{
             type:Sequelize.STRING,
         },
-        isDelete: {
-            type: Sequelize.BOOLEAN,
-        },
         userReqID: {
             type: Sequelize.INTEGER,
             references:{

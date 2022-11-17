@@ -1,8 +1,8 @@
-import React, { useEffect, useState} from "react";
-import {Link, useHistory} from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import {toast} from "react-toastify";
+import React, { useEffect, useState } from "react";
+import { Link, useHistory } from "react-router-dom";
+import { toast } from "react-toastify";
 import axios from "axios";
+import Toast from "../LoadingError/Toast";
 
 const CreateUserReq = () => {
     const [uploadedFiles, setUploadedFiles] = useState([]);
@@ -11,16 +11,8 @@ const CreateUserReq = () => {
     const [importanceName, setImportanceName]= useState("");
     const [description, setDescription] = useState("");
     const [impName, setImpName] = useState("");
-    const [stateID, setStateID] = useState(0);
-    const [stteName, setStteName] = useState("");
-    const [orgID, setOrgID] = useState();
     const history = useHistory();
-    const [firstname, setFirstname] = useState();
-    const [phone, setPhone]= useState("");
-    const dispatch = useDispatch();
 
-    const userReqCreate = useSelector((state) => state.userReqCreate);
-    const { userReq } = userReqCreate;
     useEffect(() => {
       const impName = () => {
         fetch('http://172.16.226.57:8080/api/importance')
@@ -35,26 +27,10 @@ const CreateUserReq = () => {
     for(let i in impName) {
       arr1.push(impName[i].importanceName)
     }
-    useEffect(()=> {
-      const stteName = () => {
-        fetch('http://172.16.226.57:8080/api/state')
-        .then(res => res.json())
-        .then(stateData => setStteName(stateData));
-      }
-      stteName()
-      setOrgID(JSON.parse(window.localStorage.getItem('userinfo')).organizationID)
-      setFirstname(JSON.parse(window.localStorage.getItem('userinfo')).firstname)
-      setPhone(JSON.parse(window.localStorage.getItem('userinfo')).phone)
-
-    },       
-    [])
-    let arr2=[];
-    for(let i in stteName) {
-      arr2.push(stteName[i].stateName)
-    }
    
     const submitHandler = (e) =>{
         e.preventDefault();
+        toast.success('Амжилттай хадгалагдлаа');
         const data = new FormData();
         for(let i=0; i < files.length; i++) {
           data.append('file', files[i]);
@@ -63,14 +39,12 @@ const CreateUserReq = () => {
         data.append('importanceName', importanceName);
         data.append('description', description);
         data.append('userID', (window.localStorage.userid * 1));
-        data.append('stateID', stateID);
-        data.append('organizationID', orgID);
-        data.append('firstname', firstname);
-        data.append('phone', phone);
+        data.append('organizationID', (window.localStorage.organizationID));
+        data.append('email', (window.localStorage.email));
+        data.append('phone', (window.localStorage.phone));
         data.append('createDate', new Date());
         axios.post('http://172.16.226.57:8080/api/addUserReq', data)
         .then((response) => {
-          toast.success('Амжилттай хадгалагдлаа');
           submitHandler(response.data)
         })
         setTimeout(() => history.push('/userReqs'), 2000)
@@ -80,6 +54,7 @@ const CreateUserReq = () => {
     };
     return (
         <>
+          <Toast/>
         <section className="content-main" style={{ maxWidth: "1200px" }}>
         <form onSubmit={submitHandler} encType="multipart/form-data">
         <h2 className="content-title">Ажил даалгавар нэмэх</h2>
@@ -144,16 +119,6 @@ const CreateUserReq = () => {
                         ))}
                         </div>
                     </div>
-                    {/* <div className="mb-12">
-                        <label className="form-label" htmlFor="user_developerID">Гүйцэтгэгч </label>
-                        <select className="form-select" id="user_developerID"
-                          onChange = {(e) => { setFirstname(e.target.value)}}>
-                          <option value="">Сонгох</option>
-                            {arr0.map(userData => 
-                            <option value={userData}>{userData}</option>) 
-                          }
-                        </select>   
-                    </div>     */}
                     </div>
                   </div>
                   </div>

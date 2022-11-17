@@ -1,4 +1,4 @@
-import React, { useEffect , useState} from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { listUser } from "../../Redux/Actions/userActions";
@@ -10,13 +10,14 @@ const HeadUserMain = () => {
   const dispatch = useDispatch();
   const headUserList = useSelector((state) => state.headUserList);
   const { loading, error, users } = headUserList;
-  const UserID = window.localStorage.userid * 1;
+  const UserID = window.localStorage.organizationID * 1;
   const [searchTerm, setSearch] = useState("");
-  const keys=["firstname", "email"]
+  const keys = ["firstname", "email", "lastname", "phone"];
   const search = (userReqs) => {
-    return userReqs.filter((request) => 
-    keys.some((key) => request[key].toLowerCase().includes(searchTerm)))
-  }
+    return userReqs.filter((request) =>
+      keys.some((key) => request[key].toLowerCase().includes(searchTerm))
+    );
+  };
   useEffect(() => {
     dispatch(listUser(UserID));
   }, [dispatch]);
@@ -27,7 +28,7 @@ const HeadUserMain = () => {
         <div>
           <Link to="/addUser" className="btn btn-primary">
             <i className="material-icons md-plus"></i> Хэрэглэгч нэмэх
-          </Link>          
+          </Link>
         </div>
       </div>
       <div className="card mb-4">
@@ -38,10 +39,9 @@ const HeadUserMain = () => {
                 type="text"
                 placeholder="Хайх..."
                 className="form-control"
-                onChange ={(e) => 
-                setSearch(e.target.value)}
+                onChange={(e) => setSearch(e.target.value)}
               />
-            </div>            
+            </div>
           </div>
         </header>
         <div className="card shadow-sm">

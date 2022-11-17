@@ -1,44 +1,48 @@
 import React from "react";
-import { Link , useHistory} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 const RequestTable = (props) => {
-  const { requests }=props;
+  const { requests } = props;
   const history = useHistory();
 
   const handleClick = (userReqID) => {
-    setTimeout(() => history.push(`/requestEdit/?id=${userReqID}`))
-}
+    setTimeout(() => history.push(`/requestEdit/?id=${userReqID}`));
+  };
   return (
-      <table className="table">
-        <thead>
-          <tr>
-            <th scope="col">Нэр</th>
-            <th scope="col">Ажлын төрөл</th>
-            <th scope="col">Төлөв</th>
-            <th scope="col">Хавсралт</th>
-            <th scope="col">Дэлгэрэнгүй</th>
-            <th scope="col"> Байгууллага</th>
-            <th>Үүсгэсэн огноо</th>
-           
-          </tr>
-        </thead>
-        <tbody>
-          {requests.map((request)=>(
-            <tr key={request.userReqID} onClick={() => handleClick(request.userReqID)}>
+    <table className="table">
+      <thead>
+        <tr>
+          <th scope="col">Нэр</th>
+          <th scope="col">Ажлын төрөл</th>
+          <th scope="col">Төлөв</th>
+          <th scope="col">Хавсралт</th>
+          <th scope="col">Дэлгэрэнгүй</th>
+          <th scope="col"> Байгууллага</th>
+          <th>Үүсгэсэн огноо</th>
+        </tr>
+      </thead>
+      <tbody>
+        {requests.map((request) => (
+          <tr
+            key={request.userReqID}
+            onClick={() => handleClick(request.userReqID)}
+          >
             <td>{request.name}</td>
-              <td>{request.importanceName}</td>
-              <td>{request.stateName}</td>
-              <td>{request?.file_name}</td>
-              <td>{request.description}</td>
-              <td>{request.organizationName}</td>
-              <td>{new Date(request.createDate).toISOString().slice(0,10).replace('T', '')}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+            <td>{request.importanceName}</td>
+            <td>{request.stateName}</td>
+            <td>{request?.file_name}</td>
+            <td>{request.description}</td>
+            <td>{request.organizationName}</td>
+            <td>
+              {new Date(request.createDate)
+                .toISOString()
+                .slice(0, 19)
+                .replace("T", " ")}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
 };
 export default RequestTable;
-
-
-

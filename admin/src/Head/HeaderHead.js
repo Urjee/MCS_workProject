@@ -1,11 +1,9 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import $ from "jquery";
-import { useDispatch } from "react-redux";
-import { logout } from "./Redux/Actions/userActions"
-import logo from "./img/user.png";
+import logo from "./img/gamer.png";
+
 const HeaderHead = () => {
-  const dispatch = useDispatch();
   useEffect(() => {
     $("[data-trigger]").on("click", function (e) {
       e.preventDefault();
@@ -26,18 +24,17 @@ const HeaderHead = () => {
   }, []);
 
   const logoutHandler = () => {
-    dispatch(logout());
-  };
-   const firstname = window.localStorage.getItem("firstname");
+    localStorage.removeItem("userInfo");
+    window.location.assign('/login');
 
+  };
+  const firstname = window.localStorage.getItem("firstname");
 
   return (
     <header className="main-header navbar">
       <div className="col-search">
         <form className="searchform">
-          <datalist id="search_terms">
-            
-          </datalist>
+          <datalist id="search_terms"></datalist>
         </form>
       </div>
       <div className="col-nav">
@@ -48,22 +45,17 @@ const HeaderHead = () => {
           <i className="md-28 fas fa-bars"></i>
         </button>
         <ul className="nav">
-          
           <li className="dropdown nav-item">
             <Link className="dropdown-toggle" data-bs-toggle="dropdown" to="#">
-              <img
-                className="img-xs rounded-circle"
-                src={logo}
-                alt="User"
-              />
+            <img className="img-xs rounded-circle" src={logo} alt="User" />
             </Link>
             <div className="dropdown-menu dropdown-menu-end">
               <Link className="dropdown-item" to="/">
-              <i className="icon fas fa-user"></i>
+                <i className="icon fas fa-user"></i>
                 {firstname}
               </Link>
               <Link className="dropdown-item" to="/settings">
-              <i class="fa fa-cog" aria-hidden="true"></i>
+                <i class="fa fa-cog" aria-hidden="true"></i>
                 Тохиргоо
               </Link>
               <Link
@@ -71,7 +63,7 @@ const HeaderHead = () => {
                 className="dropdown-item text-danger"
                 to="#"
               >
-                <i class="fa fa-sign-out"  aria-hidden="true"></i>
+                <i class="fa fa-sign-out" aria-hidden="true"></i>
                 Гарах
               </Link>
             </div>

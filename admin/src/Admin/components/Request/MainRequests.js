@@ -10,12 +10,13 @@ const MainRequests = () => {
   const requestList = useSelector((state) => state.requestList);
   const { loading, error, requests } = requestList;
   const [searchTerm, setSearch] = useState("");
-  const keys=["name", "importanceName", "stateName", "organizationName"]
+  const keys = ["name", "importanceName", "stateName", "organizationName"];
 
   const search = (requests) => {
-    return requests.filter((request) => 
-    keys.some((key) => request[key].toLowerCase().includes(searchTerm)))
-  }
+    return requests.filter((request) =>
+      keys.some((key) => request[key].toLowerCase().includes(searchTerm))
+    );
+  };
   useEffect(() => {
     dispatch(listRequest());
   }, [dispatch]);
@@ -25,31 +26,29 @@ const MainRequests = () => {
         <h2 className="content-title">Ирсэн хүсэлтүүд</h2>
       </div>
       <header className="card-header">
-          <div className="row gx-3">
-            <div className="col-lg-4 col-md-6 me-auto">
-              <input
-                type="text"
-                placeholder="Хайх..."
-                className="form-control"
-                onChange={(e) => 
-                  setSearch(e.target.value)
-                }
-              />             
-            </div>            
+        <div className="row gx-3">
+          <div className="col-lg-4 col-md-6 me-auto">
+            <input
+              type="text"
+              placeholder="Хайх..."
+              className="form-control"
+              onChange={(e) => setSearch(e.target.value)}
+            />
           </div>
-        </header>
+        </div>
+      </header>
       <div className="card shadow-sm">
         <div className="card-body">
-        <div className="table-responsive">
+          <div className="table-responsive">
             {loading ? (
               <Loading />
             ) : error ? (
               <Message variant="alert-danger">{error}</Message>
             ) : (
-            <RequestTable requests={search(requests)} />
+              <RequestTable requests={search(requests)} />
             )}
-            </div>
-      </div>
+          </div>
+        </div>
       </div>
     </section>
   );

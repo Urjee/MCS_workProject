@@ -5,14 +5,14 @@ import { useDispatch } from "react-redux";
 const HeadUsers = (props) => {
   const { users } = props;
   const history = useHistory();
-  
-  const handleClick = (UserID) =>{
-    setTimeout(() => history.push(`/headUserEdit/?id=${UserID}`))
-  }
+
+  const handleClick = (UserID) => {
+    setTimeout(() => history.push(`/headUserEdit/?id=${UserID}`));
+  };
   const dispatch = useDispatch();
-  useEffect(() =>{
-    dispatch(fetch)
-  })
+  useEffect(() => {
+    dispatch(fetch);
+  });
   return (
     <table className="table">
       <thead>
@@ -28,7 +28,7 @@ const HeadUsers = (props) => {
       </thead>
       <tbody>
         {users.map((user) => (
-          <tr key={user.UserID} onClick={() =>handleClick(user.UserID)}>
+          <tr key={user.UserID} onClick={() => handleClick(user.UserID)}>
             <td>{user.firstname}</td>
             <td>{user.lastname}</td>
             <td>{user.email}</td>

@@ -4,12 +4,6 @@ import { useSelector } from "react-redux";
 import moment from "moment";
 import { CSVLink} from 'react-csv';
 
-const ToastObjects = {
-  pauseOnFocusLoss: false,
-  draggable: false,
-  pauseOnHover: false,
-  autoClose: 2000,
-};
 const ReportProDetail = () => {
   const [name, setName] = useState("");
   const [firstname, setFirstname] = useState("");
@@ -18,7 +12,6 @@ const ReportProDetail = () => {
   const [organizationName, setOrganizationName ] = useState("");
   const [stateName, setStateName] = useState("");
   const [createDate, setCreateDate] = useState("");
-  const [planTime, setPlanTime] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [realTime, setRealTime] = useState("");
@@ -27,11 +20,6 @@ const ReportProDetail = () => {
   const userReqID = searchString.get("id")
   const reportList = useSelector((state) => state.reportList);
   const { requests } = reportList;
-
-  // const date0 = new Date(createDate).toISOString().slice(0,10).replace('T', '')
-  //  const date = new Date(startDate).toISOString().slice(0,10).replace('T', '')
-  //  const date2 = new Date(endDate).toISOString().slice(0,10).replace('T', '')
-  //  const date3 = new Date(realTime).toISOString().slice(12,19).replace('T', '')
 
   const arr = [];
   for(var i in requests) {
@@ -67,7 +55,6 @@ useEffect(() => {
       setImportanceName(res[0].importanceName)
       setOrganizationName(res[0].organizationName)
       setStateName(res[0].stateName)
-      setPlanTime(res[0].planTime)
       setRealTime(res[0].realTime)
       setStartDate(res[0].startDate)
       setEndDate(res[0].endDate)

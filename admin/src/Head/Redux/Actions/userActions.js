@@ -3,7 +3,6 @@ import {
   USER_CREATE_SUCCESS,
   USER_LIST_FAIL,
   USER_LIST_REQUEST,
-  USER_LIST_RESET,
   USER_LIST_SUCCESS,
   USER_LOGIN_FAIL,
   USER_LOGIN_REQUEST,
@@ -35,14 +34,14 @@ export const login = (email, password) => async (dispatch) => {
     dispatch({ type: USER_LOGIN_REQUEST });
     const config = {
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
     };
-    const {data} = await axios.post(
+    const { data } = await axios.post(
       `${URLFront}/api/login`,
-      { email, password},
-      config,
-      );
+      { email, password },
+      config
+    );
     if (data === null) {
       toast.error("Та нэвтрэх эрхгүй байна", ToastObjects);
       dispatch({
@@ -77,30 +76,29 @@ export const listUser = (UserID) => async (dispatch) => {
     dispatch({ type: USER_LIST_REQUEST });
     const config = {
       headers: {
-       "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
     };
     const { data } = await axios.post(
       `${URLFront}/api/headUser`,
-       { UserID },
-       config,
-       );
+      { UserID },
+      config
+    );
     dispatch({ type: USER_LIST_SUCCESS, payload: data });
     // localStorage.setItem("userInfo", JSON.stringify(data));
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    if (message === "Not authorized, token failed") {
     }
-    catch (error) {
-      const message =
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message;
-      if (message === "Not authorized, token failed") {
-      }
-      dispatch({
-        type: USER_LIST_FAIL,
-        payload: message,
-      });
-    }
-  };
+    dispatch({
+      type: USER_LIST_FAIL,
+      payload: message,
+    });
+  }
+};
 // DELETE USER
 export const deleteUser = (id) => async (dispatch, getState) => {
   try {
@@ -134,7 +132,20 @@ export const deleteUser = (id) => async (dispatch, getState) => {
 };
 // CREATE USER
 export const addUser =
-  (UserID, password, firstname, lastname, phone, job, email, isAdmin, orgID, headID, departmentID, isActive) =>
+  (
+    UserID,
+    password,
+    firstname,
+    lastname,
+    phone,
+    job,
+    email,
+    isAdmin,
+    orgID,
+    headID,
+    departmentID,
+    isActive
+  ) =>
   async (dispatch, getState) => {
     try {
       dispatch({ type: USER_CREATE_REQUEST });
@@ -151,23 +162,33 @@ export const addUser =
 
       const { data } = await axios.post(
         `${URLFront}/api/addUser/`,
-        {UserID, password, firstname, lastname, phone, job, email, isAdmin, orgID, headID, departmentID, isActive },
+        {
+          UserID,
+          password,
+          firstname,
+          lastname,
+          phone,
+          job,
+          email,
+          isAdmin,
+          orgID,
+          headID,
+          departmentID,
+          isActive,
+        },
         config
       );
 
       dispatch({ type: USER_CREATE_SUCCESS, payload: data });
     } catch (error) {
       const message =
-
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message;
       if (message === "Not authorized, token failed") {
       }
-     
     }
   };
-
 
 // EDIT USER
 export const editUser = (id) => async (dispatch) => {

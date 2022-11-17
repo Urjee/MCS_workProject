@@ -3,7 +3,6 @@ import {
   WORKUSER_CREATE_SUCCESS,
   USER_LIST_FAIL,
   USER_LIST_REQUEST,
-  USER_LIST_RESET,
   USER_LIST_SUCCESS,
   USER_LOGIN_FAIL,
   USER_LOGIN_REQUEST,
@@ -35,14 +34,14 @@ export const login = (email, password) => async (dispatch) => {
     dispatch({ type: USER_LOGIN_REQUEST });
     const config = {
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
     };
-    const {data} = await axios.post(
+    const { data } = await axios.post(
       `${URLFront}/api/login`,
-      { email, password},
-      config,
-      );
+      { email, password },
+      config
+    );
     if (data === null) {
       toast.error("Та нэвтрэх эрхгүй байна", ToastObjects);
       dispatch({
@@ -50,7 +49,6 @@ export const login = (email, password) => async (dispatch) => {
       });
     } else {
       dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
-      // localStorage.setItem("userInfo", JSON.stringify(data));
     }
   } catch (error) {
     const message =
@@ -136,7 +134,16 @@ export const deleteUser = (id) => async (dispatch, getState) => {
 };
 // CREATE USER
 export const createWorkUser =
-  (workUser_id, name, organizationID, subWorkID, importance_id, stateID, planTime, file) =>
+  (
+    workUser_id,
+    name,
+    organizationID,
+    subWorkID,
+    importance_id,
+    stateID,
+    planTime,
+    file
+  ) =>
   async (dispatch, getState) => {
     try {
       dispatch({ type: WORKUSER_CREATE_REQUEST });
@@ -153,23 +160,29 @@ export const createWorkUser =
 
       const { data } = await axios.post(
         `${URLFront}/api/addUser/`,
-        {workUser_id, name, organizationID, subWorkID, importance_id, stateID, planTime, file },
+        {
+          workUser_id,
+          name,
+          organizationID,
+          subWorkID,
+          importance_id,
+          stateID,
+          planTime,
+          file,
+        },
         config
       );
 
       dispatch({ type: WORKUSER_CREATE_SUCCESS, payload: data });
     } catch (error) {
       const message =
-
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message;
       if (message === "Not authorized, token failed") {
       }
-     
     }
   };
-
 
 // EDIT USER
 export const editUser = (id) => async (dispatch) => {

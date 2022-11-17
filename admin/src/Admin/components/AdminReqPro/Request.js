@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const Request = (props) => {
-  const { works, comment } = props;
+  const { works } = props;
   let totalSale = 0;
   if (works) {
     works.map((work) =>
@@ -19,9 +19,9 @@ const Request = (props) => {
             </span>
             <div className="text">
               <Link to="/requestProgrammer" className="mb-1">
-            <i className="material-icons md-plus"></i> Ирсэн хүсэлтүүд
-          </Link>
-          <br/>
+                <i className="material-icons md-plus"></i> Ирсэн хүсэлтүүд
+              </Link>
+              <br />
               {/* <span>{totalSale.toFixed(0)}</span> */}
             </div>
           </article>
@@ -34,10 +34,10 @@ const Request = (props) => {
               <i className="text-success fas fa-bags-shopping"></i>
             </span>
             <div className="text">
-            <Link to="/adminReqsPro" className="mb-1">
-            <i className="material-icons md-plus"></i> Гүйцэтгэсэн ажил
-          </Link>
-             <br/>
+              <Link to="/adminReqsPro" className="mb-1">
+                <i className="material-icons md-plus"></i> Гүйцэтгэсэн ажил
+              </Link>
+              <br />
               {/* {works ? <span>{works.length}</span> : <span>0</span>} */}
             </div>
           </article>
@@ -50,10 +50,10 @@ const Request = (props) => {
               <i className="text-warning fas fa-shopping-basket"></i>
             </span>
             <div className="text">
-            <Link to="" className="mb-1">
-            <i className="material-icons md-plus"></i>Сэтгэгдэл
+              <Link to="#" className="mb-1">
+                <i className="material-icons md-plus"></i>Сэтгэгдэл
               </Link>
-              <br/>
+              <br />
               {/* {comment ? <span>{comment.length}</span> : <span>0</span>} */}
             </div>
           </article>
@@ -62,6 +62,5 @@ const Request = (props) => {
     </div>
   );
 };
-
 
 export default Request;

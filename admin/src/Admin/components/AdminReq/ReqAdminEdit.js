@@ -1,41 +1,33 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import {toast} from "react-toastify";
 import Loading from "../LoadingError/Loading";
 import Message from "../LoadingError/Error";
 import Toast from "../LoadingError/Toast";
 import { Link, useHistory } from "react-router-dom";
-import moment from 'moment'
 import axios  from "axios";
 
 const ReqAdminEdit = () => {
     const [name, setName] = useState("");
-    const [organizationName, setOrganizationName] = useState("");
-    const [subWorkID, setSubWorkID] = useState();
     const [impName, setImpName] = useState("");
     const [importanceName, setImportanceName] = useState("");
     const imprts=[];
     const [planTime, setPlanTime] = useState('');
     const [file_name, setFileName] = useState([]);
-    const [file_path, setFilePath]= useState([]);
     const [description, setDescription] = useState("");
     const [stateName, setStateName] = useState("");
     const [stteName, setStteName] = useState("");
-    const states = [];
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [realTime, setRealTime] = useState("");
     const [DeveloperID, setDeveloperID] = useState();
     const [percentOfPerform, setPercentOfperform] = useState();
-    const [organizationID, setOrganization] = useState();
     const [firstname, setFirstname] = useState("");
     const searchString = new URLSearchParams(window.location.search);
     const [fileRemove, setFileRemove] = useState(false);
-    const [UserID, setUserID] = useState();
     const reqID = searchString.get("id")
-    const dispatch = useDispatch();
     const requestCreate = useSelector((state) => state.requestCreate);
-    const { loading, error, requests } = requestCreate;
+    const { loading, error } = requestCreate;
     const [stateID, setStateID] = useState();
     const [developerName, setDeveloperName]= useState("");
     const history = useHistory();
@@ -75,13 +67,6 @@ const ReqAdminEdit = () => {
       .then(res => res.json())
       .then(devData => setDeveloperName(devData));
       }
-      // .then(res => {
-      //   const data = res.json();
-      //   data.then((res) => {
-      //     setDeveloperName(res)
-      //     console.log(res);
-      //   })
-      // })
       developerName()
     }, [])
 
@@ -100,7 +85,6 @@ const ReqAdminEdit = () => {
         percentOfPerform: percentOfPerform,
         stateID: stateID,
         stateName: stateName,
-        // file_name: file_name,
         firstname: firstname,
         DeveloperID: DeveloperID,
         userReqID: reqID,
@@ -124,12 +108,9 @@ const ReqAdminEdit = () => {
       .then(res => res.json())
       .then(res => {
         setName(res[0][0].name)
-        setOrganizationName(res[0][0].organizationName)
-        setSubWorkID(res[0][0].subWorkID)
         setImportanceName(res[0][0].importanceName)
         setPlanTime(res[0][0].planTime)
         setFileName(res[0][0].file_name)
-        setFilePath(res[0][0].path)
         setDescription(res[0][0].description)
         setStateName(res[0][0].stateName)
         setFirstname(res[0][0].firstname)
@@ -137,10 +118,9 @@ const ReqAdminEdit = () => {
         setEndDate(res[0][0].endDate)
         setRealTime(res[0][0].realTime)
         setDeveloperID(res[0][0].DeveloperID)
-        setOrganization(res[0][0].organizationID)
-        setUserID(res[0][0].UserID)
         setPercentOfperform(res[0][0].percentOfPerform)   
         setStateID(res[0][0].stateID) 
+        setFileRemove(res[0][0].fileRemove)
       })
       .catch(function (error){
         console.log(error);
@@ -150,7 +130,7 @@ const ReqAdminEdit = () => {
   }, [])  
   const handleDownload = () => {
     axios({
-      url: `http://172.16.226.57:8080/images/${file_name}`,
+      url: `c`,
       method: "GET",
       headers: {
         "Accept": "application/json", 
@@ -170,7 +150,10 @@ const ReqAdminEdit = () => {
   const date2 = planTime.toString().slice(0,19).replace('T', ' ')
   const time = realTime.toString().slice(11,19).replace('T', ' ')
   const sDate = startDate.toString().slice(0, 19).replace('T', ' ')
-
+  const fileButton = () => {
+    window.open(`http://172.16.226.57:8080/images/${file_name}`, '_blank')
+    history.push('/adminReqs')
+  }
   return (
   <>
   <Toast/>
@@ -217,12 +200,14 @@ const ReqAdminEdit = () => {
                       <label id="input1label" htmlFor="fileName" z="form-label">
                         Файл
                       </label>
+                      <button  onClick={() => fileButton('https://google.com')} className="form-control" value={file_name}>
                           <input 
                             value={file_name}
                             accept=".jpg,.jpeg,.png,.docx,.csv,.xslx,.pdf"
                             className="form-control"/>
+                            </button>
                               <br/>
-                            <button id="download" className="btn btn-third cursor-pointer text-white" onClick={handleDownload}>
+                            <button hidden id="download" className="btn btn-third cursor-pointer text-white" onClick={handleDownload}>
                                <i className="icon fas fa-download" id="download" />
                               Татаж авах 
                              </button>

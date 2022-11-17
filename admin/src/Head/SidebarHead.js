@@ -3,7 +3,7 @@ import { Link, NavLink } from "react-router-dom";
 import logo from "./img/mcs.png";
 
 const SidebarHead = () => {
-   return (
+  return (
     <div>
       <aside className="navbar-aside" id="offcanvas_aside">
         <div className="aside-top">
@@ -35,7 +35,7 @@ const SidebarHead = () => {
               </NavLink>
             </li>
             <li className="menu-item">
-               <NavLink
+              <NavLink
                 activeClassName="active"
                 className="menu-link"
                 to="/headUser"
@@ -43,10 +43,8 @@ const SidebarHead = () => {
                 <i className="icon fas fa-bags-shopping"></i>
                 <span className="text">Хэрэглэгч</span>
               </NavLink>
-              
-            </li> 
+            </li>
             <li className="menu-item">
-            
               <NavLink
                 activeClassName="active"
                 className="menu-link"
@@ -54,10 +52,9 @@ const SidebarHead = () => {
               >
                 <i className="icon fas fa-bags-shopping"></i>
                 <span className="text">Ажлын хүсэлт</span>
-              </NavLink>   
-
-              </li> 
-              <li className="menu-item">
+              </NavLink>
+            </li>
+            <li className="menu-item">
               <NavLink
                 activeClassName="active"
                 className="menu-link"
@@ -66,7 +63,7 @@ const SidebarHead = () => {
                 <i className="icon fas fa-file"></i>
                 <span className="text">Тайлан</span>
               </NavLink>
-            </li>         
+            </li>
           </ul>
           <br />
           <br />

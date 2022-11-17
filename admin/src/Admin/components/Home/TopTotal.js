@@ -1,56 +1,55 @@
-// import React from "react";
+import React from "react";
+import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 
-// const TopTotal = (props) => {
-//   const { orders, products } = props;
-//   let totalSale = 0;
-//   if (orders) {
-//     orders.map((order) =>
-//       order.isPaid === true ? (totalSale = totalSale + order.totalPrice) : null
-//     );
-//   }
-//   return (
-//     <div className="row">
-//       <div className="col-lg-4">
-//         <div className="card card-body mb-4 shadow-sm">
-//           <article className="icontext">
-//             <span className="icon icon-sm rounded-circle alert-primary">
-//               <i className="text-primary fas fa-usd-circle"></i>
-//             </span>
-//             <div className="text">
-//               <h6 className="mb-1">Total Sales</h6>{" "}
-//               <span>${totalSale.toFixed(0)}</span>
-//             </div>
-//           </article>
-//         </div>
-//       </div>
-//       <div className="col-lg-4">
-//         <div className="card card-body mb-4 shadow-sm">
-//           <article className="icontext">
-//             <span className="icon icon-sm rounded-circle alert-success">
-//               <i className="text-success fas fa-bags-shopping"></i>
-//             </span>
-//             <div className="text">
-//               <h6 className="mb-1">Total Orders</h6>
-//               {orders ? <span>{orders.length}</span> : <span>0</span>}
-//             </div>
-//           </article>
-//         </div>
-//       </div>
-//       <div className="col-lg-4">
-//         <div className="card card-body mb-4 shadow-sm">
-//           <article className="icontext">
-//             <span className="icon icon-sm rounded-circle alert-warning">
-//               <i className="text-warning fas fa-shopping-basket"></i>
-//             </span>
-//             <div className="text">
-//               <h6 className="mb-1">Total Products</h6>
-//               {products ? <span>{products.length}</span> : <span>0</span>}
-//             </div>
-//           </article>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
+function TopTotal(props) {
+  const COLORS = [
+    "#ec444e",
+    "#be9bd4",
+    "#a6be42",
+    "#FF8042",
+    "#51a4f5",
+    "#075eb3",
+  ];
 
-// export default TopTotal;
+  const { data } = props;
+
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (active) {
+      return (
+        <div
+          className="custom-tooltip"
+          style={{
+            backgroundColor: "#ffff",
+            padding: "0px",
+            border: "1px solid #cccc",
+          }}
+        >
+          <label>{`${payload[0].name} : ${payload[0].value} %`}</label>
+        </div>
+      );
+    }
+    return null;
+  };
+
+  return (
+    <PieChart width={800} height={470}>
+      <Pie
+        data={data}
+        color="#000000"
+        dataKey="value"
+        nameKey="name"
+        cx="50%"
+        cy="50%"
+        outerRadius={160}
+        fill="#8884d8"
+      >
+        {data.map((entry, index) => (
+          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+        ))}
+      </Pie>
+      <Tooltip content={CustomTooltip} />
+      <Legend />
+    </PieChart>
+  );
+}
+export default TopTotal;

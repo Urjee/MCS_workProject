@@ -1,6 +1,5 @@
 const db = require('../models');
-const User = db.User;
-const { QueryTypes, Op } = require('sequelize');
+const { QueryTypes } = require('sequelize');
 
 exports.allDeveloper = async(req, res) => {
     db.sequelize.query(`
@@ -12,9 +11,7 @@ exports.allDeveloper = async(req, res) => {
         .then(userData => {
         res.send(userData);
     });
-
 }
-
 exports.dev = async(req, res) => {
     db.sequelize.query(`
     SELECT usrs.*

@@ -1,40 +1,35 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import {toast} from "react-toastify";
 import Loading from "../LoadingError/Loading";
 import Message from "../LoadingError/Error";
 import Toast from "../LoadingError/Toast";
 import { Link, useHistory } from "react-router-dom";
 import axios  from "axios";
-import { USER_CREATE_RESET } from "../../Redux/Constants/UserContants";
 
 const UserEdit = () => {
+  const searchString = new URLSearchParams(window.location.search);
+  const uID = searchString.get("id")
+
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState();
   const [organizationName, setOrganizationName] = useState("");
-  const [isActive, setIsActive] = useState();
   const [activeName, setActiveName] = useState();
   const [departmentName, setDepartmentName] = useState("");
   const [headName, setHeadName] = useState("");
-  const [name, setName] = useState("");
   const [job, setJob] = useState("");
   const [depName, setDepName] = useState("");
   const [headNme, setHeadNme] = useState("");
-  const [active, setActive] = useState("");
-
   const [isAdmin, setisAdmin] = useState("");
   const [headd, setHead] = useState("");
   const [filters, setFilters] = useState([]);
-  const searchString = new URLSearchParams(window.location.search);
-  const [UserID, setUserID] = useState();
   const [orgName, setOrgName] = useState("");
   const history = useHistory();
-  const dispatch = useDispatch();
   const [organizationID, setOrganizationID] = useState();
-  const uID = searchString.get("id")
-
+  const [UserID, setUserID] = useState()
+  
   const userCreate = useSelector((state) => state.userCreate);
     const { loading, error } = userCreate;
   useEffect(() => {
@@ -112,7 +107,8 @@ useEffect(() => {
       setJob(res[0].job)
       setisAdmin(res[0].isAdmin)
       setUserID(res[0].uID)
-      setIsActive(res[0].isActive)
+      setHeadNme(res[0].headNme)
+      setOrganizationID(res[0].organizationID)
     })
     .catch(function (error){
       console.log(error);
@@ -226,7 +222,7 @@ useEffect(() => {
                       <option value={3}>Удирдлага</option>
                     </select>
                   </div>
-                  { headName == 2 ?
+                  { headName === 2 ?
                     <div className="mb-6">
                       <label htmlFor="user_headName" className="form-label">
                         Удирдлага сонгох
