@@ -10,7 +10,7 @@ const UserMain = () => {
   const dispatch = useDispatch();
   const userList = useSelector((state) => state.userList);
   const { loading, error, users } = userList;
-  const UserID = window.localStorage.userid * 1;
+  // const UserID = window.localStorage.userid * 1;
 
   const userDelete = useSelector((state) => state.userDelete);
   const { error: errorDelete } = userDelete;
@@ -24,7 +24,7 @@ const UserMain = () => {
     );
   };
   useEffect(() => {
-    dispatch(listUser(UserID));
+    dispatch(listUser());
   }, [dispatch]);
   return (
     <section className="content-main">

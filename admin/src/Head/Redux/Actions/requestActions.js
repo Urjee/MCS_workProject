@@ -70,14 +70,21 @@ export const createHeadReq =
     }
   };
 // ALL REQUEST
-export const headReport = () => async (dispatch) => {
+export const headReport = (organizationID) => async (dispatch) => {
   try {
     dispatch({ type: REPORT_LIST_REQUEST });
 
-    const { data } = await axios.post(`${URLFront}/api/headReport`);
-
+    const { data } = await axios.post(`${URLFront}/api/headReport`,
+    {organizationID});
+    // if(!data && data.length > 0){
     dispatch({ type: REPORT_LIST_SUCCESS, payload: data });
-  } catch (error) {
+    
+    // else {
+    //   <h5>data ni</h5>
+    // } 
+  
+    }
+    catch (error) {
     const message =
       error.response && error.response.data.message
         ? error.response.data.message

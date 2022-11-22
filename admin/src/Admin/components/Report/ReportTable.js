@@ -29,13 +29,13 @@ const RequestTable = (props) => {
             <tr key={request.userReqID} onClick={() => handleClick(request.userReqID)}>
               <td>{request?.name}</td>
               <td>{request.firstname}</td>
-              <td>{new Date(request.createDate).toISOString().slice(0,10).replace('T', '')}</td>
-              <td>{new Date(request.startDate).toISOString().slice(0,10).replace('T', '')}</td>
-              <td>{new Date(request.endDate).toISOString().slice(0,10).replace('T', '')}</td>
+              <td>{request.createDate}</td>
+              <td>{(request.startDate).replace("T", " ")}</td>
+              <td>{(request.endDate).replace("T", " ")}</td>
               <td>{request.importanceName}</td>
               <td>{request.organizationName}</td>
               <td>{request.stateName}</td>
-              <td>{new Date(request.realTime).toISOString().slice(12, 19).replace('T', ' ')}</td>
+              <td>{request.realTime}</td>
               <td>{request.userrname}</td>
             </tr>
           ))}

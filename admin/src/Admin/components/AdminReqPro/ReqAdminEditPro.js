@@ -21,7 +21,6 @@ const ReqAdminEditPro = () => {
   const [stteName, setStteName] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [realTime, setRealTime] = useState("");
   const [DeveloperID, setDeveloperID] = useState();
   const [percentOfPerform, setPercentOfperform] = useState();
   const [firstname, setFirstname] = useState("");
@@ -117,7 +116,6 @@ const ReqAdminEditPro = () => {
           setFirstname(res[0][0].firstname);
           setStartDate(res[0][0].startDate);
           setEndDate(res[0][0].endDate);
-          setRealTime(res[0][0].realTime);
           setDeveloperID(res[0][0].DeveloperID);
           setPercentOfperform(res[0][0].percentOfPerform);
           setStateID(res[0][0].stateID);
@@ -148,10 +146,10 @@ const ReqAdminEditPro = () => {
     });
   };
   const date2 = planTime.toString().slice(0, 19).replace("T", " ");
-  const time = realTime.toString().slice(11, 19).replace("T", " ");
+  const realTime = ((new Date(endDate).getTime() - new Date(startDate).getTime()) / 1000 / 60 / 60);
   const sDate = startDate.toString().slice(0, 19).replace("T", " ");
   const fileButton = () => {
-    window.open(`http://172.16.226.57:8080/images/${file_name}`, "_blank");
+    window.open(`http://localhost:4000/images/${file_name}`, "_blank");
     history.push("/adminReqsPro");
   };
   return (
@@ -169,7 +167,7 @@ const ReqAdminEditPro = () => {
                   {error && <Message variant="alert-danger">{error}</Message>}
                   {loading && <Loading />}
                   <div className="mb-4">
-                    <label htmlFor="userReq_name" className="form-label">
+                    <label className="form-label">
                       Ажил даалгаврын нэр
                     </label>
                     <input
@@ -180,10 +178,7 @@ const ReqAdminEditPro = () => {
                     />
                   </div>
                   <div className="mb-12">
-                    <label
-                      htmlFor="userReq_importanceName"
-                      className="form-label"
-                    >
+                    <label className="form-label">
                       Чухал байдал
                     </label>
                     <input
@@ -191,10 +186,10 @@ const ReqAdminEditPro = () => {
                       value={importanceName}
                       className="form-select"
                       onChange={(e) => setImportanceName}
-                    ></input>
+                    />
                   </div>
                   <div className="mb-12">
-                    <label htmlFor="userReq_stateName" className="form-label">
+                    <label className="form-label">
                       Төлөв
                     </label>
                     <select
@@ -238,18 +233,18 @@ const ReqAdminEditPro = () => {
                     </div>
                   )}
                   <div className="mb-12">
-                    <label htmlFor="userReq_description" className="form-label">
+                    <label className="form-label">
                       Тайлбар
                     </label>
-                  </div>
                   <input
                     type="text"
                     className="form-control"
                     value={description}
                     onChange={(e) => setDescription}
                   />
+                  </div>
                   <div className="mb-12">
-                    <label htmlFor="userReq_planTime" className="form-label">
+                    <label className="form-label">
                       Төлөвлөгөөт хугацаа
                     </label>
                     <input
@@ -257,17 +252,6 @@ const ReqAdminEditPro = () => {
                       type="datetime-local"
                       value={date2}
                       onChange={(e) => setPlanTime(e.target.value)}
-                    />
-                  </div>
-                  <div className="mb-12">
-                    <label htmlFor="userReq_realTime" className="form-label">
-                      Бодит цаг{" "}
-                    </label>
-                    <input
-                      type="time"
-                      className="form-control"
-                      value={time}
-                      onChange={(e) => setRealTime(e.target.value)}
                     />
                   </div>
                   <div className="mb-12">
@@ -286,6 +270,16 @@ const ReqAdminEditPro = () => {
                       className="form-control"
                       value={endDate.toString().slice(0, 19).replace("T", " ")}
                       onChange={(e) => setEndDate(e.target.value)}
+                    />
+                  </div>
+                  <div className="mb-12">
+                    <label className="form-label">
+                      Бодит цаг
+                    </label>
+                    <input
+                      type=""
+                      className="form-control"
+                      value={realTime}
                     />
                   </div>
                   <div className="mb-12">

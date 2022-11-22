@@ -48,13 +48,13 @@ module.exports = (sequelize, Sequelize) => {
             },
         },
         createDate: {
-            type: Sequelize.TIME,
+            type: Sequelize.STRING,
         },       
         planTime: {
-            type: Sequelize.DATE,
+            type: Sequelize.STRING,
         },
         realTime: {
-            type: Sequelize.DATE,
+            type: Sequelize.STRING,
         },
         UserID: {
             type: Sequelize.INTEGER,
@@ -75,10 +75,10 @@ module.exports = (sequelize, Sequelize) => {
         }
         ,
         startDate: {
-            type: Sequelize.DATE,
+            type: Sequelize.STRING,
         },
         endDate: {
-            type: Sequelize.DATE,
+            type: Sequelize.STRING,
         }
     }, {
         timestamps: false,

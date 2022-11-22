@@ -21,9 +21,10 @@ app.use(cookiesMiddleware())
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "images", file.originalname);
+
   },
   filename: (req, file, cb) => {
-    cb(null, file.originalname);
+    cb(null, Buffer.from(file.originalname, 'latin1').toString('utf-8'));
   },
 });
 //zurag GET ashiglaj download hiih
@@ -33,16 +34,17 @@ app.use("/images", express.static(__dirname + "/images"));
 const upload = multer({ storage: storage });
 
 app.post("/api/addUserReq", upload.array("file", 10), async (req, res) => {
+  const today = new Date();
+  let createdate = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
+  let currentTime = today.getHours() + ":" + today.getMinutes() +":" + today.getSeconds();
   let reqID;
+
   const imprts = await db.Importance.findOne({
     where: { importanceName: req.body.importanceName },
   });
   let importanceID = imprts.importanceID;
 
-  const today = new Date();
-  let createdate = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
-  let currentTime = today.getHours() + ":" + today.getMinutes() +":" + today.getSeconds() + ":" + today.getMilliseconds();
-  
+  if(importanceID == '3'){
   const request = await db.UserReq.create({
     name: req.body.name,
     createDate: createdate + " " + currentTime,
@@ -52,7 +54,6 @@ app.post("/api/addUserReq", upload.array("file", 10), async (req, res) => {
     organizationID: req.body.organizationID,
     stateID: 1,
   });
-
   if (request) {
     reqID = request.userReqID;
     axios.post("http://172.16.226.57:8080/api/message", {
@@ -61,6 +62,26 @@ app.post("/api/addUserReq", upload.array("file", 10), async (req, res) => {
       userReqID: reqID,
     });
   }
+  } else {
+    const request = await db.UserReq.create({
+      name: req.body.name,
+      createDate: createdate + " " + currentTime,
+      importanceID: importanceID,
+      description: req.body.description,
+      UserID: req.body.userID,
+      organizationID: req.body.organizationID,
+      stateID: 3,
+    });
+    if (request) {
+      reqID = request.userReqID;
+      axios.post("http://172.16.226.57:8080/api/message", {
+        email: req.body.email,
+        phone: req.body.phone,
+        userReqID: reqID,
+      });
+    }
+  }
+  
 
   for (let i = 0; i < req.files.length; i++) {
     const files = await db.File.findAll({
@@ -103,16 +124,13 @@ app.post(
       UserID: req.body.userID,
       organizationID: user.organizationID,
       stateID: 3,
-    }).then((data) => {
-      res.send(data);
-      reqID = data.userReqID;
     });
-    let userReqID;
     if (request) {
+      reqID = request.userReqID;
       axios.post("http://172.16.226.57:8080/api/message", {
-        firstname: req.body.firstname,
+        email: req.body.email,
         phone: req.body.phone,
-        userReqID: userReqID,
+        userReqID: reqID,
       });
     }
     for (let i = 0; i < req.files.length; i++) {
@@ -136,24 +154,22 @@ app.post(
     }
   }
 );
-app.post("/api/requestUpdate", upload.array("file", 10), async (req, res) => {
+app.put("/api/requestUpdate", async (req, res) => {
   const reqID = req.body.userReqID;
-  const dev = await db.User.findOne({
-    where: { firstname: req.body.firstname },
-  });
-  let devID = dev.UserID;
-
+  const devID = await db.sequelize.query(`SELECT usrs.*
+  From Users usrs
+ WHERE usrs.firstname = N'${req.body.firstname}' and usrs.isAdmin = 1`);
   try {
     const update = await db.sequelize.query(`
             UPDATE 
               [dbo].UserReqs
             SET
-              planTime = '${new Date(req.body.planTime).toISOString().slice(0, 23).replace("T", " ")}',
+              planTime = '${req.body.planTime}',
               realTime = '${req.body.realTime}',
-              startDate = '${new Date(req.body.startDate).toISOString().slice(0, 23).replace("T", " ")}',
-              endDate = '${new Date(req.body.endDate).toISOString().slice(0, 23).replace("T", " ")}',
+              startDate = '${req.body.startDate}',
+              endDate = '${req.body.endDate}',
               stateID = ${req.body.stateID},
-              DeveloperID = ${devID},
+              DeveloperID = ${devID[0][0].UserID},
               percentOfPerform = ${req.body.percentOfPerform}
             WHERE
               [dbo].UserReqs.userReqID = ${reqID}`);
@@ -171,30 +187,29 @@ app.post("/api/requestUpdate", upload.array("file", 10), async (req, res) => {
 });
 app.put("/api/requestAdminUpdate", async (req, res) => {
   const reqID = req.body.userReqID;
-  const realTime = req.body.realTime;
-  const states = await db.State.findOne({
-    where: {
-      stateName: req.body.stateName,
-    },
-  });
-  let stateID = states.stateID;
   const devID = await db.sequelize.query(`SELECT usrs.*
-   From Users usrs
-  WHERE usrs.firstname = N'${req.body.firstname}' and usrs.isAdmin = 1`);
+  From Users usrs
+ WHERE usrs.firstname = N'${req.body.firstname}' and usrs.isAdmin = 1`);
+ const states = await db.State.findOne({
+  where: {
+    stateName: req.body.stateName,
+  },
+});
+let stateID = states.stateID;
   try {
     const update = await db.sequelize.query(`
-      UPDATE 
-        [dbo].UserReqs
-      SET
-        planTime = '${new Date(req.body.planTime).toISOString().slice(0, 23).replace("T", " ")}',
-        realTime = '${realTime}',
-        startDate = '${new Date(req.body.startDate).toISOString().slice(0, 23).replace("T", " ")}',
-        endDate = '${new Date(req.body.endDate).toISOString().slice(0, 23).replace("T", " ")}',
-        DeveloperID = ${devID[0][0].UserID},
-        stateID = ${stateID},
-        percentOfPerform = ${req.body.percentOfPerform}
-      WHERE
-        [dbo].UserReqs.userReqID = ${reqID}`);
+            UPDATE 
+              [dbo].UserReqs
+            SET
+              planTime = '${req.body.planTime}',
+              realTime = '${req.body.realTime}',
+              startDate = '${req.body.startDate}',
+              endDate = '${req.body.endDate}',
+              stateID = ${stateID},
+              DeveloperID = ${devID[0][0].UserID},
+              percentOfPerform = ${req.body.percentOfPerform}
+            WHERE
+              [dbo].UserReqs.userReqID = ${reqID}`);
 
     if (update.length > 0) {
       res.status(200).send(update);
@@ -207,6 +222,44 @@ app.put("/api/requestAdminUpdate", async (req, res) => {
     });
   }
 });
+// app.put("/api/requestAdminUpdate", async (req, res) => {
+//   const reqID = req.body.userReqID;
+//   const states = await db.State.findOne({
+//     where: {
+//       stateName: req.body.stateName,
+//     },
+//   });
+//   let stateID = states.stateID;
+//   const devID = await db.sequelize.query(`SELECT usrs.*
+//    From Users usrs
+//   WHERE usrs.firstname = N'${req.body.firstname}' and usrs.isAdmin = 1`);
+//   try {
+//     const update = await db.sequelize.query(`
+//       UPDATE 
+//         [dbo].UserReqs
+//       SET
+//         planTime = ${req.body.planTime},
+//         realTime = ${req.body.realTime},
+//         startDate = ${req.body.startDate},
+//         endDate = ${req.body.endDate},
+//         DeveloperID = ${devID[0][0].UserID},
+//         stateID = ${stateID},
+//         percentOfPerform = ${req.body.percentOfPerform}
+//       WHERE
+//         [dbo].UserReqs.userReqID = ${reqID}`
+//       );
+
+//     if (update.length > 0) {
+//       res.status(200).send(update);
+//     } else {
+//       res.status(204).send(update);
+//     }
+//   } catch (err) {
+//     res.status(500).json({
+//       message: err.message
+//     });
+//   }
+// });
 app.post("/api/headUEdit", async (req, res) => {
   const deps = await db.Department.findOne({
     where: { departmentName: req.body.departmentName },
@@ -230,23 +283,20 @@ app.post("/api/headUEdit", async (req, res) => {
     }
   );
 });
-app.post("/api/userEdit", async (req, res) => {
-  const org = await db.Organization.findOne({
-    where: { organizationName: req.body.organizationName },
-  });
+app.put("/api/userEdit", async (req, res) => {
+  const org = await db.Organization.findOne({ where: { organizationName: req.body.organizationName }});
   let organizationID = org.organizationID;
-  const dep = await db.Department.findOne({
-    where: { departmentName: req.body.departmentName },
-  });
-  let departmentID = dep.departmentID;
-  const active = await db.User.findOne({
-    where: { isActive: req.body.isActive },
-  });
-  let isActive = active?.isActive;
-  const head = await db.User.findOne({
-    where: { firstname: req.body.headNme },
-  });
   const uID = req.body.UserID;
+
+  const dep = await db.Department.findOne({ where: { departmentName: req.body.departmentName }});
+  let departmentID = dep.departmentID;
+
+  const active = await db.User.findOne({ where: { isActive: req.body.isActive }});
+  let isActive = active?.isActive;
+  const head = await db.sequelize.query(`SELECT usrs.*
+  From Users usrs
+  WHERE usrs.firstname = N'${req.body.headd}' and usrs.isAdmin = 1`);
+
 
   const update = await db.User.update(
     {
@@ -265,7 +315,6 @@ app.post("/api/userEdit", async (req, res) => {
       where: {
         UserID: uID,
       },
-      raw: true,
     }
   );
 
@@ -275,7 +324,6 @@ app.post("/api/userEdit", async (req, res) => {
     res.status(422).json({ message: "Input error" });
   }
 });
-
 app.post("/api/uploads", async (req, res) => {
   const reqID = req.body.userReqID;
   await db.UserReq.update(

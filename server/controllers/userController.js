@@ -7,7 +7,7 @@ exports.allUsers = async (req, res) => {
   const UserID = req.body.UserID;
   db.sequelize
     .query(
-      `exec sp_users 1,${UserID}, 0 ;`,
+      `exec sp_users 1,1, 0 ;`,
       { type: QueryTypes.SELECT }
     )
     .then((data) => {

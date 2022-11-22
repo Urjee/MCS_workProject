@@ -40,29 +40,17 @@ const ReqAdmin = (props) => {
             <td>{request.organizationName}</td>
             <td>{request.importanceName}</td>
             <td>{request.stateName}</td>
+            <td>{request.createDate}</td>
             <td>
-              {new Date(request.createDate)
-                .toISOString()
-                .slice(0, 10)
-                .replace("T", " ")}
-            </td>
-            <td>
-              {new Date(request.planTime)
-                .toISOString()
-                .slice(0, 19)
+              {(request.planTime)
                 .replace("T", " ")}
             </td>
             <td>{request.realTime}</td>
             <td>
-              {new Date(request.startDate)
-                .toISOString()
-                .slice(0, 11)
+              {(request.startDate)
                 .replace("T", " ")}
             </td>
-            <td>
-              {new Date(request.endDate)
-                .toISOString()
-                .slice(0, 11)
+            <td>{(request.endDate)
                 .replace("T", " ")}
             </td>
             <td>{request.firstname}</td>

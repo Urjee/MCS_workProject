@@ -307,30 +307,10 @@ WHERE uReqs.stateID>=5 AND uReqs.importanceID>=3`,
     });
 };
 exports.headReport = async (req, res) => {
+  const id = req.body;
   await db.sequelize
     .query(
-      `
-    SELECT uReqs.*,
-    imprts.importanceName AS importanceName,
-    stta.stateName AS stateName,
-    fle.file_name AS file_name,
-    users.firstname as firstname,
-    usr.firstname as userrname,
-    org.organizationName AS organizationName
-FROM [dbo].UserReqs AS uReqs
-    INNER JOIN Importance AS imprts
-    ON imprts.importanceID = uReqs.importanceID
-    INNER JOIN States AS stta
-    ON stta.stateID = uReqs.stateID
-    INNER JOIN Files fle
-    ON uReqs.file_id = fle.file_id
-    LEFT JOIN Organizations org
-    ON org.organizationID = uReqs.organizationID
-    INNER JOIN Users users
-    ON users.UserID = uReqs.UserID 
-    INNER JOIN Users usr
-    ON usr.UserID = uReqs.DeveloperID
-WHERE uReqs.stateID>=5`,
+      `exec sp_userReqs 11,0, ${id.organizationID}`,
       {
         type: QueryTypes.SELECT,
       }

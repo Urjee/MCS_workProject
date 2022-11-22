@@ -19,7 +19,6 @@ const ReqAdminEdit = () => {
     const [stteName, setStteName] = useState("");
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
-    const [realTime, setRealTime] = useState("");
     const [DeveloperID, setDeveloperID] = useState();
     const [percentOfPerform, setPercentOfperform] = useState();
     const [firstname, setFirstname] = useState("");
@@ -74,6 +73,7 @@ const ReqAdminEdit = () => {
     for(let i in developerName) {
       arr0.push(developerName[i].firstname)
     } 
+    const realTime = ((new Date(endDate).getTime() - new Date(startDate).getTime()) / 1000 / 60 / 60);
 
     const submitHandler = async(e) =>{   
       e.preventDefault();
@@ -116,7 +116,6 @@ const ReqAdminEdit = () => {
         setFirstname(res[0][0].firstname)
         setStartDate(res[0][0].startDate)
         setEndDate(res[0][0].endDate)
-        setRealTime(res[0][0].realTime)
         setDeveloperID(res[0][0].DeveloperID)
         setPercentOfperform(res[0][0].percentOfPerform)   
         setStateID(res[0][0].stateID) 
@@ -147,9 +146,9 @@ const ReqAdminEdit = () => {
       link.click();
   }) 
 }
-  const date2 = planTime.toString().slice(0,19).replace('T', ' ')
-  const time = realTime.toString().slice(11,19).replace('T', ' ')
-  const sDate = startDate.toString().slice(0, 19).replace('T', ' ')
+  // const date2 = planTime.toString().slice(0,19).replace('T', ' ')
+  // const sDate = startDate.toString().slice(0, 19).replace('T', ' ')
+
   const fileButton = () => {
     window.open(`http://172.16.226.57:8080/images/${file_name}`, '_blank')
     history.push('/adminReqs')
@@ -223,24 +222,25 @@ const ReqAdminEdit = () => {
                        <label htmlFor="userReq_planTime" className="form-label">
                          Төлөвлөгөөт хугацаа
                         </label>
-                        <input className="form-control"  type ="datetime-local" value={date2}
+                        <input className="form-control"  type ="datetime-local" value={planTime}
                         onChange = {(e) => setPlanTime(e.target.value)}/>                          
                     </div>
-                     <div className="mb-12">
-                       <label htmlFor="userReq_realTime" className="form-label">Бодит цаг </label>
-                        <input type="time" className="form-control" value={(time)}
-                        onChange = {(e) => setRealTime(e.target.value)} />  
-                      </div> 
+                     
                     <div className="mb-12">
                         <label>Эхэлсэн огноо</label>
-                        <input type = "datetime-local" className="form-control" value={sDate}
+                        <input type = "datetime-local" className="form-control" value={startDate}
                         onChange = {(e) => setStartDate(e.target.value)}/>   
                     </div>      
                     <div className="mb-12">
                         <label>Дуусах огноо</label>
-                        <input type="datetime-local" className="form-control"  value={endDate.toString().slice(0, 19).replace('T', ' ')}
+                        <input type="datetime-local" className="form-control"  value={endDate}
                         onChange = {(e) => setEndDate(e.target.value)}/>   
                     </div>    
+                    <div className="mb-12">
+                       <label htmlFor="userReq_realTime" className="form-label">
+                        Бодит цаг </label>
+                        <input type="" className="form-control" value={realTime} />  
+                      </div> 
                     <div className="mb-12">
                         <label htmlFor="userReq_firstname" className="form-label">
                           Гүйцэтгэгч 

@@ -74,7 +74,7 @@ export const login = (email, password) => async (dispatch) => {
 // };
 
 // ALL USER
-export const listUser = (UserID) => async (dispatch, getState) => {
+export const listUser = () => async (dispatch, getState) => {
   try {
     dispatch({ type: USER_LIST_REQUEST });
 
@@ -82,15 +82,13 @@ export const listUser = (UserID) => async (dispatch, getState) => {
       userLogin: { userInfo },
     } = getState();
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    };
+    // const config = {
+    //   headers: {
+    //     Authorization: `Bearer ${userInfo.token}`,
+    //   },
+    // };
 
-    const { data } = await axios.post(`${URLFront}/api/users`, 
-    {UserID},
-    config);
+    const { data } = await axios.post(`${URLFront}/api/users`);
 
     dispatch({ type: USER_LIST_SUCCESS, payload: data });
   } catch (error) {

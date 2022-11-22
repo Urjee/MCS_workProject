@@ -24,28 +24,16 @@ const ReportProMain = () => {
   for (var i in requests) {
     arr.push({
       "Ажил даалгаврын нэр": requests[i].name,
-      Хэрэглэгч: requests[i].firstname,
+      "Хэрэглэгч": requests[i].firstname,
       "Ажлын төрөл": requests[i].importanceName,
-      Байгууллага: requests[i].organizationName,
-      "Төлөвлөгөөт хугацаа": new Date(requests[i].planTime)
-        .toISOString()
-        .slice(0, 23)
-        .replace("T", ""),
-      "Үүсгэсэн огноо": new Date(requests[i].createDate)
-        .toISOString()
-        .slice(0, 23)
-        .replace("T", ""),
-      "Эхэлсэн огноо": new Date(requests[i].startDate)
-        .toISOString()
-        .slice(0, 10)
-        .replace("T", ""),
-      "Дууссан хугацаа": new Date(requests[i].endDate)
-        .toISOString()
-        .slice(0, 10)
-        .replace("T", ""),
-      "Бодит цаг": new Date(requests[i].realTime).getHours(),
-      Төлөв: requests[i].stateName,
-      Гүйцэтгэгч: requests[i].userrname,
+      "Байгууллага": requests[i].organizationName,
+      "Төлөвлөгөөт хугацаа": requests[i].planTime,
+      "Үүсгэсэн огноо": requests[i].createDate,
+      "Эхэлсэн огноо": requests[i].startDate,
+      "Дууссан хугацаа": requests[i].endDate,
+      "Бодит цаг": requests[i].realTime,
+      "Төлөв": requests[i].stateName,
+      "Гүйцэтгэгч": requests[i].userrname,
     });
   }
 

@@ -22,7 +22,8 @@ const RequestTable = (props) => {
         </tr>
       </thead>
       <tbody>
-        {requests.map((request) => (
+     {
+        requests.map((request) => (
           <tr
             key={request.userReqID}
             onClick={() => handleClick(request.userReqID)}
@@ -33,15 +34,12 @@ const RequestTable = (props) => {
             <td>{request?.file_name}</td>
             <td>{request.description}</td>
             <td>{request.organizationName}</td>
-            <td>
-              {new Date(request.createDate)
-                .toISOString()
-                .slice(0, 19)
-                .replace("T", " ")}
-            </td>
+            <td>{request.createDate} </td>
           </tr>
-        ))}
+        )) 
+        }
       </tbody>
+
     </table>
   );
 };

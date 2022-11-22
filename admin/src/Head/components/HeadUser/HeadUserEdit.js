@@ -3,7 +3,12 @@ import { toast } from "react-toastify";
 import Toast from "../LoadingError/Toast";
 import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
-
+const ToastObjects = {
+  pauseOnFocusLoss: false,
+  draggable: false,
+  pauseOnHover: false,
+  autoClose: 2000,
+};
 const HeadUserEdit = () => {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastName] = useState("");
@@ -12,7 +17,6 @@ const HeadUserEdit = () => {
   const [email, setEmail] = useState("");
   const [job, setJob] = useState("");
   const [departmentName, setDepartmentName] = useState("");
-  const [isActive, setIsActive] = useState();
   const [activeName, setActiveName] = useState("");
   const [UserID, setUserID] = useState();
   const [depName, setDepName] = useState("");
@@ -40,6 +44,8 @@ const HeadUserEdit = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    toast.success("Амжилттай хадгалагдлаа", ToastObjects);
+    setTimeout(() => history.push("/headUser"), 2000);
     await axios
       .post("http://172.16.226.57:8080/api/headUEdit", {
         firstname: firstname,
@@ -53,10 +59,8 @@ const HeadUserEdit = () => {
         isActive: activeName === "0" ? 0 : 1,
       })
       .then((response) => {
-        toast.success("Амжилттай хадгалагдлаа");
         submitHandler(response.data);
       });
-    setTimeout(() => history.push("/headUser"), 2000);
   };
   useEffect(() => {
     const userid = () => {

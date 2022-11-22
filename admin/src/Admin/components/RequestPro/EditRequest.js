@@ -21,8 +21,7 @@ const EditRequest = () => {
   const [stteName, setStteName] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [realTime, setRealTime] = useState("");
-  const [percentOfPerform, setPercentOfperform] = useState();
+  const [percentOfPerform, setPercentOfperform] = useState(0);
   const [firstname, setFirstname] = useState();
   const [fileRemove, setFileRemove] = useState(false);
   const [UserID, setUserID] = useState();
@@ -82,11 +81,11 @@ const EditRequest = () => {
   for (let i in developerName) {
     arr0.push(developerName[i].firstname);
   }
-
+  const realTime = ((new Date(endDate).getTime() - new Date(startDate).getTime()) / 1000 / 60 / 60);
   const submitHandler = async (e) => {
     e.preventDefault();
     await axios
-      .post("http://172.16.226.57:8080/api/requestUpdate", {
+      .put("http://172.16.226.57:8080/api/requestUpdate", {
         planTime: planTime,
         realTime: realTime,
         startDate: startDate,
@@ -106,7 +105,7 @@ const EditRequest = () => {
   };
   useEffect(() => {
     const userid = () => {
-      fetch("http://172.16.226.57:8080/api/editRequest", {
+      fetch("http://172.16.226.57:8080/api/requestEdit", {
         method: "POST",
         body: JSON.stringify({ userReqID: reqID }),
         headers: {
@@ -115,23 +114,24 @@ const EditRequest = () => {
       })
         .then((res) => res.json())
         .then((res) => {
-          setName(res[0].name);
-          setImportanceName(res[0].importanceName);
-          setFirstname(res[0].firstname);
-          setPlanTime(res[0].planTime);
-          setFileName(res[0].file_name);
-          setDescription(res[0].description);
-          setStateName(res[0].stateName);
-          setStartDate(res[0].startDate);
-          setEndDate(res[0].endDate);
-          setRealTime(res[0].realTime);
-          setPercentOfperform(res[0].percentOfPerform);
-          setFileRemove(res[0].fileRemove);
-          setUserID(res[0].UserID);
+          setName(res[0][0].name);
+          setImportanceName(res[0][0].importanceName);
+          setFirstname(res[0][0].firstname);
+          setPlanTime(res[0][0].planTime);
+          setFileName(res[0][0].file_name);
+          setDescription(res[0][0].description);
+          setStateName(res[0][0].stateName);
+          setStartDate(res[0][0].startDate);
+          setEndDate(res[0][0].endDate);
+          setPercentOfperform(res[0][0].percentOfPerform);
+          setFileRemove(res[0][0].fileRemove);
+          setUserID(res[0][0].UserID);
+          
         });
     };
     userid();
   }, []);
+  
   const handleDownload = () => {
     axios({
       url: `http://172.16.226.57:8080/images/${file_name}`,
@@ -253,21 +253,11 @@ const EditRequest = () => {
                       onChange={(e) => setPlanTime(e.target.value)}
                     />
                   </div>
-                  <div className="mb-12">
-                    <label htmlFor="userReq_realTime" className="form-label">
-                      Бодит цаг{" "}
-                    </label>
-                    <input
-                      type="time"
-                      className="form-control"
-                      value={realTime}
-                      onChange={(e) => setRealTime(e.target.value)}
-                    />
-                  </div>
+                  
                   <div className="mb-12">
                     <label>Эхэлсэн огноо</label>
                     <input
-                      type="date"
+                      type="datetime-local"
                       className="form-control"
                       value={startDate}
                       onChange={(e) => setStartDate(e.target.value)}
@@ -276,15 +266,25 @@ const EditRequest = () => {
                   <div className="mb-12">
                     <label>Дуусах огноо</label>
                     <input
-                      type="date"
+                      type="datetime-local"
                       className="form-control"
                       value={endDate}
                       onChange={(e) => setEndDate(e.target.value)}
                     />
                   </div>
                   <div className="mb-12">
+                    <label className="form-label">
+                      Бодит цаг
+                    </label>
+                    <input
+                      type=""
+                      className="form-control"
+                      value={realTime}
+                    />
+                  </div>
+                  <div className="mb-12">
                     <label className="form-label" htmlFor="user_developerID">
-                      Гүйцэтгэгч{" "}
+                      Гүйцэтгэгч
                     </label>
                     <select
                       className="form-select"

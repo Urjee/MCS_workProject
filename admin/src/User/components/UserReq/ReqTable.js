@@ -29,7 +29,7 @@ const RequestTable = (props) => {
                 {/* <Link><td>{request.subWorkID}0</td></Link> */}
                 <td>{request.importanceName}</td>
                 <td>{request?.stateName}</td>
-                <td>{new Date(request?.createDate).toISOString().slice(0, 19).replace('T', ' ')}</td>
+                <td>{request?.createDate}</td>
                 <td>{request?.file_name}</td>
                 <td>{request.description}</td>
               </tr>

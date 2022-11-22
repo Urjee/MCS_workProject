@@ -45,7 +45,7 @@ const MainRequests = () => {
             ) : error ? (
               <Message variant="alert-danger">{error}</Message>
             ) : (
-              <RequestTable requests={search(requests)} />
+              <RequestTable  requests={search(requests)} />
             )}
           </div>
         </div>

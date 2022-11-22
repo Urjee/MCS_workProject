@@ -42,7 +42,7 @@ const CreateUserReq = () => {
         data.append('organizationID', (window.localStorage.organizationID));
         data.append('email', (window.localStorage.email));
         data.append('phone', (window.localStorage.phone));
-        data.append('createDate', new Date());
+        data.append('createDate', new Date().toISOString());
         axios.post('http://172.16.226.57:8080/api/addUserReq', data)
         .then((response) => {
           submitHandler(response.data)
@@ -120,7 +120,7 @@ const CreateUserReq = () => {
                         </div>
                     </div>
                     </div>
-                  </div>
+                  </div> 
                   </div>
                   <div className="content-header">
                     <Link to="/userReqs" className="btn btn-danger text-white">

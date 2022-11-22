@@ -19,16 +19,14 @@ const RequestEdit = () => {
   const [description, setDescription] = useState("");
   const [stateName, setStateName] = useState("");
   const [stteName, setStteName] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [realTime, setRealTime] = useState("");
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
   const [percentOfPerform, setPercentOfperform] = useState();
   const [firstname, setFirstname] = useState();
   const [fileRemove, setFileRemove] = useState(false);
   const [UserID, setUserID] = useState();
   const [developerName, setDeveloperName] = useState("");
   const history = useHistory();
-
   const requestCreate = useSelector((state) => state.requestCreate);
   const { loading, error } = requestCreate;
 
@@ -71,20 +69,18 @@ const RequestEdit = () => {
   for (let i in developerName) {
     arr0.push(developerName[i].firstname);
   }
-
-  console.log(typeof realTime);
-
+  
   const submitHandler = async (e) => {
     e.preventDefault();
     await axios
-      .post("http://172.16.226.57:8080/api/requestUpdate", {
+      .put("http://172.16.226.57:8080/api/requestUpdate", {
         planTime: planTime,
         realTime: realTime,
         startDate: startDate,
         endDate: endDate,
-        percentOfPerform: Number(percentOfPerform),
+        percentOfPerform: percentOfPerform,
         firstname: firstname,
-        userReqID: Number(reqID),
+        userReqID: reqID,
         stateID: 4,
         UserID: UserID,
       })
@@ -113,14 +109,20 @@ const RequestEdit = () => {
           setStateName(res[0][0].stateName);
           setStartDate(res[0][0].startDate);
           setEndDate(res[0][0].endDate);
-          setRealTime(res[0][0].realTime);
           setPercentOfperform(res[0][0].percentOfPerform);
           setFileRemove(res[0][0].fileRemove);
           setUserID(res[0][0].UserID);
+
+        })
+        .catch(function (error){
+          console.log(error);
         });
     };
     userid();
   }, []);
+
+const realTime = ((new Date(endDate).getTime() - new Date(startDate).getTime()) / 1000 / 60 / 60);
+    
   const handleDownload = () => {
     axios({
       url: `http://172.16.226.57:8080/images/${file_name}`,
@@ -243,20 +245,10 @@ const RequestEdit = () => {
                     />
                   </div>
                   <div className="mb-12">
-                    <label htmlFor="userReq_realTime" className="form-label">
-                      Бодит цаг{" "}
-                    </label>
-                    <input
-                      type="time"
-                      className="form-control"
-                      value={realTime}
-                      onChange={(e) => setRealTime(e.target.value)}
-                    />
-                  </div>
                   <div className="mb-12">
                     <label>Эхэлсэн огноо</label>
                     <input
-                      type="date"
+                      type="datetime-local"
                       className="form-control"
                       value={startDate}
                       onChange={(e) => setStartDate(e.target.value)}
@@ -265,15 +257,25 @@ const RequestEdit = () => {
                   <div className="mb-12">
                     <label>Дуусах огноо</label>
                     <input
-                      type="date"
+                      type="datetime-local"
                       className="form-control"
                       value={endDate}
                       onChange={(e) => setEndDate(e.target.value)}
                     />
                   </div>
+                  <label className="form-label">
+                      Бодит цаг
+                    </label>
+                    <input
+                      type=""
+                      className="form-control"
+                      value={realTime}
+                      
+                    />
+                  </div>
                   <div className="mb-12">
                     <label className="form-label" htmlFor="user_developerID">
-                      Гүйцэтгэгч{" "}
+                      Гүйцэтгэгч
                     </label>
                     <select
                       className="form-select"

@@ -26,7 +26,7 @@ const ReqAdd = () => {
   const states = [];
   const [orgID, setOrgID] = useState();
   const history = useHistory();
-  const [firstname, setFirstname] = useState();
+  const [email, setEmail] = useState();
   const [phone, setPhone] = useState("");
   const dispatch = useDispatch();
 
@@ -54,7 +54,7 @@ const ReqAdd = () => {
     setOrgID(
       JSON.parse(window.localStorage.getItem("userinfo")).organizationID
     );
-    setFirstname(JSON.parse(window.localStorage.getItem("userinfo")).firstname);
+    setEmail(JSON.parse(window.localStorage.getItem("userinfo")).email);
     setPhone(JSON.parse(window.localStorage.getItem("userinfo")).phone);
   }, []);
   let arr2 = [];
@@ -69,9 +69,7 @@ const ReqAdd = () => {
       setFileName([]);
       setStateID(states);
       setOrgID(orgID);
-      setFirstname(
-        JSON.parse(window.localStorage.getItem("userinfo")).firstname
-      );
+      setEmail(JSON.parse(window.localStorage.getItem("userinfo")).email);
       setPhone(JSON.parse(window.localStorage.getItem("userinfo")).phone);
       setUploadedFiles(uploadedFiles)
     }
@@ -79,6 +77,7 @@ const ReqAdd = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
+    toast.success("Амжилттай хадгалагдлаа", ToastObjects);
     const data = new FormData();
     for (let i = 0; i < files.length; i++) {
       data.append("file", files[i]);
@@ -90,13 +89,12 @@ const ReqAdd = () => {
     data.append("userID", window.localStorage.userid * 1);
     data.append("stateID", stateID);
     data.append("organizationID", orgID);
-    data.append("firstname", firstname);
-    data.append("phone", phone);
+    data.append("email", (window.localStorage.email));
+    data.append("phone", (window.localStorage.phone));
     data.append("createDate", new Date());
     axios
       .post("http://172.16.226.57:8080/api/headAddReqUpdate", data)
       .then((response) => {
-        toast.success("Амжилттай хадгалагдлаа", ToastObjects);
         submitHandler(response.data);
       });
 

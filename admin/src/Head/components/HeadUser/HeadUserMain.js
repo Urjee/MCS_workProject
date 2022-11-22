@@ -10,12 +10,14 @@ const HeadUserMain = () => {
   const dispatch = useDispatch();
   const headUserList = useSelector((state) => state.headUserList);
   const { loading, error, users } = headUserList;
+
   const UserID = window.localStorage.organizationID * 1;
   const [searchTerm, setSearch] = useState("");
-  const keys = ["firstname", "email", "lastname", "phone"];
-  const search = (userReqs) => {
-    return userReqs.filter((request) =>
-      keys.some((key) => request[key].toLowerCase().includes(searchTerm))
+  const keys = ["firstname", "email", "lastname"];
+
+  const search = (users) => {
+    return users.filter((user) =>
+      keys.some((key) => user[key].toLowerCase().includes(searchTerm))
     );
   };
   useEffect(() => {

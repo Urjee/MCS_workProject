@@ -31,7 +31,7 @@ const DetailsHeadReq = () => {
 
   useEffect(() => {
     const impName = () => {
-      fetch("http://122.201.28.25/api/importance")
+      fetch("http://172.16.226.57:8080/api/importance")
         .then((res) => res.json())
         .then((impData) => setImpName(impData));
     };
@@ -43,7 +43,7 @@ const DetailsHeadReq = () => {
   }
   useEffect(() => {
     const stateName = () => {
-      fetch("http://122.201.28.25/api/state").then((res) => res.json());
+      fetch("http://172.16.226.57:8080/api/state").then((res) => res.json());
     };
     stateName();
   }, []);
@@ -70,7 +70,7 @@ const DetailsHeadReq = () => {
   };
   useEffect((req, res) => {
     const userid = () => {
-      fetch("http://122.201.28.25/api/headReqDetail", {
+      fetch("http://172.16.226.57:8080/api/headReqDetail", {
         method: "POST",
         body: JSON.stringify({ userReqID: userReqID }),
         headers: {
@@ -101,7 +101,7 @@ const DetailsHeadReq = () => {
 
   const handleDownload = () => {
     axios({
-      url: `http://122.201.28.25/images/${file_name}`,
+      url: `http://172.16.226.57:8080/images/${file_name}`,
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -118,7 +118,7 @@ const DetailsHeadReq = () => {
     });
   };
   const handleConfirm = async () => {
-    await fetch("http://122.201.28.25/api/userReqUpdate", {
+    await fetch("http://172.16.226.57:8080/api/userReqUpdate", {
       method: "POST",
       body: JSON.stringify({
         userReqID: userReqID,
@@ -131,7 +131,7 @@ const DetailsHeadReq = () => {
     setTimeout(() => history.push("/headReqs"), 2000);
   };
   const handleCancel = async () => {
-    await fetch("http://122.201.28.25/api/userReqCancel", {
+    await fetch("http://172.16.226.57:8080/api/userReqCancel", {
       method: "POST",
       body: JSON.stringify({
         userReqID: userReqID,

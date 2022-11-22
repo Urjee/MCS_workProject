@@ -21,9 +21,8 @@ const UserEdit = () => {
   const [headName, setHeadName] = useState("");
   const [job, setJob] = useState("");
   const [depName, setDepName] = useState("");
-  const [headNme, setHeadNme] = useState("");
   const [isAdmin, setisAdmin] = useState("");
-  const [headd, setHead] = useState("");
+  const [headd, setHead] = useState([]);
   const [filters, setFilters] = useState([]);
   const [orgName, setOrgName] = useState("");
   const history = useHistory();
@@ -34,7 +33,7 @@ const UserEdit = () => {
     const { loading, error } = userCreate;
   useEffect(() => {
     const organization = () => {
-      fetch('http://122.201.28.25/api/organization')
+      fetch('http://172.16.226.57:8080/api/organization')
       .then(res => res.json())
       .then(orgData => setOrgName(orgData) )
     }
@@ -46,7 +45,7 @@ const UserEdit = () => {
       }
   useEffect(() => {
     const department = ()=>{
-      fetch('http://122.201.28.25/api/department')
+      fetch('http://172.16.226.57:8080/api/department')
       .then(res => res.json())
       .then(depData => setDepName(depData))
      }
@@ -55,14 +54,25 @@ const UserEdit = () => {
       for(let i in depName) {
         arr1.push(depName[i].departmentName)
       }
+      useEffect(() => {
+        const head = async() => {
+          await fetch("http://122.201.28.25/api/head")
+          .then(res => res.json())
+          .then(data => setHead(data));
+        };
+        head()
+      },[]);
+      console.log(headd)
+      console.log(headName)
+      console.log(organizationName)
 
   const filterChange = (orgName) => {
-    setFilters(headNme.filter(e => e.organizationName === orgName));
+    setFilters(headd.filter(e => e.organizationName === orgName));
   }
   const submitHandler = async(e) =>{   
       
     e.preventDefault(); 
-    await axios.post('http://122.201.28.25/api/userEdit', 
+    await axios.put('http://172.16.226.57:8080/api/userEdit', 
     { 
       firstname: firstname,
       lastname: lastname,
@@ -86,7 +96,7 @@ const UserEdit = () => {
 
 useEffect(() => {
   const details = () => {
-    fetch('http://122.201.28.25/api/userDetails', {
+    fetch('http://172.16.226.57:8080/api/userDetails', {
       method: "POST",
       body: 
         JSON.stringify({UserID: uID}),
@@ -107,7 +117,6 @@ useEffect(() => {
       setJob(res[0].job)
       setisAdmin(res[0].isAdmin)
       setUserID(res[0].uID)
-      setHeadNme(res[0].headNme)
       setOrganizationID(res[0].organizationID)
     })
     .catch(function (error){
@@ -165,10 +174,10 @@ useEffect(() => {
                     <div className="mb-12">
                         <label htmlFor="user_organizationName" className="form-label">
                           Харьяа байгууллага </label>
-                          <select className="form-select" value = {organizationName}
+                          <select className="form-select" value={organizationName}
                            onChange={(e) =>
                             {
-                              setOrganizationName(e.currentTarget.value)
+                              setOrganizationName(e.target.value)
                                   filterChange(e.target.value)
                             }}>
                              <option>{organizationName}</option>
@@ -215,14 +224,14 @@ useEffect(() => {
                     <label htmlFor="user_head" className="form-label">
                     Хэрэглэгчийн төрөл </label>
                     <select className="form-select"
-                      onChange={e =>{ setHeadName(e.target.value)}}>
-                      <option>{headName}</option>
+                      onChange={e =>{ setisAdmin(e.target.value)}}>
+                      <option>{isAdmin}</option>
                       <option value={1}>Админ</option>
                       <option value={2}>Хэрэглэгч</option>
                       <option value={3}>Удирдлага</option>
                     </select>
                   </div>
-                  { headName === 2 ?
+                  { isAdmin == 2 ?
                     <div className="mb-6">
                       <label htmlFor="user_headName" className="form-label">
                         Удирдлага сонгох
@@ -230,14 +239,14 @@ useEffect(() => {
                       <select
                         className="form-select"
                         id="user_headName"
-                        value={headd}
-                        onChange={(e) => setHead(e.target.value)
+                        value={headd ? headd : headName}
+                        onChange={(e) => setHeadName(e.target.value)
                         } >
                         <option>Сонгох</option>
                         {
                           filters.map(e => {
                             return (
-                              <option value={e.firstname}>{e.firstname}</option>
+                              <option>{e.firstname}</option>
                             )
                           })
                         }    

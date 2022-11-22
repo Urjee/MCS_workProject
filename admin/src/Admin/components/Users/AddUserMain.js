@@ -269,13 +269,13 @@ const AddUserMain = () => {
                       onChange={e => {
                         setAdmin(e.target.value)
                       }}>
-                      <option >Сонгох</option>
+                      <option>Сонгох</option>
                       <option value={1}>Админ</option>
                       <option value={2}>Хэрэглэгч</option>
                       <option value={3}>Удирдлага</option>
                     </select>
                   </div>
-                  { admin === 2 ?
+                  { admin == 2 ?
                     <div className="mb-6">
                       <label htmlFor="user_headName" className="form-label">
                         Удирдлага сонгох

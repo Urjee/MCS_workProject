@@ -24,17 +24,17 @@ const ReportProDetail = () => {
   const arr = [];
   for(var i in requests) {
     arr.push({
-      'Ажил даалгаврын нэр': requests[i].name,
-      'Хэрэглэгч': requests[i].firstname,
-      'Ажлын төрөл': requests[i].importanceName,
-      'Байгууллага': requests[i].organizationName,
-      'Төлөвлөгөөт хугацаа': new Date(requests[i].planTime).toISOString().slice(0,23).replace('T',''),
-      'Үүсгэсэн огноо': new Date(requests[i].createDate).toISOString().slice(0,23).replace('T',''),
-      'Эхэлсэн огноо': new Date(requests[i].startDate).toISOString().slice(0,10).replace('T',''),
-      'Дууссан хугацаа': new Date(requests[i].endDate).toISOString().slice(0,10).replace('T',''),
-      'Бодит цаг': new Date(requests[i].realTime).getHours(),
-      'Төлөв': requests[i].stateName,
-      'Гүйцэтгэгч': requests[i].userrname,
+      "Ажил даалгаврын нэр": requests[i].name,
+      "Хэрэглэгч": requests[i].firstname,
+      "Ажлын төрөл": requests[i].importanceName,
+      "Байгууллага": requests[i].organizationName,
+      "Төлөвлөгөөт хугацаа": requests[i].planTime,
+      "Үүсгэсэн огноо": requests[i].createDate,
+      "Эхэлсэн огноо": requests[i].startDate,
+      "Дууссан хугацаа": requests[i].endDate,
+      "Бодит цаг": requests[i].realTime,
+      "Төлөв": requests[i].stateName,
+      "Гүйцэтгэгч": requests[i].userrname,
     })
   }
   
@@ -103,7 +103,7 @@ useEffect(() => {
                 <div className="text">
                   <h6 className="mb-1">Хугацаа</h6>
                   <p className="mb-1">
-                    ({startDate})-({endDate})
+                  ({(startDate).replace('T', ' ')})-({(endDate).replace('T',' ')})
                   </p>
                 </div>
               </article>
@@ -158,8 +158,8 @@ useEffect(() => {
                       <td>{name}</td>
                       <td>{firstname}</td>
                       <td>{createDate}</td>
-                      <td>{startDate}</td>
-                      <td>{endDate}</td>
+                      <td>{(startDate).replace('T', ' ')}</td>
+                      <td>{(endDate).replace('T', ' ')}</td>
                       <td>{importanceName}</td>
                       <td>{organizationName}</td>
                       <td>{stateName}</td>

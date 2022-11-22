@@ -18,7 +18,8 @@ export const listRequest = () => async (dispatch) => {
 
     const { data } = await axios.post(`${URLFront}/api/requests`);
 
-    dispatch({ type: REQUEST_LIST_SUCCESS, payload: data });
+      dispatch({ type: REQUEST_LIST_SUCCESS, payload: data });
+    
   } catch (error) {
     const message =
       error.response && error.response.data.message
