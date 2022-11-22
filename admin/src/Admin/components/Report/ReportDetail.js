@@ -20,6 +20,7 @@ const ReportDetail = () => {
   const userReqID = searchString.get("id");
   const reportList = useSelector((state) => state.reportList);
   const { requests } = reportList;
+  
 
   const arr = [];
   for (var i in requests) {

@@ -1,4 +1,3 @@
-import CommentForm from "./CommentForm";
 const UserID = window.localStorage.userid;
 
 const Comment = ({

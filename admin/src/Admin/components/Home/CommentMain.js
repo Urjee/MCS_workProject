@@ -7,7 +7,7 @@ import {
   deleteComment as deleteCommentApi,
 } from "./api";
 
-const CommentMain = ({ commentsUrl, currentUserId }) => {
+const CommentMain = ({ currentUserId }) => {
   const [backendComments, setBackendComments] = useState([]);
   const [activeComment, setActiveComment] = useState(null);
   const rootComments = backendComments.filter(

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import TopTotal from "./TopTotal";
 import StateStatistic from "./StateStatistic";
-import Comment from "./Comment";
 import CommentMain from "./CommentMain";
 const Main = () => {
   const isAdmin = window.localStorage.isAdmin;
