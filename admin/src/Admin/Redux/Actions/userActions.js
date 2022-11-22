@@ -150,6 +150,7 @@ export const adminCreateUser =
     headd,
     admin,
     isActive,
+    jobTitle,
     jobTitleName
   ) =>
   async (dispatch, getState) => {
@@ -179,7 +180,8 @@ export const adminCreateUser =
           headd,
           admin,
           isActive,
-          jobTitleName
+          jobTitle,
+          jobTitleName,
         },
         config
       );
@@ -193,6 +195,7 @@ export const adminCreateUser =
       }
     }
   };
+
 
 // EDIT USER
 export const editUser = (id) => async (dispatch) => {

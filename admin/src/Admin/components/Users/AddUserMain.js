@@ -21,7 +21,9 @@ const AddUserMain = () => {
   const [phone, setPhone] = useState("");
   const [departmentName, setDepartmentName]= useState("")
   const [job, setJob] = useState("");
+  const [jobTitle, setJobTile] = useState();
   const [jobTitleName, setJobTitleName] = useState("");
+
   const [organizationName, setOrganization] = useState("");
   const [headName, setHeadName]= useState("");
   const [name, setName] = useState([]);
@@ -61,9 +63,15 @@ const AddUserMain = () => {
           console.log(error);
         });
       };
+      const jobtitle = async() => {
+        await fetch("http://172.16.226.57:8080/api/jobTitle")
+        .then(res => res.json())
+        .then(jobData => setJobTitleName(jobData))
+      };
       name()
       department()
       head()
+      jobtitle()
       setUserID(JSON.parse(window.localStorage.getItem('userinfo')).UserID)
     }, [])
 
@@ -83,7 +91,9 @@ const AddUserMain = () => {
     for(let i in headName) {
       arr2.push(headName[i].firstname)
     }
-   
+    for(let i in jobTitleName ) {
+      arr3.push(jobTitleName[i].jobTitleName)
+    }
     const filterChange = (name) => {
       setFilters(headName.filter(e => e.organizationName === name));
     }
@@ -102,6 +112,7 @@ const AddUserMain = () => {
       setHead(headd);
       setAdmin(admin);
       setIsActive();
+      setJobTile();
       setJobTitleName(jobTitleName);
     }
   }, [user, dispatch]);
@@ -109,7 +120,7 @@ const AddUserMain = () => {
   const submitHandler = (e) => {
     e.preventDefault();
     toast.success("Хэрэглэгч нэмэгдлээ", ToastObjects);
-    dispatch(adminCreateUser(password, firstname, lastname, email, phone, departmentName, job, organizationName, headd, admin, isActive, jobTitleName));
+    dispatch(adminCreateUser(password, firstname, lastname, email, phone, departmentName, job, organizationName, headd, admin, isActive, jobTitle, jobTitleName));
     setTimeout(() => history.push('/users'), 2000)
   }; 
   

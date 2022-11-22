@@ -234,6 +234,7 @@ useEffect(() => {
                       <option value={3}>Удирдлага</option>
                     </select>
                   </div>
+                 
                   { adminName == 2 ?
                     <div className="mb-6">
                       <label htmlFor="user_headName" className="form-label">
@@ -257,6 +258,16 @@ useEffect(() => {
                     </div>
                   : null
                   }
+                   {isAdmin == 2?
+                  <div className="mb-6">
+                    <label htmlFor="user_head" className="form-label">
+                    Удирдлага </label>
+                    <select className="form-select"
+                      onChange={e =>{ setAdminName(e.target.value)}}>
+                      <option>{headName}</option>
+                    </select>
+                  </div>
+                : null}
                 </div> 
                        
                 <div className="content-header">
