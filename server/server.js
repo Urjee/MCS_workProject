@@ -293,11 +293,10 @@ app.put("/api/userEdit", async (req, res) => {
 
   const active = await db.User.findOne({ where: { isActive: req.body.isActive }});
   let isActive = active?.isActive;
-  const head = await db.sequelize.query(`SELECT usrs.*
-  From Users usrs
-  WHERE usrs.firstname = N'${req.body.headd}' and usrs.isAdmin = 1`);
 
-
+  const head = await db.User.findOne({ where: {firstname: req.body.headName}});
+  let headID = head?.UserID;
+  
   const update = await db.User.update(
     {
       firstname: req.body.firstname,
@@ -307,7 +306,7 @@ app.put("/api/userEdit", async (req, res) => {
       job: req.body.job,
       departmentID: departmentID,
       organizationID: organizationID,
-      headID: head?.UserID,
+      headID: headID,
       isActive: isActive,
       isAdmin: req.body.isAdmin,
     },

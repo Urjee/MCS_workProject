@@ -150,7 +150,6 @@ export const adminCreateUser =
     headd,
     admin,
     isActive,
-    jobTitle,
     jobTitleName
   ) =>
   async (dispatch, getState) => {
@@ -180,8 +179,7 @@ export const adminCreateUser =
           headd,
           admin,
           isActive,
-          jobTitle,
-          jobTitleName,
+          jobTitleName
         },
         config
       );

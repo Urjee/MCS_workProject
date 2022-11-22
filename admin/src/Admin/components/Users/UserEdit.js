@@ -22,6 +22,7 @@ const UserEdit = () => {
   const [job, setJob] = useState("");
   const [depName, setDepName] = useState("");
   const [isAdmin, setisAdmin] = useState("");
+  const [adminName, setAdminName] = useState("");
   const [headd, setHead] = useState([]);
   const [filters, setFilters] = useState([]);
   const [orgName, setOrgName] = useState("");
@@ -85,6 +86,7 @@ const UserEdit = () => {
       UserID: uID,
       headName: headName,
       isAdmin:isAdmin,
+      adminName:adminName,
       isActive: activeName === '0' ? 0 : 1,
     })
     .then((response) => {
@@ -116,6 +118,7 @@ useEffect(() => {
       setActiveName(res[0].activeName)
       setJob(res[0].job)
       setisAdmin(res[0].isAdmin)
+      setAdminName(res[0].adminName)
       setUserID(res[0].uID)
       setOrganizationID(res[0].organizationID)
     })
@@ -224,14 +227,14 @@ useEffect(() => {
                     <label htmlFor="user_head" className="form-label">
                     Хэрэглэгчийн төрөл </label>
                     <select className="form-select"
-                      onChange={e =>{ setisAdmin(e.target.value)}}>
-                      <option>{isAdmin}</option>
+                      onChange={e =>{ setAdminName(e.target.value)}}>
+                      <option>{adminName}</option>
                       <option value={1}>Админ</option>
                       <option value={2}>Хэрэглэгч</option>
                       <option value={3}>Удирдлага</option>
                     </select>
                   </div>
-                  { isAdmin == 2 ?
+                  { adminName == 2 ?
                     <div className="mb-6">
                       <label htmlFor="user_headName" className="form-label">
                         Удирдлага сонгох
@@ -239,7 +242,7 @@ useEffect(() => {
                       <select
                         className="form-select"
                         id="user_headName"
-                        value={headd ? headd : headName}
+                        value={headName}
                         onChange={(e) => setHeadName(e.target.value)
                         } >
                         <option>Сонгох</option>
