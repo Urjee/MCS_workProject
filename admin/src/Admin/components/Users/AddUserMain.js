@@ -63,15 +63,10 @@ const AddUserMain = () => {
           console.log(error);
         });
       };
-      const jobtitle = async() => {
-        await fetch("http://172.16.226.57:8080/api/jobTitle")
-        .then(res => res.json())
-        .then(jobData => setJobTitleName(jobData))
-      };
+     
       name()
       department()
       head()
-      jobtitle()
       setUserID(JSON.parse(window.localStorage.getItem('userinfo')).UserID)
     }, [])
 
