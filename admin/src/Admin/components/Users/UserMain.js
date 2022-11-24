@@ -51,7 +51,6 @@ const UserMain = () => {
         </header>
         <div className="card shadow-sm">
           <div className="card-body">
-            <div className="table-responsive">
               {errorDelete && (
                 <Message variant="alert-danger">{errorDelete}</Message>
               )}
@@ -60,10 +59,20 @@ const UserMain = () => {
               ) : error ? (
                 <Message variant="alert-danger">{error}</Message>
               ) : (
-                <Users users={search(users)} />
+                <>
+                {
+                  users.length === 0 ? (
+                    <div className="col-12 alert alert-info text-center mt-3">
+                      Одоогоор дата байхгүй
+                    </div>
+                  ) :(
+                    <div className="table-responsive">
+                  <Users users={search(users)} />
+                </div>
+              )}
+              </>
               )}
             </div>
-          </div>
         </div>
       </div>
     </section>

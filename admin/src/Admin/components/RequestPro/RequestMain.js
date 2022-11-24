@@ -19,18 +19,27 @@ const RequestMain = () => {
       <div className="content-header">
         <h2 className="content-title">Ирсэн хүсэлтүүд</h2>
       </div>
-      <div className="card shadow-sm">
+      <div className="card mb-4">
         <div className="card-body">
-        <div className="table-responsive">
             {loading ? (
               <Loading />
             ) : error ? (
               <Message variant="alert-danger">{error}</Message>
             ) : (
-            <Request requests={requests} />
+              <>
+              {
+                requests.length === 0 ? (
+                  <div className="col-12 alert alert-info text-center mt-3">
+                    Одоогоор дата байхгүй
+                  </div>
+                ) : (
+                  <div className="table-responsive">
+              <Request requests={(requests)} />
+              </div>
+                )}
+                </>
             )}
-            </div>
-      </div>
+        </div>
       </div>
     </section>
   );

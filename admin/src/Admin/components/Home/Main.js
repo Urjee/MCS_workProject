@@ -35,7 +35,16 @@ const Main = () => {
             <div className="card mb-8 shadow-sm">
               <article className="card-body">
                 <h5 className="card-title">Байгууллагын ажил даалгавар</h5>
+                {data.length === 0 ? (
+                  <div className=" alert alert-info text-center mt-3">
+                          Одоогоор дата байхгүй
+                  </div>
+                ) : ( 
+                <>
                 <TopTotal data={data} />
+                </>
+                )
+                }
               </article>
             </div>
           </div>
@@ -43,7 +52,15 @@ const Main = () => {
             <div className="card mb-6 shadow-sm">
               <article className="card-body">
                 <h5 className="card-title">Ажил даалгаврын төлөв</h5>
+                {data.length === 0 ? (
+                  <div className=" alert alert-info text-center mt-3">
+                          Одоогоор дата байхгүй
+                  </div>
+                ) : ( 
+                <>
                 <StateStatistic />
+                </>
+                )}
               </article>
             </div>
           </div>

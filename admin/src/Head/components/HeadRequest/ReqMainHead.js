@@ -45,22 +45,32 @@ const ReqMainHead = () => {
             </div>
           </div>
         </header>
-        <div className="card shadow-sm">
-          <div className="card-body">
-            <div className="table-responsive">
-              {loading ? (
-                <Loading />
-              ) : error ? (
-                <Message variant="alert-danger">{error}</Message>
-              ) : (
+        <div className="card mb-4">
+        <div className="card-body">
+            {loading ? (
+              <Loading />
+            ) : error ? (
+              <Message variant="alert-danger">{error}</Message>
+            ) : (
+              <>
+              {
+                headReqs.length === 0 ? (
+                  <div className="col-12 alert alert-info text-center mt-3">
+                    Одоогоор дата байхгүй
+                  </div>
+                ) : (
+                  <div className="table-responsive">
                 <RequestHead headReqs={search(headReqs)} />
-              )}
-            </div>
-          </div>
+              </div>
+                )}
+                </>
+            )}
         </div>
+      </div>
       </div>
     </section>
   );
 };
 
 export default ReqMainHead;
+

@@ -10,10 +10,9 @@ function TopTotal(props) {
     "#51a4f5",
     "#075eb3",
   ];
-
   const { data } = props;
 
-  const CustomTooltip = ({ active, payload, label }) => {
+  const CustomTooltip = ({ active, payload }) => {
     if (active) {
       return (
         <div
@@ -29,10 +28,9 @@ function TopTotal(props) {
       );
     }
     return null;
-  };
-
+  }
   return (
-    <PieChart width={800} height={470}>
+  <PieChart width={800} height={470}>
       <Pie
         data={data}
         color="#000000"

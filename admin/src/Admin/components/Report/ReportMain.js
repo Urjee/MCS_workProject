@@ -102,18 +102,27 @@ const ReportMain = () => {
       </header>
       <div className="card shadow-sm">
         <div className="card-body">
-          <div className="table-responsive">
             {loading ? (
               <Loading />
             ) : error ? (
               <Message variant="alert-danger">{error}</Message>
-            ) : (
+            ) :(
+              <>
+              {
+                requests.length === 0 ? (
+                  <div className="col-12 alert alert-info text-center mt-3">
+                    Одоогоор дата байхгүй
+                  </div>
+                ) : (
+                  <div className="table-responsive">
               <ReportTable requests={search(requests)} />
-            )}
-          </div>
-        </div>
+              </div>
+              )}
+              </>
+          )}
       </div>
-    </section>
+    </div>
+  </section>
   );
 };
 

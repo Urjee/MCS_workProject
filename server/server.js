@@ -157,7 +157,7 @@ app.put("/api/requestUpdate", async (req, res) => {
   const reqID = req.body.userReqID;
   const devID = await db.sequelize.query(`SELECT usrs.*
   From Users usrs
- WHERE usrs.firstname = N'${req.body.firstname}' and usrs.isAdmin = 1`);
+ WHERE usrs.firstname = N'${req.body.firstname}'`);
   try {
     const update = await db.sequelize.query(`
             UPDATE 
@@ -188,7 +188,7 @@ app.put("/api/requestAdminUpdate", upload.array("file", 10), async (req, res) =>
   const reqID = req.body.userReqID;
   const devID = await db.sequelize.query(`SELECT usrs.*
   From Users usrs
- WHERE usrs.firstname = N'${req.body.firstname}' and usrs.isAdmin = 1`);
+ WHERE usrs.firstname = N'${req.body.firstname}'`);
  const states = await db.State.findOne({
   where: {
     stateName: req.body.stateName,

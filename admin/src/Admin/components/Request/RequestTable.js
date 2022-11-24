@@ -22,12 +22,15 @@ const RequestTable = (props) => {
         </tr>
       </thead>
       <tbody>
-     {
-        requests.map((request) => (
-          <tr
-            key={request.userReqID}
-            onClick={() => handleClick(request.userReqID)}
-          >
+      {/* {requests.length === 0 ? (
+          <table className="alert alert-info text-center mt-3 form-control">
+            Одоогоор дата байхгүй 
+          </table>
+        ) : ( 
+          <> */}
+        { requests.map((request) => (
+          <tr key={request.userReqID}
+            onClick={() => handleClick(request.userReqID)}>
             <td>{request.name}</td>
             <td>{request.importanceName}</td>
             <td>{request.stateName}</td>
@@ -36,8 +39,9 @@ const RequestTable = (props) => {
             <td>{request.organizationName}</td>
             <td>{request.createDate} </td>
           </tr>
-        )) 
+          )) 
         }
+        
       </tbody>
 
     </table>

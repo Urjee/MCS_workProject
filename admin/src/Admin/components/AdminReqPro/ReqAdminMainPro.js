@@ -54,16 +54,25 @@ const ReqAdminMain = () => {
       </header>
       <div className="card mb-4">
         <div className="card-body">
-          <div className="table-responsive">
             {loading ? (
               <Loading />
             ) : error ? (
               <Message variant="alert-danger">{error}</Message>
-            ) : (
+            ) :(
+            <>
+              {
+                requests.length === 0 ? (
+                  <div className="col-12 alert alert-info text-center mt-3">
+                    Одоогоор дата байхгүй
+                  </div>
+                ) : (
+                  <div className="table-responsive">
               <ReqAdminPro requests={search(requests)} />
-            )}
+              </div>
+                )}
+                </>
+              )}
           </div>
-        </div>
       </div>
     </section>
   );
