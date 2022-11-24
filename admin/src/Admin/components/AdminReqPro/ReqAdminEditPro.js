@@ -29,7 +29,14 @@ const ReqAdminEditPro = () => {
   const [developerName, setDeveloperName] = useState("");
   const imprts = [];
   const history = useHistory();
+  const [files, setFiles] = useState([]);
+  const [file, setFile] = useState([]);
+  const arr = [];
+  const [uploadedFiles, setUploadedFiles] = useState([]);
 
+  const onInputChange = (e) => {
+    setFiles(e.target.files)
+  };
   const requestCreate = useSelector((state) => state.requestCreate);
   const { loading, error } = requestCreate;
 
@@ -75,25 +82,28 @@ const ReqAdminEditPro = () => {
     arr0.push(developerName[i].firstname);
   }
 
-  const submitHandler = async (e) => {
+  const submitHandler =  (e) => {
     e.preventDefault();
-    await axios
-      .put("http://172.16.226.57:8080/api/requestAdminUpdate", {
-        planTime: planTime,
-        realTime: realTime,
-        startDate: startDate,
-        endDate: endDate,
-        percentOfPerform: percentOfPerform,
-        stateID: stateID,
-        stateName: stateName,
-        firstname: firstname,
-        DeveloperID: DeveloperID,
-        userReqID: reqID,
-      })
-      .then((response) => {
-        toast.success("Амжилттай хадгалагдлаа");
-        submitHandler(response.data);
-      });
+    const data = new FormData();
+        for(let i=0; i < files.length; i++) {
+          data.append('file', files[i]);
+        }
+        data.append('planTime', planTime);
+        data.append('realTime', realTime);
+        data.append('startDate', startDate);
+        data.append('endDate', endDate);
+        data.append('percentOfPerform', percentOfPerform);
+        data.append('stateID', stateID);
+        data.append('stateName', stateName);
+        data.append('firstname', firstname);
+        data.append('DeveloperID', DeveloperID);
+        data.append('userReqID', reqID)
+       
+        axios.put("http://172.16.226.57:8080/api/requestAdminUpdate", data)
+        .then((response) => {
+          toast.success("Амжилттай хадгалагдлаа");
+          submitHandler(response.data);
+        });
     setTimeout(() => history.push("/adminReqsPro"), 2000);
   };
   useEffect(() => {
@@ -110,7 +120,6 @@ const ReqAdminEditPro = () => {
           setName(res[0][0].name);
           setImportanceName(res[0][0].importanceName);
           setPlanTime(res[0][0].planTime);
-          setFileName(res[0][0].file_name);
           setDescription(res[0][0].description);
           setStateName(res[0][0].stateName);
           setFirstname(res[0][0].firstname);
@@ -120,6 +129,12 @@ const ReqAdminEditPro = () => {
           setPercentOfperform(res[0][0].percentOfPerform);
           setStateID(res[0][0].stateID);
           setFileRemove(res[0][0].fileRemove);
+
+          setFile(res[0])
+          for(let i = 0; i < res[0].length; i++) {
+            setFileName(res[0][i].file_name);
+            arr.push(res[0][i].file_name)
+          };
         })
         .catch(function (error) {
           console.log(error);
@@ -145,9 +160,7 @@ const ReqAdminEditPro = () => {
       link.click();
     });
   };
-  const date2 = planTime.toString().slice(0, 19).replace("T", " ");
   const realTime = ((new Date(endDate).getTime() - new Date(startDate).getTime()) / 1000 / 60 / 60);
-  const sDate = startDate.toString().slice(0, 19).replace("T", " ");
   const fileButton = () => {
     window.open(`http://localhost:4000/images/${file_name}`, "_blank");
     history.push("/adminReqsPro");
@@ -203,35 +216,6 @@ const ReqAdminEditPro = () => {
                       ))}
                     </select>
                   </div>
-                  {fileRemove ? null : (
-                    <div id="form-control" className="mb-12">
-                      <i className="icon fas fa exit"></i>
-                      <label id="input1label" htmlFor="fileName" z="form-label">
-                        Файл
-                      </label>
-                      <button
-                        onClick={() => fileButton("https://google.com")}
-                        className="form-control"
-                        value={file_name}
-                      >
-                        <input
-                          value={file_name}
-                          accept=".jpg,.jpeg,.png,.docx,.csv,.xslx,.pdf"
-                          className="form-control"
-                        />
-                      </button>
-                      <br />
-                      <button
-                        hidden
-                        id="download"
-                        className="btn btn-third cursor-pointer text-white"
-                        onClick={handleDownload}
-                      >
-                        <i className="icon fas fa-download" id="download" />
-                        Татаж авах
-                      </button>
-                    </div>
-                  )}
                   <div className="mb-12">
                     <label className="form-label">
                       Тайлбар
@@ -250,7 +234,7 @@ const ReqAdminEditPro = () => {
                     <input
                       className="form-control"
                       type="datetime-local"
-                      value={date2}
+                      value={planTime}
                       onChange={(e) => setPlanTime(e.target.value)}
                     />
                   </div>
@@ -259,7 +243,7 @@ const ReqAdminEditPro = () => {
                     <input
                       type="datetime-local"
                       className="form-control"
-                      value={sDate}
+                      value={startDate}
                       onChange={(e) => setStartDate(e.target.value)}
                     />
                   </div>
@@ -268,7 +252,7 @@ const ReqAdminEditPro = () => {
                     <input
                       type="datetime-local"
                       className="form-control"
-                      value={endDate.toString().slice(0, 19).replace("T", " ")}
+                      value={endDate}
                       onChange={(e) => setEndDate(e.target.value)}
                     />
                   </div>
@@ -297,7 +281,6 @@ const ReqAdminEditPro = () => {
                       ))}
                     </select>
                   </div>
-
                   <div className="mb-12">
                     <label>Ажлын гүйцэтгэл</label>
                     <input
@@ -307,7 +290,45 @@ const ReqAdminEditPro = () => {
                       onChange={(e) => setPercentOfperform(e.target.value)}
                     />
                   </div>
-                  <br />
+                  <div className="mb-12">
+                       <label htmlFor="userReq_description" className="form-label">
+                        Файл хавсаргах
+                       </label>
+                    </div>
+                        <input type="file" name="file" onChange={onInputChange} className="form-control" multiple />
+                        <div className="uploaded-files-list">
+                            {uploadedFiles.map(file => (
+                              <div>
+                                  {file.originalname}
+                              </div>
+                            ))}
+                        </div>
+                        <br/>
+                    { fileRemove ? null :
+                    <div id="form-control" className="mb-12">
+                      <i className="icon fas fa exit"></i>
+                      <label id="input1label" htmlFor="fileName" z="form-label">
+                        Хавсаргасан файл
+                      </label>
+                            {
+                              file.map((file) => 
+                              <button className="btn btn-file cursor-pointer text-black"onClick={() => window.open(`http://172.16.226.57:8080/images/${file.file_name}`, "_blank")}>
+                              <input
+                                className="form-control"
+                                value={file.file_name}
+                                multiple />
+                          </button>
+                              )
+                            }
+                        <br/>
+                        <button hidden id="download" className="btn btn-third cursor-pointer text-white" onClick={handleDownload}>
+                            <i className="icon fas fa-download" id="download" />
+                          Татаж авах 
+                        </button>
+                      </div>   
+                      }   
+                     
+                      <br/>
                   <div className="content-header">
                     <Link to="/adminReqsPro" className="btn btn-dark col-3">
                       Буцах

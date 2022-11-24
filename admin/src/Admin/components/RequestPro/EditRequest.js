@@ -29,7 +29,8 @@ const EditRequest = () => {
   const history = useHistory();
   const states = [];
   const imprts = [];
-
+  const [filess, setFiless] = useState([]);
+  const arr=[];
   const requestCreate = useSelector((state) => state.requestCreate);
   const { loading, error } = requestCreate;
 
@@ -118,7 +119,6 @@ const EditRequest = () => {
           setImportanceName(res[0][0].importanceName);
           setFirstname(res[0][0].firstname);
           setPlanTime(res[0][0].planTime);
-          setFileName(res[0][0].file_name);
           setDescription(res[0][0].description);
           setStateName(res[0][0].stateName);
           setStartDate(res[0][0].startDate);
@@ -126,7 +126,11 @@ const EditRequest = () => {
           setPercentOfperform(res[0][0].percentOfPerform);
           setFileRemove(res[0][0].fileRemove);
           setUserID(res[0][0].UserID);
-          
+          setFiless(res[0])
+          for(let i = 0; i < res[0].length; i++) {
+            setFileName(res[0][i].file_name);
+            arr.push(res[0][i].file_name)
+          };
         });
     };
     userid();
@@ -203,34 +207,6 @@ const EditRequest = () => {
                       onChange={(e) => setStateName}
                     ></input>
                   </div>
-                  {fileRemove ? null : (
-                    <div id="form-control" className="mb-12">
-                      <i className="icon fas fa exit"></i>
-                      <label id="input1label" htmlFor="fileName" z="form-label">
-                        Файл
-                      </label>
-                      <button
-                        onClick={() => fileButton("https://google.com")}
-                        className="form-control"
-                        value={file_name}
-                      >
-                        <input
-                          value={file_name}
-                          accept=".jpg,.jpeg,.png,.docx,.csv,.xslx,.pdf"
-                          className="form-control"
-                        />
-                      </button>
-                      <button
-                        hidden
-                        id="download"
-                        className="btn btn-third cursor-pointer text-white"
-                        onClick={handleDownload}
-                      >
-                        <i className="icon fas fa-download" id="download" />
-                        Татаж авах
-                      </button>
-                    </div>
-                  )}
                   <div className="mb-12">
                     <label htmlFor="userReq_description" className="form-label">
                       Тайлбар
@@ -242,6 +218,22 @@ const EditRequest = () => {
                     value={description}
                     onChange={(e) => setDescription}
                   />
+                  <div id="form-control" className="mb-12">
+                      <i className="icon fas fa exit"></i>
+                      <label id="input1label" className="form-label">
+                        Хавсаргасан файл
+                      </label>
+                            {
+                              filess.map((file) => 
+                              <button className="btn btn-file cursor-pointer text-black"onClick={() => window.open(`http://172.16.226.57:8080/images/${file.file_name}`, "_blank")}>
+                              <input
+                                    className="form-control"
+                                    value={file.file_name}
+                                    multiple />
+                              </button>
+                              )
+                            }
+                      </div>
                   <div className="mb-12">
                     <label htmlFor="userReq_planTime" className="form-label">
                       Төлөвлөгөөт хугацаа

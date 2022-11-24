@@ -29,6 +29,8 @@ const RequestEdit = () => {
   const history = useHistory();
   const requestCreate = useSelector((state) => state.requestCreate);
   const { loading, error } = requestCreate;
+  const [filess, setFiless] = useState([]);
+  const arr=[];
 
   useEffect(() => {
     const impName = () => {
@@ -104,7 +106,6 @@ const RequestEdit = () => {
           setName(res[0][0].name);
           setImportanceName(res[0][0].importanceName);
           setPlanTime(res[0][0].planTime);
-          setFileName(res[0][0].file_name);
           setDescription(res[0][0].description);
           setStateName(res[0][0].stateName);
           setStartDate(res[0][0].startDate);
@@ -112,7 +113,12 @@ const RequestEdit = () => {
           setPercentOfperform(res[0][0].percentOfPerform);
           setFileRemove(res[0][0].fileRemove);
           setUserID(res[0][0].UserID);
-
+          
+          setFiless(res[0])
+          for(let i = 0; i < res[0].length; i++) {
+            setFileName(res[0][i].file_name);
+            arr.push(res[0][i].file_name)
+          };
         })
         .catch(function (error){
           console.log(error);
@@ -160,32 +166,27 @@ const realTime = ((new Date(endDate).getTime() - new Date(startDate).getTime()) 
                   {error && <Message variant="alert-danger">{error}</Message>}
                   {loading && <Loading />}
                   <div className="mb-4">
-                    <label htmlFor="userReq_name" className="form-label">
+                    <label className="form-label">
                       Ажил даалгаврын нэр
                     </label>
                     <input
                       type="text"
                       className="form-control"
                       value={name}
-                      onChange={(e) => setName}
-                    />
+                      onChange={(e) => setName} />
                   </div>
                   <div className="mb-12">
-                    <label
-                      htmlFor="userReq_importanceName"
-                      className="form-label"
-                    >
+                    <label className="form-label">
                       Ажлын төрөл
                     </label>
                     <input
                       type="text"
                       value={importanceName}
                       className="form-select"
-                      onChange={(e) => setImportanceName}
-                    ></input>
+                      onChange={(e) => setImportanceName}/>
                   </div>
                   <div className="mb-12">
-                    <label htmlFor="userReq_stateName" className="form-label">
+                    <label className="form-label">
                       Төлөв
                     </label>
                     <input
@@ -194,36 +195,8 @@ const realTime = ((new Date(endDate).getTime() - new Date(startDate).getTime()) 
                       onChange={(e) => setStateName}
                     ></input>
                   </div>
-                  {fileRemove ? null : (
-                    <div id="form-control" className="mb-12">
-                      <i className="icon fas fa exit"></i>
-                      <label id="input1label" htmlFor="fileName" z="form-label">
-                        Файл
-                      </label>
-                      <button
-                        onClick={() => fileButton("https://google.com")}
-                        className="form-control"
-                        value={file_name}
-                      >
-                        <input
-                          value={file_name}
-                          accept=".jpg,.jpeg,.png,.docx,.csv,.xslx,.pdf"
-                          className="form-control"
-                        />
-                      </button>
-                      <button
-                        hidden
-                        id="download"
-                        className="btn btn-third cursor-pointer text-white"
-                        onClick={handleDownload}
-                      >
-                        <i className="icon fas fa-download" id="download" />
-                        Татаж авах
-                      </button>
-                    </div>
-                  )}
                   <div className="mb-12">
-                    <label htmlFor="userReq_description" className="form-label">
+                    <label className="form-label">
                       Тайлбар
                     </label>
                   </div>
@@ -233,8 +206,28 @@ const realTime = ((new Date(endDate).getTime() - new Date(startDate).getTime()) 
                     value={description}
                     onChange={(e) => setDescription}
                   />
+                  <div id="form-control" className="mb-12">
+                      <i className="icon fas fa exit"></i>
+                      <label id="input1label" className="form-label">
+                        Хавсаргасан файл
+                      </label>
+                      <br/>
+                        {
+                          filess.map((file) => 
+                          <button className="btn btn-file cursor-pointer text-black"onClick={() => window.open(`http://172.16.226.57:8080/images/${file.file_name}`, "_blank")}>
+                             {/* <i class="fa fa-download"></i> */}
+                              <input
+                                className="form-control"
+                                value={file.file_name}
+                                multiple />
+                          </button>
+                          )
+                        
+                        }
+                        
+                      </div>
                   <div className="mb-12">
-                    <label htmlFor="userReq_planTime" className="form-label">
+                    <label className="form-label">
                       Төлөвлөгөөт хугацаа
                     </label>
                     <input
@@ -299,6 +292,7 @@ const realTime = ((new Date(endDate).getTime() - new Date(startDate).getTime()) 
                       onChange={(e) => setPercentOfperform(e.target.value)}
                     />
                   </div>
+                  
                   <br />
                   <div className="content-header">
                     <Link to="/requests" className="btn btn-dark col-3">

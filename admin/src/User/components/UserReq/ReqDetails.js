@@ -27,9 +27,14 @@ const ReqDetails = () => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [createDate, setCreateDate] = useState();
   const imprts = [];
+  const [filess, setFiless] = useState([]);
+  const arr=[];
   const reqID = searchString.get("id");
   const history = useHistory();
 
+  const onInputChange = (e) => {
+    setFiles(e.target.files)
+  };
   const dispatch = useDispatch();
   const userReqCreate = useSelector((state) => state.userReqCreate);
   const { loading, error, requests } = userReqCreate;
@@ -109,7 +114,8 @@ const ReqDetails = () => {
     const userid = () => {
       fetch("http://172.16.226.57:8080/api/headReqDetail", {
         method: "POST",
-        body: JSON.stringify({ userReqID: reqID }),
+        body: 
+        JSON.stringify({ userReqID: reqID }),
         headers: {
           "Content-Type": "application/json",
         },
@@ -119,8 +125,13 @@ const ReqDetails = () => {
           setName(res[0].name);
           setDescription(res[0].description);
           setImportanceName(res[0].importanceName);
-          setFileName(res[0].file_name);
           setCreateDate(res[0].createDate);
+
+          setFiless(res)
+          for(let i = 0; i < res[0].length; i++) {
+            setFileName(res[i].file_name);
+            arr.push(res[i].file_name)
+          };
         })
         .catch(function (error) {
           console.log(error);
@@ -129,15 +140,13 @@ const ReqDetails = () => {
     userid();
   }, []);
 
-  const handleDelete = (file_name) => {
-    setDeleteVal(file_name);
-    setFileName([]);
-    setFileRemove(true);
-  };
-  const fileButton = () => {
-    window.open(`http://172.16.226.57:8080/images/${file_name}`, "_blank");
-    history.push("/userReqs");
-  };
+    // const fileButton = () => {
+    //     for(let i = 0; i < filess[0].length; i++) {
+    //       window.open(`http://172.16.226.57:8080/images/${filess[i].file_name}`, "_blank")        
+    //   }
+    
+  //   history.push("/userReqs");
+  // };
   return (
     <>
       <Toast />
@@ -158,47 +167,62 @@ const ReqDetails = () => {
                   {error && <Message variant="alert-danger">{error}</Message>}
                   {loading && <Loading />}
                   <div className="mb-4">
-                    <label htmlFor="userReq_name" className="form-label">
+                    <label className="form-label">
                       Ажил даалгаврын нэр
                     </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                    />
+                      <input type="text" className="form-control" value={name} 
+                      onChange={(e) => setName(e.target.value)} />
                   </div>
                   <div className="mb-12">
-                    <label htmlFor="userReq_description" className="form-label">
+                    <label className="form-label">
                       Тайлбар
                     </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      value={description}
-                      onChange={(e) => setDescription(e.target.value)}
-                    />
+                    <input type="text" className="form-control" value={description}
+                      onChange={(e) => setDescription(e.target.value)} />
                   </div>
-                  <br />
                   <div className="mb-12">
-                    <label
-                      htmlFor="userReq_importanceName"
-                      className="form-label"
-                    >
+                    <label className="form-label">
                       Ажлын төрөл
                     </label>
-                    <select
-                      type="text"
-                      value={importanceName}
-                      className="form-select"
-                      onChange={(e) => setImportanceName(e.target.value)}
-                    >
+                    <select type="text" value={importanceName} className="form-select"
+                      onChange={(e) => setImportanceName(e.target.value)}>
                       {arr1.map((impData) => (
                         <option>{impData}</option>
                       ))}
                     </select>
                   </div>
-                  {fileRemove ? null : (
+                  <br/>
+                   <div id="form-control" className="mb-12">
+                      <i className="icon fas fa exit"></i>
+                      <label id="input1label" htmlFor="fileName" z="form-label">
+                        Хавсаргасан файл
+                      </label>
+                            {
+                              filess.map((file) => 
+                              <button className="btn btn-file cursor-pointer text-black"onClick={() => window.open(`http://172.16.226.57:8080/images/${file.file_name}`, "_blank")}>
+                              <input
+                                    className="form-control"
+                                    value={file.file_name}
+                                    multiple />
+                              </button>
+                              )
+                            }
+                        <br/>
+                      </div>
+                      <div className="mb-12">
+                       <label htmlFor="userReq_description" className="form-label">
+                        Файл хавсаргах
+                       </label>
+                    </div>
+                        <input type="file" name="file" onChange={onInputChange} className="form-control" multiple />
+                        <div className="uploaded-files-list">
+                            {uploadedFiles.map(file => (
+                              <div>
+                                  {file.originalname}
+                              </div>
+                            ))}
+                        </div>
+                  {/* {fileRemove ? null : (
                     <div id="form-control" className="mb-12">
                       <i className="icon fas fa exit"></i>
                       <label
@@ -211,18 +235,18 @@ const ReqDetails = () => {
                       <button
                         onClick={() => fileButton("https://google.com")}
                         className="form-control"
-                        value={file_name}
+                        value={file.file_name}
                       >
                         <input
-                          value={file_name}
+                          value={file.file_name}
                           accept=".jpg,.jpeg,.png,.docx,.csv,.xslx,.pdf"
                           className="form-control"
                         />
-                      </button>
-                      <button id="delX" onClick={() => handleDelete(file_name)}>
+                      </button> */}
+                      {/* <button id="delX" onClick={() => handleDelete(file.file_name)}>
                         X
-                      </button>
-                      <br />
+                      </button> */}
+                      {/* <br />
                       <button
                         hidden
                         id="download"
@@ -232,8 +256,10 @@ const ReqDetails = () => {
                         <i className="icon fas fa-download" id="download" />
                         Татаж авах
                       </button>
-                    </div>
-                  )}
+                    </div> */}
+                  {/* )} */}
+                      
+
                   {fileRemove ? (
                     <div>
                       <label htmlFor="userReq_file_id" className="form-label">

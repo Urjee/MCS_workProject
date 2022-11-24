@@ -28,6 +28,8 @@ const DetailsHeadReq = () => {
   const history = useHistory();
   const headRequestList = useSelector((state) => state.headRequestList);
   const { headReqs } = headRequestList;
+  const [filess, setFile] = useState([]);
+  const arr = [];
 
   useEffect(() => {
     const impName = () => {
@@ -65,7 +67,6 @@ const DetailsHeadReq = () => {
     data.append("planTime", planTime);
     data.append("file_name", file_name);
     data.append("createDate", createDate);
-    toast.success("Амжилттай", ToastObjects);
     submitHandler(data);
   };
   useEffect((req, res) => {
@@ -85,9 +86,14 @@ const DetailsHeadReq = () => {
           setOrganizationName(res[0].organizationName);
           setStateName(res[0].stateName);
           setPlanTime(res[0].planTime);
-          setFileName(res[0].file_name);
-          setFiles(res[0].files);
           setCreateDate(res[0].createDate);
+          
+          setFile(res)
+          for(let i = 0; i < res[0].length; i++) {
+            setFileName(res[i].file_name);
+            arr.push(res[i].file_name)
+          };
+
           if (files) {
             setView(true);
           }
@@ -175,36 +181,36 @@ const DetailsHeadReq = () => {
                       <thead>
                         <tr>
                           <th scope="col">Нэр</th>
-                          {/* <th scope="col">Дэд Ажил</th> */}
                           <th scope="col">Ажлын төрөл</th>
-                          <th scope="col">Хавсралт</th>
                           <th scope="col">Дэлгэрэнгүй</th>
+                          <th scope="col">Хавсралт</th>
+
                         </tr>
                       </thead>
                       <tbody>
                         <tr key={userReqID}>
                           <td>{name}</td>
-                          {/* <td><Link>0</Link></td> */}
                           <td>{importanceName}</td>
-                          <td>
-                            {file_name}
-                            <br />
-                            <br />
-                            <button
-                              className="btn btn-third cursor-pointer text-white"
-                              onClick={handleDownload}
-                            >
-                              Файл татах
-                            </button>
-                          </td>
                           <td>{description}</td>
+                          <td>
+                          {
+                              filess.map((file) => 
+                              <button className="btn btn-file cursor-pointer text-black"onClick={() => window.open(`http://172.16.226.57:8080/images/${file.file_name}`, "_blank")}>
+                              <input
+                                className="form-control"
+                                value={file.file_name}
+                                multiple />
+                          </button>
+                              )
+                            }
+                           
+                          </td>
                         </tr>
                       </tbody>
                     </table>
                   </div>
                 </div>
                 <br />
-
                 {statename === "Удирдлага батлаагүй" ? (
                   <div className="col-lg-3">
                     <div className="box shadow-sm bg-light">
@@ -228,6 +234,7 @@ const DetailsHeadReq = () => {
                 ) : undefined}
               </div>
             </div>
+            
           </div>
         </form>
       </section>

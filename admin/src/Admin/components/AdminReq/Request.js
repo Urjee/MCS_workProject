@@ -22,7 +22,6 @@ const Request = (props) => {
                 <i className="material-icons md-plus"></i> Ирсэн хүсэлтүүд
               </Link>
               <br />
-              {/* <span>{`select count(*) from UserReqs where stateID >= '3'`}</span> */}
             </div>
           </article>
         </div>
