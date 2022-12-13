@@ -9,6 +9,7 @@ import {
 } from "../Constants/requestConstants";
 import axios from "axios";
 import { URLFront } from "../url";
+import { logout } from "./userActions";
 
 // ALL REQUEST
 export const listRequest = (UserID) => async (dispatch) => {
@@ -24,6 +25,7 @@ export const listRequest = (UserID) => async (dispatch) => {
         ? error.response.data.message
         : error.message;
     if (message === "Not authorized, token failed") {
+      dispatch(logout());
     }
     dispatch({
       type: USERREQ_LIST_FAIL,
@@ -66,6 +68,7 @@ export const addUserReq =
           ? error.response.data.message
           : error.message;
       if (message === "Not authorized, token failed") {
+        dispatch(logout());
       }
     }
   };
@@ -93,6 +96,7 @@ export const deleteUserReq = () => async (dispatch, getState) => {
         ? error.response.data.message
         : error.message;
     if (message === "Not authorized, token failed") {
+      dispatch(logout());
     }
   }
 };

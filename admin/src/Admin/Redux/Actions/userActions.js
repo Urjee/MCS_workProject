@@ -7,6 +7,7 @@ import {
   USER_LOGIN_FAIL,
   USER_LOGIN_REQUEST,
   USER_LOGIN_SUCCESS,
+  USER_LOGOUT,
   USER_DELETE_FAIL,
   USER_DELETE_REQUEST,
   USER_DELETE_SUCCESS,
@@ -67,12 +68,16 @@ export const login = (email, password) => async (dispatch) => {
     });
   }
 };
+
 // LOGOUT
 // export const logout = () => (dispatch) => {
 //   localStorage.removeItem("userInfo");
 //   c
 // };
-
+export const logout = () => (dispatch) => {
+  localStorage.removeItem("userInfo");
+  dispatch({ type: USER_LOGOUT });
+};
 // ALL USER
 export const listUser = () => async (dispatch, getState) => {
   try {
@@ -97,6 +102,7 @@ export const listUser = () => async (dispatch, getState) => {
         ? error.response.data.message
         : error.message;
     if (message === "Not authorized, token failed") {
+      dispatch(logout());
     }
     dispatch({
       type: USER_LIST_FAIL,
@@ -129,6 +135,8 @@ export const deleteUser = (UserID) => async (dispatch, getState) => {
         ? error.response.data.message
         : error.message;
     if (message === "Not authorized, token failed") {
+      dispatch(logout());
+
     }
     dispatch({
       type: USER_DELETE_FAIL,
@@ -192,6 +200,7 @@ export const adminCreateUser =
           ? error.response.data.message
           : error.message;
       if (message === "Not authorized, token failed") {
+        dispatch(logout());
       }
     }
   };
@@ -209,6 +218,7 @@ export const editUser = (id) => async (dispatch) => {
         ? error.response.data.message
         : error.message;
     if (message === "Not authorized, token failed") {
+      dispatch(logout());
     }
     dispatch({
       type: USER_EDIT_FAIL,
@@ -247,6 +257,7 @@ export const updateUser = (user) => async (dispatch, getState) => {
         ? error.response.data.message
         : error.message;
     if (message === "Not authorized, token failed") {
+      dispatch(logout());
     }
     dispatch({
       type: USER_UPDATE_FAIL,

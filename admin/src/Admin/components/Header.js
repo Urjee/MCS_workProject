@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import $ from "jquery";
 import logo from "../img/gamer.png";
+import { logout } from "../Redux/Actions/userActions";
+import { useDispatch } from "react-redux";
 
 const Header = () => {
   useEffect(() => {
@@ -22,10 +24,13 @@ const Header = () => {
       }
     });
   }, []);
+  const dispatch = useDispatch();
 
   const logoutHandler = () => {
     localStorage.removeItem("userInfo");
     window.location.assign('/login');
+    dispatch(logout());
+
   };
 
   const firstname = window.localStorage.getItem("firstname");

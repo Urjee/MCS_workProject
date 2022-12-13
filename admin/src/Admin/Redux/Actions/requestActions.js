@@ -10,6 +10,8 @@ import {
 } from "../Constants/requestConstants";
 import axios from "axios";
 import { URLFront } from "../url";
+import { logout } from "./userActions";
+
 
 // ALL REQUEST
 export const listRequest = () => async (dispatch) => {
@@ -26,6 +28,8 @@ export const listRequest = () => async (dispatch) => {
         ? error.response.data.message
         : error.message;
     if (message === "Not authorized, token failed") {
+      dispatch(logout());
+
     }
     dispatch({
       type: REQUEST_LIST_FAIL,
@@ -46,6 +50,8 @@ export const totalOrg = () => async (dispatch) => {
         ? error.response.data.message
         : error.message;
     if (message === "Not authorized, token failed") {
+      dispatch(logout());
+
     }
     dispatch({
       type: REQUEST_LIST_FAIL,
@@ -67,6 +73,7 @@ export const allReport = () => async (dispatch) => {
         ? error.response.data.message
         : error.message;
     if (message === "Not authorized, token failed") {
+      dispatch(logout());
     }
     dispatch({
       type: REPORT_LIST_FAIL,
@@ -88,6 +95,7 @@ export const reportAll = () => async (dispatch) => {
         ? error.response.data.message
         : error.message;
     if (message === "Not authorized, token failed") {
+      dispatch(logout());
     }
     dispatch({
       type: REPORT_LIST_FAIL,
@@ -109,6 +117,7 @@ export const requestProList = () => async (dispatch) => {
         ? error.response.data.message
         : error.message;
     if (message === "Not authorized, token failed") {
+      dispatch(logout());
     }
     dispatch({
       type: REQUEST_LIST_FAIL,
@@ -151,6 +160,7 @@ export const requestUpdate =
           ? error.response.data.message
           : error.message;
       if (message === "Not authorized, token failed") {
+        dispatch(logout());
       }
     }
   };

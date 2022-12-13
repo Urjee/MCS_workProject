@@ -115,7 +115,7 @@ exports.adminReqs = async (req, res) => {
         ON usr.UserID = uReqs.DeveloperID
         INNER JOIN Organizations org
         ON org.organizationID = uReqs.organizationID
-        INNER JOIN Files fle
+        LEFT JOIN Files fle
         ON fle.file_id = uReqs.file_id
     WHERE uReqs.stateID >=3  AND uReqs.importanceID = 1`,
       {
@@ -186,7 +186,7 @@ exports.allRequests = async (req, res) => {
         ON imprts.importanceID = uReqs.importanceID
         INNER JOIN States AS stta
         ON stta.stateID = uReqs.stateID
-        INNER JOIN Files fle
+        LEFT JOIN Files fle
         ON uReqs.file_id = fle.file_id
         INNER JOIN Organizations org
         ON org.organizationID = uReqs.organizationID

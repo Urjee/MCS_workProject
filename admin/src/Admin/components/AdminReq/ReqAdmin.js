@@ -36,14 +36,12 @@ const ReqAdmin = (props) => {
             onClick={() => handleClick(request.userReqID)}
           >
             <td>{request.name}</td>
-            {/* <td><Link to="#">0</Link></td> */}
             <td>{request.organizationName}</td>
             <td>{request.importanceName}</td>
             <td>{request.stateName}</td>
             <td>{request.createDate}</td>
             <td>
-              {(request.planTime)
-                .replace("T", " ")}
+              {(request.planTime).replace("T", " ")}
             </td>
             <td>{request.realTime}</td>
             <td>

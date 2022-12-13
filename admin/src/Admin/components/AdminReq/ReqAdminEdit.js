@@ -80,7 +80,7 @@ const ReqAdminEdit = () => {
     for(let i in developerName) {
       arr0.push(developerName[i].firstname)
     } 
-    const realTime = ((new Date(endDate).getTime() - new Date(startDate).getTime()) / 1000 / 60 / 60);
+    const realTime = ((new Date(endDate).getTime() - new Date(startDate).getTime()) /1000/60/60);
 
     const submitHandler = (e) =>{   
       e.preventDefault();
@@ -282,10 +282,12 @@ const ReqAdminEdit = () => {
                             {
                               file.map((file) => 
                               <button className="btn btn-file cursor-pointer text-black"onClick={() => window.open(`http://172.16.226.57:8080/images/${file.file_name}`, "_blank")}>
+                              {file.file_name?
                               <input
                                 className="form-control"
                                 value={file.file_name}
                                 multiple />
+                                 : 'Хавсаргасан файл байхгүй'}
                           </button>
                               )
                             }
