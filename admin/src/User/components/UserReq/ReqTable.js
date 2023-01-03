@@ -15,7 +15,6 @@ const RequestTable = (props) => {
       <table className="table" >
           <thead>
               <th scope="col">Нэр</th>
-              {/* <th scope="col">Дэд Ажил</th> */}
               <th scope="col">Ажлын төрөл</th>
               <th scope="col">Төлөв</th>
               <th scope="col">Үүсгэсэн огноо</th>
@@ -26,7 +25,6 @@ const RequestTable = (props) => {
             {userReqs.map((request)=>(
           <tr key={request.userReqID} onClick={() => handleClick(request.userReqID)}>
                 <td>{request.name}</td>
-                {/* <Link><td>{request.subWorkID}0</td></Link> */}
                 <td>{request.importanceName}</td>
                 <td>{request?.stateName}</td>
                 <td>{request?.createDate}</td>

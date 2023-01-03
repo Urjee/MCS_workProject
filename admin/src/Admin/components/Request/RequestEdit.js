@@ -24,12 +24,16 @@ const RequestEdit = () => {
   const [percentOfPerform, setPercentOfperform] = useState();
   const [firstname, setFirstname] = useState();
   const [fileRemove, setFileRemove] = useState(false);
+  const [realTime, setRealTime] = useState('');
+  const [realHour, setRealHour] = useState('');
+  const [realMin, setRealMin] = useState('');
   const [UserID, setUserID] = useState();
   const [developerName, setDeveloperName] = useState("");
   const history = useHistory();
   const requestCreate = useSelector((state) => state.requestCreate);
   const { loading, error } = requestCreate;
   const [filess, setFiless] = useState([]);
+  const [phone, setPhone] = useState();
   const arr=[];
 
   useEffect(() => {
@@ -113,7 +117,7 @@ const RequestEdit = () => {
           setPercentOfperform(res[0][0].percentOfPerform);
           setFileRemove(res[0][0].fileRemove);
           setUserID(res[0][0].UserID);
-          
+          setPhone(res[0][0].phone);
           setFiless(res[0])
           for(let i = 0; i < res[0].length; i++) {
             setFileName(res[0][i].file_name);
@@ -126,9 +130,35 @@ const RequestEdit = () => {
     };
     userid();
   }, []);
+  
+  // const calc = () => {
+  //   let realMin;
+  //   let realHour;
 
-const realTime = ((new Date(endDate).getTime() - new Date(startDate).getTime()) / 1000 / 60 / 60);
-    
+  //   if(new Date(startDate).getMinutes() < new Date(endDate).getMinutes()) {
+  //     realHour = (new Date(endDate).getHours() - new Date(startDate).getHours()).toString();
+  //     realMin = (new Date(endDate).getMinutes() - new Date(startDate).getMinutes()).toString();
+     
+  //   } else {
+  //     realHour = ((new Date(endDate).getHours() - new Date(startDate).getHours()) - 1).toString();
+  //     realMin = ((60 + new Date(endDate).getMinutes()) - new Date(startDate).getMinutes()).toString();
+  //   }
+
+  //   setRealTime(`${realHour} цаг ${realMin} минут`);
+  // }
+  // const newStart = new Date(startDate);
+  // const newEnd = new Date(endDate);
+  // let result = Math.ceil((newEnd.getTime() - newStart.getTime())/(60*60*1000*24))
+  // console.log(result);
+  const newStart = new Date(startDate);
+  const newEnd = new Date(endDate);
+  let result = Math.ceil((newEnd.getTime() - newStart.getTime())/ 1000 /60/60)
+  // var msec = result;
+  // var hh=`0${Math.floor(msec / 1000 /60 /60)}`;
+  // msec -= hh *1000*60*60;
+
+  // const time = (hh.slice(-2));
+  // console.log(result);
   const handleDownload = () => {
     axios({
       url: `http://172.16.226.57:8080/images/${file_name}`,
@@ -174,6 +204,15 @@ const realTime = ((new Date(endDate).getTime() - new Date(startDate).getTime()) 
                       className="form-control"
                       value={name}
                       onChange={(e) => setName} />
+                  </div>
+                  <div className="mb-12">
+                    <label>Хүсэлт үүсгэгч</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={phone}
+                      onChange={(e) => setPhone}
+                    />
                   </div>
                   <div className="mb-12">
                     <label className="form-label">
@@ -254,7 +293,7 @@ const realTime = ((new Date(endDate).getTime() - new Date(startDate).getTime()) 
                       type="datetime-local"
                       className="form-control"
                       value={endDate}
-                      onChange={(e) => setEndDate(e.target.value)}
+                      onChange={(e) => {setEndDate(e.target.value)}}
                     />
                   </div>
                   <label className="form-label">
@@ -263,8 +302,7 @@ const realTime = ((new Date(endDate).getTime() - new Date(startDate).getTime()) 
                     <input
                       type=""
                       className="form-control"
-                      value={realTime}
-                      
+                      value={result} 
                     />
                   </div>
                   <div className="mb-12">
@@ -293,7 +331,7 @@ const realTime = ((new Date(endDate).getTime() - new Date(startDate).getTime()) 
                       onChange={(e) => setPercentOfperform(e.target.value)}
                     />
                   </div>
-                  
+
                   <br />
                   <div className="content-header">
                     <Link to="/requests" className="btn btn-dark col-3">

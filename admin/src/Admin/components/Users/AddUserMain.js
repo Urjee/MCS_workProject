@@ -239,7 +239,7 @@ const AddUserMain = () => {
                       onChange={(e) => setJob(e.target.value)}
                     />
                   </div> 
-                  <div className="mb-6">
+                  <div hidden className="mb-6">
                     <label htmlFor="user_jobTitle" className="form-label">
                       Албан тушаалын төрөл
                     </label>

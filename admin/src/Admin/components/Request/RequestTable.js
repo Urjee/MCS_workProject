@@ -18,16 +18,11 @@ const RequestTable = (props) => {
           <th scope="col">Хавсралт</th>
           <th scope="col">Дэлгэрэнгүй</th>
           <th scope="col"> Байгууллага</th>
+          <th scope="col"> Хүсэлт үүсгэгч</th>
           <th>Үүсгэсэн огноо</th>
         </tr>
       </thead>
       <tbody>
-      {/* {requests.length === 0 ? (
-          <table className="alert alert-info text-center mt-3 form-control">
-            Одоогоор дата байхгүй 
-          </table>
-        ) : ( 
-          <> */}
         { requests.map((request) => (
           <tr key={request.userReqID}
             onClick={() => handleClick(request.userReqID)}>
@@ -37,6 +32,7 @@ const RequestTable = (props) => {
             <td>{request?.file_name}</td>
             <td>{request.description}</td>
             <td>{request.organizationName}</td>
+            <td>{request.phone} </td>
             <td>{request.createDate} </td>
           </tr>
           )) 

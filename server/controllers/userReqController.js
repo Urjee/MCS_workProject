@@ -176,16 +176,19 @@ exports.allRequests = async (req, res) => {
   await db.sequelize
     .query(
       `
-    SELECT uReqs.*,
+      SELECT uReqs.*,
         imprts.importanceName AS importanceName,
         stta.stateName AS stateName,
         fle.file_name AS file_name,
-        org.organizationName AS organizationName
+        org.organizationName AS organizationName,
+		usr.phone as phone
     FROM [dbo].UserReqs AS uReqs
         INNER JOIN Importance AS imprts
         ON imprts.importanceID = uReqs.importanceID
         INNER JOIN States AS stta
         ON stta.stateID = uReqs.stateID
+		INNER JOIN Users AS usr
+		ON usr.UserID = uReqs.UserID
         LEFT JOIN Files fle
         ON uReqs.file_id = fle.file_id
         INNER JOIN Organizations org
